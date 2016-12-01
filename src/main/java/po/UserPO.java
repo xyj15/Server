@@ -1,5 +1,7 @@
 package po;
 
+import helper.UserRole;
+
 import java.io.Serializable;
 
 public class UserPO implements Serializable {
