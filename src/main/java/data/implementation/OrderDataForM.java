@@ -19,8 +19,7 @@ import helper.OrderStatus;
  */
 public class OrderDataForM implements OrderDataService {
 
-    private int dataSize = 19;
-    private int[] status = {0,1,2,3};
+    private int dataSize = 20;
     private String sourceFile = "OrderForMember.xls";
     private Workbook book;
     private WritableWorkbook wBook;
@@ -41,6 +40,11 @@ public class OrderDataForM implements OrderDataService {
     }
 
 
+    /**
+     *
+     * @param order
+     * @return
+     */
     public boolean addOrder(OrderPO order) {
         int col = 0;
         int row = hash(order.getMemberID());
@@ -72,7 +76,9 @@ public class OrderDataForM implements OrderDataService {
         col++;
         DateTime actualCheckOut = new DateTime(col, row, order.getActualCheckoutTime());
         col++;
-        Number roomNUM = new Number(col, row, order.getRoomNUM());
+        DateTime cancelTime = new DateTime(col, row, order.getCancelTime());
+        col++;
+        Number roomNUM = new Number(col, row, order.getNumberOfRoom());
         col++;
         Number numOfClient = new Number(col, row, order.getNumberOfClient());
         col++;
@@ -83,7 +89,7 @@ public class OrderDataForM implements OrderDataService {
         Number recover = new Number(col, row, order.getRecover());
         col++;
         double kid = 0.0;
-        if(order.isHasKids()){
+        if(order.getHaveKids()){
             kid = 1;
         }
         Number hasKid = new Number(col, row, kid);
@@ -104,14 +110,15 @@ public class OrderDataForM implements OrderDataService {
             sheet.addCell(creatTime);
             sheet.addCell(actualCheckIn);
             sheet.addCell(actualCheckOut);
+            sheet.addCell(cancelTime);
             sheet.addCell(numOfClient);
             sheet.addCell(roomNUM);
             sheet.addCell(price);
             sheet.addCell(score);
             sheet.addCell(recover);
             sheet.addCell(hasKid);
-            sheet.addCell(orderStatus);
             sheet.addCell(roomName);
+            sheet.addCell(orderStatus);
         } catch (WriteException e) {
             e.printStackTrace();
         }
@@ -126,6 +133,11 @@ public class OrderDataForM implements OrderDataService {
         return true;
     }
 
+    /**
+     *
+     * @param order
+     * @return
+     */
     public boolean updateOrder(OrderPO order) {
         WritableCell orderStart = (WritableCell) sheet.findCell(order.getOrderID());
         int col = orderStart.getColumn()+1;
@@ -150,7 +162,9 @@ public class OrderDataForM implements OrderDataService {
         col++;
         DateTime actualCheckOut = new DateTime(col, row, order.getActualCheckoutTime());
         col++;
-        Number roomNUM = new Number(col, row, order.getRoomNUM());
+        DateTime cancelTime = new DateTime(col, row, order.getCancelTime());
+        col++;
+        Number roomNUM = new Number(col, row, order.getNumberOfRoom());
         col++;
         Number numOfClient = new Number(col, row, order.getNumberOfClient());
         col++;
@@ -161,14 +175,14 @@ public class OrderDataForM implements OrderDataService {
         Number recover = new Number(col, row, order.getRecover());
         col++;
         double kid = 0.0;
-        if(order.isHasKids()){
+        if(order.getHaveKids()){
             kid = 1;
         }
         Number hasKid = new Number(col, row, kid);
         col++;
-        Number orderStatus = new Number(col, row, order.getOrderStatus().getV());
-        col++;
         Label roomName = new Label(col, row, order.getRoomName());
+        col++;
+        Number orderStatus = new Number(col, row, order.getOrderStatus().getV());
 
         try {
             sheet.addCell(memberID);
@@ -181,14 +195,15 @@ public class OrderDataForM implements OrderDataService {
             sheet.addCell(creatTime);
             sheet.addCell(actualCheckIn);
             sheet.addCell(actualCheckOut);
+            sheet.addCell(cancelTime);
             sheet.addCell(numOfClient);
             sheet.addCell(roomNUM);
             sheet.addCell(price);
             sheet.addCell(score);
             sheet.addCell(recover);
             sheet.addCell(hasKid);
-            sheet.addCell(orderStatus);
             sheet.addCell(roomName);
+            sheet.addCell(orderStatus);
         } catch (WriteException e) {
             e.printStackTrace();
         }
@@ -203,11 +218,16 @@ public class OrderDataForM implements OrderDataService {
         return true;
     }
 
+    /**
+     *
+     * @param orderID
+     * @return
+     */
     public boolean cancleOrder(String orderID) {
         Cell orderStart = sheet.findCell(orderID);
         int col = orderStart.getColumn()+dataSize-1;
         int row = orderStart.getRow();
-        Number orderStatus = new Number(col, row, status[OrderStatus.Canceled.getV()]);
+        Number orderStatus = new Number(col, row, OrderStatus.Canceled.getV());
 
         try {
             sheet.addCell(orderStatus);
@@ -225,11 +245,16 @@ public class OrderDataForM implements OrderDataService {
         return true;
     }
 
+    /**
+     *
+     * @param orderID
+     * @return
+     */
     public boolean makeOrderAbnormal(String orderID) {
         Cell orderStart = sheet.findCell(orderID);
         int col = orderStart.getColumn()+dataSize-1;
         int row = orderStart.getRow();
-        Number orderStatus = new Number(col, row, status[OrderStatus.Abnormal.getV()]);
+        Number orderStatus = new Number(col, row, OrderStatus.Abnormal.getV());
 
         try {
             sheet.addCell(orderStatus);
@@ -247,12 +272,18 @@ public class OrderDataForM implements OrderDataService {
         return true;
     }
 
+    /**
+     *
+     * @param orderID
+     * @param recover
+     * @return
+     */
     public boolean recoverOrder(String orderID, double recover) {
         Cell orderStart = sheet.findCell(orderID);
         int col = orderStart.getColumn();
         int row = orderStart.getRow();
         Number orderStatus = new Number(col+dataSize-1, row, OrderStatus.Canceled.getV());
-        Number recoverLocation = new Number(col+dataSize-5, row, recover);
+        Number recoverLocation = new Number(col+dataSize-4, row, recover);
 
         try {
             sheet.addCell(orderStatus);
@@ -271,6 +302,11 @@ public class OrderDataForM implements OrderDataService {
         return true;
     }
 
+    /**
+     *
+     * @param orderID
+     * @return
+     */
     public OrderPO getOrder(String orderID) {
         Cell orderStart = sheet.findCell(orderID);
         int col = orderStart.getColumn();
@@ -296,6 +332,8 @@ public class OrderDataForM implements OrderDataService {
         col++;
         Date actualCheckOut = ((DateCell) sheet.getCell(col, row)).getDate();
         col++;
+        Date cancelTime = ((DateCell)sheet.getCell(col, row)).getDate();
+        col++;
         int roomNUM = (int)((NumberCell) sheet.getCell(col, row)).getValue();
         col++;
         int numOfClient = (int)((NumberCell) sheet.getCell(col, row)).getValue();
@@ -322,14 +360,15 @@ public class OrderDataForM implements OrderDataService {
             case 2: orderStatus = OrderStatus.Abnormal; break;
             case 3: orderStatus = OrderStatus.Canceled; break;
         }
-        OrderPO  result = new OrderPO(memberID,hotelID,orderID,orderStatus,creatTime,checkIn,latestCheckIn,checkOut,roomNUM,roomName,numOfClient,hasKid,recover,promotion,price);
-        result.setEvaluation(evaluation);
-        result.setActualCheckinTime(actualCheckIn);
-        result.setActualCheckoutTime(actualCheckOut);
-        result.setScore(score);
-        return result;
+        return new OrderPO(memberID,hotelID,orderID,orderStatus,creatTime,checkIn,actualCheckIn,latestCheckIn,checkOut,actualCheckOut,
+                roomNUM,roomName,numOfClient,hasKid,score,evaluation,recover,promotion,price,cancelTime);
     }
 
+    /**
+     *
+     * @param userID
+     * @return
+     */
     public ArrayList<OrderPO> getOrderList(String userID) {
         ArrayList<OrderPO> result = new ArrayList<OrderPO>();
         int col = 0;
@@ -338,9 +377,15 @@ public class OrderDataForM implements OrderDataService {
             result.add(getOrder(col, row));
             col+=dataSize;
         }
+        if(result.size()==0) return null;   //This hotel does not have any order.
         return result;
     }
 
+    /**
+     *
+     * @param userID
+     * @return
+     */
     public ArrayList<OrderPO> getFinishedOrders(String userID) {
         ArrayList<OrderPO> result = new ArrayList<OrderPO>();
         int col = 0;
@@ -352,9 +397,15 @@ public class OrderDataForM implements OrderDataService {
             }
             col+=dataSize;
         }
+        if(result.size()==0) return null;   //This hotel does not have any finished order.
         return result;
     }
 
+    /**
+     *
+     * @param userID
+     * @return
+     */
     public ArrayList<OrderPO> getUnfinishedOrders(String userID) {
         ArrayList<OrderPO> result = new ArrayList<OrderPO>();
         int col = 0;
@@ -366,9 +417,15 @@ public class OrderDataForM implements OrderDataService {
             }
             col+=dataSize;
         }
+        if(result.size()==0) return null;   //This hotel does not have any unfinished order.
         return result;
     }
 
+    /**
+     *
+     * @param userID
+     * @return
+     */
     public ArrayList<OrderPO> getAbnormalOrders(String userID) {
         ArrayList<OrderPO> result = new ArrayList<OrderPO>();
         int col = 0;
@@ -380,9 +437,15 @@ public class OrderDataForM implements OrderDataService {
             }
             col+=dataSize;
         }
+        if(result.size()==0) return null;   //This hotel does not have any abnormal order.
         return result;
     }
 
+    /**
+     *
+     * @param userID
+     * @return
+     */
     public ArrayList<OrderPO> getCancledOrders(String userID) {
         ArrayList<OrderPO> result = new ArrayList<OrderPO>();
         int col = 0;
@@ -394,15 +457,27 @@ public class OrderDataForM implements OrderDataService {
             }
             col+=dataSize;
         }
+        if(result.size()==0) return null;   //This hotel does not have any canceled order.
         return result;
     }
 
+    /**
+     *
+     * @param ID
+     * @return
+     */
     private int hash(String ID){
-        int result = ID.hashCode();
-        result%=27;
-        return result;
+        int hashResult = Integer.parseInt(ID);
+        hashResult%=27;
+        return hashResult;
     }
 
+    /**
+     *
+     * @param col
+     * @param row
+     * @return
+     */
     private OrderPO getOrder(int col, int row){
         String orderID = sheet.getCell(col, row).getContents();
         col++;
@@ -426,6 +501,8 @@ public class OrderDataForM implements OrderDataService {
         col++;
         Date actualCheckOut = ((DateCell) sheet.getCell(col, row)).getDate();
         col++;
+        Date cancelTime = ((DateCell)sheet.getCell(col, row)).getDate();
+        col++;
         int roomNUM = (int)((NumberCell) sheet.getCell(col, row)).getValue();
         col++;
         int numOfClient = (int)((NumberCell) sheet.getCell(col, row)).getValue();
@@ -452,12 +529,8 @@ public class OrderDataForM implements OrderDataService {
             case 2: orderStatus = OrderStatus.Abnormal; break;
             case 3: orderStatus = OrderStatus.Canceled; break;
         }
-        OrderPO  result = new OrderPO(memberID,hotelID,orderID,orderStatus,creatTime,checkIn,latestCheckIn,checkOut,roomNUM,roomName,numOfClient,hasKid,recover,promotion,price);
-        result.setEvaluation(evaluation);
-        result.setActualCheckinTime(actualCheckIn);
-        result.setActualCheckoutTime(actualCheckOut);
-        result.setScore(score);
-        return result;
+        return new OrderPO(memberID,hotelID,orderID,orderStatus,creatTime,checkIn,actualCheckIn,latestCheckIn,checkOut,actualCheckOut,
+                roomNUM,roomName,numOfClient,hasKid,score,evaluation,recover,promotion,price,cancelTime);
     }
 
 }

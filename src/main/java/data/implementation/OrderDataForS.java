@@ -64,7 +64,7 @@ public class OrderDataForS implements OrderDataServiceMini {
 		int col = orderStart.getColumn();
 		int row = orderStart.getRow();
 		Number orderStatus = new Number(col+dataSize-1, row, OrderStatus.Canceled.getV());
-		Number recoverLocation = new Number(col+dataSize-5, row, recover);
+		Number recoverLocation = new Number(col+dataSize-4, row, recover);
 
 		try {
 			sheet.addCell(orderStatus);
@@ -112,12 +112,15 @@ public class OrderDataForS implements OrderDataServiceMini {
 		int rows = sheet.getRows();
 		for (int i = 0; i < rows; i++) {
 			ArrayList<OrderPO> temp = getOrderList(i);
-			for (OrderPO order:temp) {
-				if(order.getCreateTime()==theDay){
-					result.add(order);
+			if(temp!=null){
+				for (OrderPO order:temp) {
+					if(order.getCreateTime()==theDay){
+						result.add(order);
+					}
 				}
 			}
 		}
+		if(result.size()==0) return null;   //does not have any abnormal order.
 		return result;
 	}
 
@@ -128,6 +131,7 @@ public class OrderDataForS implements OrderDataServiceMini {
 			result.add(getOrder(col, row));
 			col+=dataSize;
 		}
+		if(result.size()==0) return null;   //This hotel does not have any order.
 		return result;
 	}
 
@@ -153,6 +157,8 @@ public class OrderDataForS implements OrderDataServiceMini {
 		Date actualCheckIn = ((DateCell) sheet.getCell(col, row)).getDate();
 		col++;
 		Date actualCheckOut = ((DateCell) sheet.getCell(col, row)).getDate();
+		col++;
+		Date cancelTime = ((DateCell) sheet.getCell(col, row)).getDate();
 		col++;
 		int roomNUM = (int)((NumberCell) sheet.getCell(col, row)).getValue();
 		col++;
@@ -180,11 +186,7 @@ public class OrderDataForS implements OrderDataServiceMini {
 			case 2: orderStatus = OrderStatus.Abnormal; break;
 			case 3: orderStatus = OrderStatus.Canceled; break;
 		}
-		OrderPO  result = new OrderPO(memberID,hotelID,orderID,orderStatus,creatTime,checkIn,latestCheckIn,checkOut,roomNUM,roomName,numOfClient,hasKid,recover,promotion,price);
-		result.setEvaluation(evaluation);
-		result.setActualCheckinTime(actualCheckIn);
-		result.setActualCheckoutTime(actualCheckOut);
-		result.setScore(score);
-		return result;
+		return new OrderPO(memberID,hotelID,orderID,orderStatus,creatTime,checkIn,actualCheckIn,latestCheckIn,checkOut,actualCheckOut,
+				roomNUM,roomName,numOfClient,hasKid,score,evaluation,recover,promotion,price,cancelTime);
 	}
 }

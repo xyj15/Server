@@ -1,35 +1,58 @@
 package po;
 
-import java.io.Serializable;
+import helper.User;
+import helper.UserType;
+
 import java.util.ArrayList;
 
-public class HotelPO implements Serializable {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private String hotelID;
+public class HotelPO extends User {
+	
 	private String name;
+	private int level;
+	private String city;
 	private String address;
-	private String level;
 	private String district;
-	private ArrayList<RoomPO> roomList;
+	private double score;	//酒店评分
+	private String service;	//酒店设施服务
+	private String introduction;	//酒店简介
+	private String managerName;	//酒店管理人员的姓名
+	private String managerTel;	//酒店管理人员的联系方式
 	
-	public HotelPO(String hotelID, String name, String address, String level, String district){
-		this.setHotelID(hotelID);
-		this.setName(name);
-		this.setAddress(address);
-		this.setLevel(level);
-		this.setDistrict(district);
+	private ArrayList<String> enterpriseList;	//合作企业列表
+	
+	public HotelPO() {
+		enterpriseList = new ArrayList<String>();
 	}
 	
-	public String getHotelID() {
-		return hotelID;
+	public HotelPO(String name, String address, String district, String city, int level, double score, String service,
+	               String introduction, String managerName, String managerTel, ArrayList<String> enterpriseList) {
+		this.name = name;
+		this.address = address;
+		this.district = district;
+		this.city = city;
+		this.level = level;
+		this.score = score;
+		this.introduction = introduction;
+		this.managerName = managerName;
+		this.managerTel = managerTel;
+		this.enterpriseList = enterpriseList;
 	}
 	
-	public void setHotelID(String hotelID) {
-		this.hotelID = hotelID;
+	public HotelPO(String userID, String password, String name, String address, String district, String city,
+	               int level, double score, String service, String introduction, String managerName,
+	               String managerTel, ArrayList<String> enterpriseList) {
+		super(userID, password, UserType.Hotel);
+		this.name = name;
+		this.address = address;
+		this.district = district;
+		this.city = city;
+		this.level = level;
+		this.score = score;
+		this.service = service;
+		this.introduction = introduction;
+		this.managerName = managerName;
+		this.managerTel = managerTel;
+		this.enterpriseList = enterpriseList;
 	}
 	
 	public String getName() {
@@ -48,11 +71,11 @@ public class HotelPO implements Serializable {
 		this.address = address;
 	}
 	
-	public String getLevel() {
+	public int getLevel() {
 		return level;
 	}
 	
-	public void setLevel(String level) {
+	public void setLevel(int level) {
 		this.level = level;
 	}
 	
@@ -64,12 +87,59 @@ public class HotelPO implements Serializable {
 		this.district = district;
 	}
 	
-	public ArrayList<RoomPO> getRoomList() {
-		return roomList;
+	public double getScore() {
+		return score;
 	}
 	
-	public void setRoomList(ArrayList<RoomPO> roomList) {
-		this.roomList = roomList;
+	public void setScore(double score) {
+		this.score = score;
 	}
 	
+	public String getIntroduction() {
+		return introduction;
+	}
+	
+	public void setIntroduction(String introduction) {
+		this.introduction = introduction;
+	}
+	
+	public String getManagerName() {
+		return managerName;
+	}
+	
+	public void setManagerName(String managerName) {
+		this.managerName = managerName;
+	}
+	
+	public String getManagerTel() {
+		return managerTel;
+	}
+	
+	public void setManagerTel(String managerTel) {
+		this.managerTel = managerTel;
+	}
+	
+	public ArrayList<String> getEnterpriseList() {
+		return enterpriseList;
+	}
+	
+	public void setEnterpriseList(ArrayList<String> enterpriseList) {
+		this.enterpriseList = enterpriseList;
+	}
+	
+	public String getCity() {
+		return city;
+	}
+	
+	public void setCity(String city) {
+		this.city = city;
+	}
+	
+	public String getService() {
+		return service;
+	}
+	
+	public void setService(String service) {
+		this.service = service;
+	}
 }

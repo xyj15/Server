@@ -1,14 +1,18 @@
 package po;
 
-public class RoomPO{
+import helper.RoomType;
+
+public class RoomPO {
 
 	/**
 	 * 
 	 */
+	private boolean reserved;   //客房是否被预定
 	private boolean available;	//客房是否可使用
 	private String roomID;	//客房号
 	private String roomName;	//客房名称
 	private double price;	//客房单价
+	private RoomType roomType;   //客房类型
 	
 	public RoomPO(boolean available, String roomID, String roomName, double price){
 		this.available = available;
@@ -33,6 +37,14 @@ public class RoomPO{
 		return available;
 	}
 
+	public RoomType getRoomType() {
+		return roomType;
+	}
+
+	public boolean isReserved() {
+		return reserved;
+	}
+
 	public void setAvailable(boolean available) {
 		this.available = available;
 	}
@@ -45,7 +57,15 @@ public class RoomPO{
 		this.roomID = roomID;
 	}
 
-	public void setRoomType(String roomName) {
+	public void setRoomName(String roomName) {
 		this.roomName = roomName;
+	}
+
+	public void setRoomType(RoomType roomType) {
+		this.roomType = roomType;
+	}
+
+	public void setReserved(boolean reserved) {
+		this.reserved = reserved;
 	}
 }

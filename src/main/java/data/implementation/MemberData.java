@@ -22,6 +22,7 @@ import helper.MemberType;
 public class MemberData implements MemberDataService {
 
 	int dataSize = 9;
+	int lengthOfID = 8;
 	String sourceFile = "MemberData.xls";
 	Workbook book;
 	WritableWorkbook wBook;
@@ -40,13 +41,24 @@ public class MemberData implements MemberDataService {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}	
+	}
 
+	/**
+	 *
+	 * @param ID
+	 * @return the result of hash
+	 */
 	private int hash(String ID){
-		int hashResult = ID.hashCode();
-		hashResult %= 1024;
+		int hashResult = Integer.parseInt(ID);
+		hashResult %= 100;
 		return hashResult;
 	}
+
+	/**
+	 *
+	 * @param member
+	 * @return
+	 */
 	//@Override
 	public boolean addMember(MemberPO member) {
 		// TODO Auto-generated method stub
@@ -54,7 +66,7 @@ public class MemberData implements MemberDataService {
 		int row = hash(member.getMemberID());
 		while(wSheet.getCell(col, row).getContents()!=""){
 			if(wSheet.getCell(col, row).getContents().equals(member.getMemberID())){
-				return true;
+				return false;   //The member with the same ID has already existed.
 			}
 			col+=dataSize;
 		}
@@ -143,14 +155,20 @@ public class MemberData implements MemberDataService {
 		}
 		return true;
 	}
+
+	/**
+	 *
+	 * @param memberID
+	 * @return
+	 */
 	//@Override
-	public boolean delete(String memberID) {
+	public boolean deleteMember(String memberID) {
 		// TODO Auto-generated method stub
 		int col = 0;
 		int row = hash(memberID);
 		while(!wSheet.getCell(col, row).getContents().equals(memberID)){
 			if(wSheet.getCell(col, row).getContents().equals("")){
-				return false;
+				return false;     //The member with the ID of memberID does not exist.
 			}
 			col+=dataSize;
 		}
@@ -170,6 +188,12 @@ public class MemberData implements MemberDataService {
 		}
 		return true;
 	}
+
+	/**
+	 *
+	 * @param member
+	 * @return
+	 */
 	//@Override
 	public boolean updateMember(MemberPO member) {
 		// TODO Auto-generated method stub
@@ -177,7 +201,7 @@ public class MemberData implements MemberDataService {
 		int row = hash(member.getMemberID());
 		while(!wSheet.getCell(col, row).getContents().equals(member.getMemberID())){
 			if(wSheet.getCell(col, row).getContents().equals("")){
-				return false;
+				return false;    //The member with the ID of memberID does not exist.
 			}
 			col+=dataSize;
 		}
@@ -258,6 +282,12 @@ public class MemberData implements MemberDataService {
 		}
 		return true;
 	}
+
+	/**
+	 *
+	 * @param ID
+	 * @return
+	 */
 	//@Override
 	public MemberPO getMember(String ID) {
 		// TODO Auto-generated method stub
@@ -295,5 +325,15 @@ public class MemberData implements MemberDataService {
 		}
 
 		return null;
+	}
+
+	public String getAvailableID() {
+		long rows = wSheet.getRows();
+		if(rows>99999999) return null;    //The space for saving the information of Members has been full.
+		String ID = rows+1+"";
+		while(ID.length()<lengthOfID){
+			ID = '0'+ID;
+		}
+		return ID;
 	}
 }

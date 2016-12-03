@@ -23,6 +23,7 @@ public class SalerData implements SalerDataService {
 	WritableWorkbook wBook;
 	WritableSheet wSheet;
 	int dataSize = 4;
+	int lengthOfID = 4;
 	
 	public SalerData(){
 		try {
@@ -154,7 +155,17 @@ public class SalerData implements SalerDataService {
 		String tel = wSheet.getCell(col, row).getContents();
 		return new SalerPO(ID, password, name, tel);
 	}
-	
+
+	public String getAvailableID() {
+		long rows = wSheet.getRows();
+		if(rows>99999999) return null;    //The space for saving the information of Members has been full.
+		String ID = rows+1+"";
+		while(ID.length()<lengthOfID){
+			ID = '0'+ID;
+		}
+		return ID;
+	}
+
 	private int hash(String ID){
 		int hashResult = ID.hashCode();
 		hashResult%=10;

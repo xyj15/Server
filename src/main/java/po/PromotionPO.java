@@ -1,70 +1,191 @@
 package po;
 
-import java.io.Serializable;
+import helper.PromotionType;
+import helper.SaleType;
 
-public class PromotionPO implements Serializable {
+import java.util.Date;
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	String birthday;
-	int roomNumber;
-	boolean coordinate;
-	String date;
-	boolean VIP;
-	String district;
+public class PromotionPO {
 	
-	public PromotionPO(String b, int rn, boolean c, String da, boolean v, String di) {
-		birthday=b;
-		roomNumber=rn;
-		coordinate=c;
-		date=da;
-		VIP=v;
-		district=di;
+	private String promotionID;
+	private String promotionName;
+	private PromotionType promotionType;
+	private SaleType saleType;
+	
+	private Date startDate;
+	private Date endDate;
+	
+	private Date birthday;
+	
+	private int numberOfRoom;
+	
+	private String enterprise;
+	
+	private int level;
+	
+	private String district;
+	
+	private double discount;
+	private double neededPrice;
+	private double reducePrice;
+	
+	/**
+	 * 一般营销策略的构造方法
+	 * @param promotionID
+	 * @param promotionName
+	 * @param promotionType
+	 */
+	public PromotionPO(String promotionID, String promotionName, PromotionType promotionType) {
+		this.promotionID = promotionID;
+		this.promotionName = promotionName;
+		this.promotionType = promotionType;
 	}
 	
-	public String getBirday(){
+	public void setRankPromotion() {
+		saleType = SaleType.Rank;
+	}
+	
+	public void setDatePromotion(Date startDate, Date endDate) {
+		saleType = SaleType.Date;
+		this.startDate = startDate;
+		this.endDate = endDate;
+	}
+	
+	public void setBirthdayPromotion(Date birthday) {
+		saleType = SaleType.Birthday;
+		this.birthday = birthday;
+	}
+	
+	public void setRoomNumberPromotion() {
+		saleType = SaleType.RoomNumber;
+	}
+	
+	public void setEnterprisePromotion(String enterprise) {
+		saleType = SaleType.Enterprise;
+		this.enterprise = enterprise;
+	}
+	
+	public void setDistrictPromotion(String district) {
+		saleType = SaleType.District;
+	}
+	
+	public boolean checkAvailable(MemberPO memberVO) {
+		return false;
+	}
+	
+	public double calculatePrice(double originalPrice) {
+		return 0;
+	}
+	
+	public String getPromotionID() {
+		return promotionID;
+	}
+	
+	public void setPromotionID(String promotionID) {
+		this.promotionID = promotionID;
+	}
+	
+	public String getPromotionName() {
+		return promotionName;
+	}
+	
+	public void setPromotionName(String promotionName) {
+		this.promotionName = promotionName;
+	}
+	
+	public PromotionType getPromotionType() {
+		return promotionType;
+	}
+	
+	public void setPromotionType(PromotionType promotionType) {
+		this.promotionType = promotionType;
+	}
+	
+	public SaleType getSaleType() {
+		return saleType;
+	}
+	
+	public void setSaleType(SaleType saleType) {
+		this.saleType = saleType;
+	}
+	
+	public Date getStartDate() {
+		return startDate;
+	}
+	
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+	
+	public Date getEndDate() {
+		return endDate;
+	}
+	
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+	
+	public Date getBirthday() {
 		return birthday;
 	}
 	
-	public int getRoomNumber(){
-		return roomNumber;
+	public void setBirthday(Date birthday) {
+		this.birthday = birthday;
 	}
 	
-	public boolean getCoordinate(){
-		return coordinate;
+	public int getNumberOfRoom() {
+		return numberOfRoom;
 	}
 	
-	public String getDate(){
-		return date;
+	public void setNumberOfRoom(int numberOfRoom) {
+		this.numberOfRoom = numberOfRoom;
 	}
 	
-	public boolean getVIP(){
-		return VIP;
+	public String getEnterprise() {
+		return enterprise;
 	}
 	
-	public String getDistrict(){
+	public void setEnterprise(String enterprise) {
+		this.enterprise = enterprise;
+	}
+	
+	public int getLevel() {
+		return level;
+	}
+	
+	public void setLevel(int level) {
+		this.level = level;
+	}
+	
+	public String getDistrict() {
 		return district;
 	}
 	
-	public void setBirthday(String birthday){
-		this.birthday=birthday;
-	}
-	public void setRoomNumber(int roomNumber){
-		this.roomNumber=roomNumber;
-	}
-	public void setCoodinate(boolean coordinate){
-		this.coordinate=coordinate;
-	}
-	public void setDate(String date){
-		this.date=date;
-	}
-	public void setVIP(boolean VIP){
-		this.VIP=VIP;
-	}
-	public void setDistrict(String district){
-		this.district=district;
+	public void setDistrict(String district) {
+		this.district = district;
 	}
 	
+	public double getDiscount() {
+		return discount;
+	}
+	
+	public void setDiscount(double discount) {
+		this.discount = discount;
+	}
+	
+	public double getNeededPrice() {
+		return neededPrice;
+	}
+	
+	public void setNeededPrice(double neededPrice) {
+		this.neededPrice = neededPrice;
+	}
+	
+	public double getReducePrice() {
+		return reducePrice;
+	}
+	
+	public void setReducePrice(double reducePrice) {
+		this.reducePrice = reducePrice;
+	}
 }
