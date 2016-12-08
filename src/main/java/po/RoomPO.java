@@ -14,11 +14,13 @@ public class RoomPO {
 	private double price;	//客房单价
 	private RoomType roomType;   //客房类型
 	
-	public RoomPO(boolean available, String roomID, String roomName, double price){
+	public RoomPO(boolean reserved, boolean available, String roomID, String roomName, double price, RoomType roomType){
+		this.reserved = reserved;
 		this.available = available;
 		this.roomID = roomID;
 		this.roomName = roomName;
 		this.price =price;
+		this.roomType = roomType;
 	}
 
 	public String getRoomID() {

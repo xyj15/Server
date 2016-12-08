@@ -172,4 +172,17 @@ public class SalerData implements SalerDataService {
 		return hashResult;
 	}
 
+	/**
+	 *
+	 */
+	public void close() {
+		try {
+			wBook.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (WriteException e) {
+			e.printStackTrace();
+		}
+		book.close();
+	}
 }

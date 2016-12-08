@@ -37,6 +37,8 @@ public class PromotionData implements PromotionDataService {
 		col++;
 		String promotionName = wSheet.getCell(col, row).getContents();
 		col++;
+		String relatedHotelID = wSheet.getCell(col, row).getContents();
+		col++;
 		String enterprise = wSheet.getCell(col, row).getContents();
 		col++;
 		String district = wSheet.getCell(col, row).getContents();
@@ -74,14 +76,14 @@ public class PromotionData implements PromotionDataService {
 			case 4: saleType = SaleType.Enterprise; break;
 			case 5: saleType = SaleType.District; break;
 		}
-		PromotionPO result = new PromotionPO(promotionID,promotionName,promotionType);
+		PromotionPO result = new PromotionPO(promotionID,promotionName,promotionType,relatedHotelID);
 		result.setEnterprise(enterprise);
 		result.setDistrict(district);
 		result.setStartDate(startDate);
 		result.setEndDate(endDate);
 		result.setBirthday(birthday);
 		result.setNumberOfRoom(numberOfRoom);
-		result.setLevel(level);
+		//result.setLevel(level);
 		result.setDiscount(discount);
 		result.setNeededPrice(neededPrice);
 		result.setReducePrice(reducePrice);
@@ -102,6 +104,8 @@ public class PromotionData implements PromotionDataService {
 		col++;
 		Label name = new Label(col, row, promotion.getPromotionName());
 		col++;
+		Label relatedHotelID = new Label(col, row, promotion.getRelatedHotelID());
+		col++;
 		Label district = new Label(col, row, promotion.getDistrict());
 		col++;
 		Label enterprise = new Label(col, row, promotion.getEnterprise());
@@ -113,8 +117,6 @@ public class PromotionData implements PromotionDataService {
 		DateTime birthday = new DateTime(col, row, promotion.getBirthday());
 		col++;
 		Number numberOfRoom = new Number(col, row,promotion.getNumberOfRoom());
-		col++;
-		Number level = new Number(col, row, promotion.getLevel());
 		col++;
 		Number discount = new Number(col, row, promotion.getDiscount());
 		col++;
@@ -129,13 +131,13 @@ public class PromotionData implements PromotionDataService {
 		try {
 			wSheet.addCell(promotionID);
 			wSheet.addCell(name);
+			wSheet.addCell(relatedHotelID);
 			wSheet.addCell(district);
 			wSheet.addCell(enterprise);
 			wSheet.addCell(startDate);
 			wSheet.addCell(endDate);
 			wSheet.addCell(birthday);
 			wSheet.addCell(numberOfRoom);
-			wSheet.addCell(level);
 			wSheet.addCell(discount);
 			wSheet.addCell(neededPrice);
 			wSheet.addCell(reducePrice);
@@ -191,6 +193,8 @@ public class PromotionData implements PromotionDataService {
 		col++;
 		Label name = new Label(col, row, promotion.getPromotionName());
 		col++;
+		Label relatedHotelID = new Label(col, row, promotion.getRelatedHotelID());
+		col++;
 		Label district = new Label(col, row, promotion.getDistrict());
 		col++;
 		Label enterprise = new Label(col, row, promotion.getEnterprise());
@@ -202,8 +206,6 @@ public class PromotionData implements PromotionDataService {
 		DateTime birthday = new DateTime(col, row, promotion.getBirthday());
 		col++;
 		Number numberOfRoom = new Number(col, row,promotion.getNumberOfRoom());
-		col++;
-		Number level = new Number(col, row, promotion.getLevel());
 		col++;
 		Number discount = new Number(col, row, promotion.getDiscount());
 		col++;
@@ -217,13 +219,13 @@ public class PromotionData implements PromotionDataService {
 
 		try {
 			wSheet.addCell(name);
+			wSheet.addCell(relatedHotelID);
 			wSheet.addCell(district);
 			wSheet.addCell(enterprise);
 			wSheet.addCell(startDate);
 			wSheet.addCell(endDate);
 			wSheet.addCell(birthday);
 			wSheet.addCell(numberOfRoom);
-			wSheet.addCell(level);
 			wSheet.addCell(discount);
 			wSheet.addCell(neededPrice);
 			wSheet.addCell(reducePrice);
@@ -268,6 +270,20 @@ public class PromotionData implements PromotionDataService {
 		return ID;
 	}
 
+	/**
+	 *
+	 */
+	public void close() {
+		try {
+			wBook.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (WriteException e) {
+			e.printStackTrace();
+		}
+		book.close();
+	}
+
 	private int hash(String ID){
 		int hashResult = Integer.parseInt(ID);
 		hashResult %= 27;
@@ -280,6 +296,8 @@ public class PromotionData implements PromotionDataService {
 		String promotionID = wSheet.getCell(col, row).getContents();
 		col++;
 		String promotionName = wSheet.getCell(col, row).getContents();
+		col++;
+		String relatedHotelID = wSheet.getCell(col, row).getContents();
 		col++;
 		String enterprise = wSheet.getCell(col, row).getContents();
 		col++;
@@ -318,14 +336,13 @@ public class PromotionData implements PromotionDataService {
 			case 4: saleType = SaleType.Enterprise; break;
 			case 5: saleType = SaleType.District; break;
 		}
-		PromotionPO result = new PromotionPO(promotionID,promotionName,promotionType);
+		PromotionPO result = new PromotionPO(promotionID,promotionName,promotionType,relatedHotelID);
 		result.setEnterprise(enterprise);
 		result.setDistrict(district);
 		result.setStartDate(startDate);
 		result.setEndDate(endDate);
 		result.setBirthday(birthday);
 		result.setNumberOfRoom(numberOfRoom);
-		result.setLevel(level);
 		result.setDiscount(discount);
 		result.setNeededPrice(neededPrice);
 		result.setReducePrice(reducePrice);

@@ -3,6 +3,7 @@ package data.implementation;
 import data.dataservice.HotelDataService;
 import jxl.Cell;
 import jxl.NumberCell;
+import jxl.Sheet;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
 import jxl.write.*;
@@ -24,20 +25,20 @@ public class HotelData implements HotelDataService {
 	private int lengthOfID = 6;
 	private String sourceFile = "HotelData.xls";
 	private Workbook book;
+	private Sheet sheet;
 	private WritableWorkbook wBook;
 	private WritableSheet wSheet;
-	private static long sumOfHotel = 0;
 
 	public HotelData(){
-		try {
-			book = Workbook.getWorkbook(new File(sourceFile));
-			wBook = Workbook.createWorkbook(new File(sourceFile),book);
-			wSheet = wBook.getSheet(0);
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (BiffException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			book = Workbook.getWorkbook(new File(sourceFile));
+//			wBook = Workbook.createWorkbook(new File(sourceFile),book);
+//			wSheet = wBook.getSheet(0);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		} catch (BiffException e) {
+//			e.printStackTrace();
+//		}
 
 	}
 
@@ -48,10 +49,12 @@ public class HotelData implements HotelDataService {
 	 * @return
 	 */
 	public boolean addHotel(HotelPO hotel) {
+		createWritableSheet();
 		int col = 0;
 		int row = hash(hotel.getCity()+hotel.getDistrict());
-		while(wSheet.getCell(col, row).getContents()!=""){
+		while(wSheet.getCell(col, row).getContents()!=""||(!wSheet.getCell(col, row).getContents().equals("-1"))){
 			if(wSheet.getCell(col, row).getContents().equals(hotel.getUserID())){
+				close();
 				return false;     // the hotel with the same ID has already existed
 			}
 			col+=dataSize;
@@ -103,12 +106,34 @@ public class HotelData implements HotelDataService {
 			e.printStackTrace();
 		}
 
+		WritableSheet sumSheet = wBook.getSheet(1);
+		int sum = (int) ((NumberCell) sumSheet.getCell(0, 0)).getValue();
+		sum++;
+		Number sumOfHotel = new Number(0,0,sum);
 		try {
-			wBook.write();
-		} catch (IOException e) {
+			sumSheet.addCell(sumOfHotel);
+		} catch (WriteException e) {
 			e.printStackTrace();
 		}
-		sumOfHotel++;
+
+		try {
+			Workbook roomBook = Workbook.getWorkbook(new File("RoomData.xls"));
+			WritableWorkbook wRoomBook = Workbook.createWorkbook(new File("RoomData.xls"),book);
+			WritableSheet wRoomSheet = wRoomBook.createSheet(hotel.getName(), Integer.parseInt(hotel.getUserID()));
+			wRoomBook.write();
+			try {
+				wRoomBook.close();
+			} catch (WriteException e) {
+				e.printStackTrace();
+			}
+			roomBook.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (BiffException e) {
+			e.printStackTrace();
+		}
+
+		close();
 		return true;
 	}
 
@@ -118,16 +143,18 @@ public class HotelData implements HotelDataService {
 	 * @return
 	 */
 	public boolean deleteHotel(String hotelID) {
+		createWritableSheet();
 		int col = 0;
 		int row = hash(hotelID);
 		while(!wSheet.getCell(col, row).getContents().equals(hotelID)){
 			if(wSheet.getCell(col, row).getContents().equals("")){
+				close();
 				return false;                         //The hotel with ID of hotelID does not exist.
 			}
 			col+=dataSize;
 		}
 		for(int i=0;i<dataSize;i++){
-			Label label = new Label(col+i,row,"");
+			Label label = new Label(col+i,row,"-1");
 			try {
 				wSheet.addCell(label);
 			} catch (WriteException e) {
@@ -136,11 +163,17 @@ public class HotelData implements HotelDataService {
 			}
 		}
 
+		WritableSheet sumSheet = wBook.getSheet(1);
+		int sum = (int) ((NumberCell) sumSheet.getCell(0, 0)).getValue();
+		sum--;
+		Number sumOfHotel = new Number(0,0,sum);
 		try {
-			wBook.write();
-		} catch (IOException e) {
+			sumSheet.addCell(sumOfHotel);
+		} catch (WriteException e) {
 			e.printStackTrace();
 		}
+
+		close();
 		return true;
 	}
 
@@ -150,11 +183,12 @@ public class HotelData implements HotelDataService {
 	 * @return
 	 */
 	public boolean updateHotel(HotelPO hotel) {
+		createWritableSheet();
 		int col = 0;
 		int row = hash(hotel.getUserID());
 		while(!wSheet.getCell(col, row).getContents().equals(hotel.getUserID())){
 			if(wSheet.getCell(col, row).getContents().equals("")){
-				return false;                         //The hotel with ID of hotelID does not exist.
+				close();                         //The hotel with ID of hotelID does not exist.
 			}
 			col+=dataSize;
 		}
@@ -205,11 +239,7 @@ public class HotelData implements HotelDataService {
 			e.printStackTrace();
 		}
 
-		try {
-			wBook.write();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		close();
 		return true;
 	}
 
@@ -219,10 +249,12 @@ public class HotelData implements HotelDataService {
 	 * @return
 	 */
 	public HotelPO getHotelByID(String hotelID) {
-		Cell hotelStart = wSheet.findCell(hotelID);
+		createSheet();
+		Cell hotelStart = sheet.findCell(hotelID);
 		int col = hotelStart.getColumn();
 		int row = hotelStart.getRow();
-		return getHotelByPosition(col, row);
+		HotelPO result = getHotelByPosition(col, row);
+		return result;
 	}
 
 	/**
@@ -231,10 +263,12 @@ public class HotelData implements HotelDataService {
 	 * @return
 	 */
 	public HotelPO getHotelByName(String hotelName) {
-		Cell hotelStart = wSheet.findCell(hotelName);
+		createSheet();
+		Cell hotelStart = sheet.findCell(hotelName);
 		int col = hotelStart.getColumn()-2;
 		int row = hotelStart.getRow();
-		return getHotelByPosition(col, row);
+		HotelPO result = getHotelByPosition(col, row);
+		return result;
 	}
 
 	/**
@@ -244,12 +278,15 @@ public class HotelData implements HotelDataService {
 	 * @return
 	 */
 	public ArrayList<HotelPO> getHotelListByCityDistrict(String city, String district) {
+		createWritableSheet();
 		int col = 0;
 		int row = hash(city+district);
 		ArrayList<HotelPO> result = new ArrayList<HotelPO>();
 		while(wSheet.getCell(col, row).getContents()!=""){
-			result.add(getHotelByPosition(col, row));
+			if(!wSheet.getCell(col, row).getContents().equals("-1"))result.add(getHotelByPosition(col, row));
+			col+=dataSize;
 		}
+		close();
 		if(result.size()==0) return null;       //There is no hotel sighed in the district of the city.
 		return result;
 	}
@@ -298,7 +335,17 @@ public class HotelData implements HotelDataService {
 	 * @return
 	 */
 	public ArrayList<HotelPO> getHotelListFilteredByPrice(double lowPrice, double highPrice, String city, String district) {
-		return null;
+		createWritableSheet();
+		RoomData rooms = new RoomData();
+		ArrayList<HotelPO> result = getHotelListByCityDistrict(city, district);
+		close();
+		for (HotelPO temp: result) {
+			if(!rooms.hasSuitableRoom(lowPrice, highPrice, temp.getUserID())){
+				result.remove(temp);
+			}
+		}
+		if(result.size()==0) return null;  //There is no hotel fits the condition.
+		return result;
 	}
 
 	/**
@@ -306,12 +353,41 @@ public class HotelData implements HotelDataService {
 	 * @return
 	 */
 	public String getAvailableID() {
-		if(sumOfHotel>999999) return null;   //The space for saving the information of Hotels has been full.
-		String ID = sumOfHotel+1+"";
+		createSheet();
+		Sheet sumSheet = book.getSheet(1);
+		int sum = (int) ((NumberCell) sumSheet.getCell(0, 0)).getValue();
+		if(sum>999999) return null;   //The space for saving the information of Hotels has been full.
+		String ID = sum+1+"";
 		while(ID.length()<lengthOfID){
 			ID = '0'+ID;
 		}
 		return ID;
+	}
+
+	/**
+	 *
+	 */
+	public void close(){
+		write();
+		try {
+			wBook.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (WriteException e) {
+			e.printStackTrace();
+		}
+		book.close();
+	}
+
+	/**
+	 *
+	 */
+	private void write(){
+		try {
+			wBook.write();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -332,37 +408,74 @@ public class HotelData implements HotelDataService {
 	 * @return
 	 */
 	private HotelPO getHotelByPosition(int col, int row){
-		String ID = wSheet.getCell(col, row).getContents();
+		String ID = sheet.getCell(col, row).getContents();
 		col++;
-		String password = wSheet.getCell(col, row).getContents();
+		String password = sheet.getCell(col, row).getContents();
 		col++;
-		String name = wSheet.getCell(col, row).getContents();
+		String name = sheet.getCell(col, row).getContents();
 		col++;
-		String city = wSheet.getCell(col, row).getContents();
+		String city = sheet.getCell(col, row).getContents();
 		col++;
-		String district = wSheet.getCell(col, row).getContents();
+		String district = sheet.getCell(col, row).getContents();
 		col++;
-		String address = wSheet.getCell(col, row).getContents();
+		String address = sheet.getCell(col, row).getContents();
 		col++;
-		String service = wSheet.getCell(col, row).getContents();
+		String service = sheet.getCell(col, row).getContents();
 		col++;
-		String introduction = wSheet.getCell(col, row).getContents();
+		String introduction = sheet.getCell(col, row).getContents();
 		col++;
-		String managerName = wSheet.getCell(col, row).getContents();
+		String managerName = sheet.getCell(col, row).getContents();
 		col++;
-		String managerTel = wSheet.getCell(col, row).getContents();
+		String managerTel = sheet.getCell(col, row).getContents();
 		col++;
-		int level = (int)((NumberCell)wSheet.getCell(col, row)).getValue();
+		int level = (int)((NumberCell)sheet.getCell(col, row)).getValue();
 		col++;
-		double score = ((NumberCell)wSheet.getCell(col, row)).getValue();
+		double score = ((NumberCell)sheet.getCell(col, row)).getValue();
 		col++;
-		String totalEnterprise = wSheet.getCell(col, row).getContents();
+		String totalEnterprise = sheet.getCell(col, row).getContents();
 		String[] temp = totalEnterprise.split(";");
 		ArrayList<String> enterprise = new ArrayList<String>();
 		for (String anEnterprise: temp) {
 			enterprise.add(anEnterprise);
 		}
 		return new HotelPO(ID,password,name,address,district,city,level,score,service,introduction,managerName,managerTel,enterprise);
+	}
+
+	/**
+	 * 用来初始化sheet
+	 *
+	 */
+	private void createSheet(){
+		try {
+			try {
+				book=Workbook.getWorkbook(new File(sourceFile));
+				sheet = book.getSheet(0);
+			} catch (BiffException e) {
+				e.printStackTrace();
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 *用来初始化wSheet
+	 *
+	 */
+	private void createWritableSheet(){
+		try {
+			try {
+				book=Workbook.getWorkbook(new File(sourceFile));
+				wBook = Workbook.createWorkbook(new File(sourceFile),book);
+				wSheet = wBook.getSheet(0);
+			} catch (BiffException e) {
+				e.printStackTrace();
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 //	private boolean add(int col, int row, HotelPO hotel){

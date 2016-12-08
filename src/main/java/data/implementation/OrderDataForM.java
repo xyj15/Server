@@ -223,7 +223,7 @@ public class OrderDataForM implements OrderDataService {
      * @param orderID
      * @return
      */
-    public boolean cancleOrder(String orderID) {
+    public boolean cancelOrder(String orderID) {
         Cell orderStart = sheet.findCell(orderID);
         int col = orderStart.getColumn()+dataSize-1;
         int row = orderStart.getRow();
@@ -241,7 +241,7 @@ public class OrderDataForM implements OrderDataService {
             e.printStackTrace();
         }
 
-        sync.cancleOrder(orderID);
+        sync.cancelOrder(orderID);
         return true;
     }
 
@@ -459,6 +459,20 @@ public class OrderDataForM implements OrderDataService {
         }
         if(result.size()==0) return null;   //This hotel does not have any canceled order.
         return result;
+    }
+
+    /**
+     *
+     */
+    public void close() {
+        try {
+            wBook.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (WriteException e) {
+            e.printStackTrace();
+        }
+        book.close();
     }
 
     /**

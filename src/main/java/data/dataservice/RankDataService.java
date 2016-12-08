@@ -14,4 +14,5 @@ public interface RankDataService {
 	public ArrayList<Double> getDiscountList();	//获得每级享受折扣表
 	public boolean updateCreditList(ArrayList<Double> creditList);	//更新升级所需信用表
 	public boolean updateDiscountList(ArrayList<Double> discountList);	//更新每级享受折扣表
+	public void close();   //关闭输入流
 }

@@ -8,4 +8,5 @@ public interface SalerDataService {
 	public boolean updateSaler(SalerPO saler);
 	public SalerPO getSaler(String ID);
 	public String getAvailableID();   //得到可用的新增ID
+	public void close();   //关闭输入流
 }

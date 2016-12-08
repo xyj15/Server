@@ -100,4 +100,18 @@ public class RankData implements RankDataService {
 		}
 		return true;
 	}
+
+	/**
+	 *
+	 */
+	public void close() {
+		try {
+			wBook.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (WriteException e) {
+			e.printStackTrace();
+		}
+		book.close();
+	}
 }

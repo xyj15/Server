@@ -1,15 +1,13 @@
 package data.implementation;
 
-import helper.OrderDataServiceMini;
+import data.dataservice.OrderDataService;
 import jxl.Cell;
 import jxl.DateCell;
 import jxl.NumberCell;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
+import jxl.write.*;
 import jxl.write.Number;
-import jxl.write.WritableSheet;
-import jxl.write.WritableWorkbook;
-import jxl.write.WriteException;
 import po.OrderPO;
 import helper.OrderStatus;
 
@@ -21,7 +19,7 @@ import java.util.Date;
 /**
  * Created by apple on 2016/12/1.
  */
-public class OrderDataForS implements OrderDataServiceMini {
+public class OrderDataForS implements OrderDataService {
 
 	private int dataSize = 19;
 	private String sourceFile = "OrderForMember.xls";
@@ -48,10 +46,86 @@ public class OrderDataForS implements OrderDataServiceMini {
 	}
 
 	public boolean updateOrder(OrderPO order) {
-		return false;
+		WritableCell orderStart = (WritableCell) sheet.findCell(order.getOrderID());
+		int col = orderStart.getColumn()+1;
+		int row = orderStart.getRow();
+		Label memberID = new Label(col,row,order.getMemberID());
+		col++;
+		Label hotelID = new Label(col, row, order.getHotelID());
+		col++;
+		Label evaluation = new Label(col, row, order.getEvaluation());
+		col++;
+		Label promotion = new Label(col, row, order.getPromotionID());
+		col++;
+		DateTime checkIn = new DateTime(col, row, order.getCheckinTime());
+		col++;
+		DateTime checkOut = new DateTime(col, row, order.getCheckoutTime());
+		col++;
+		DateTime latestCheckIn = new DateTime(col, row, order.getLatestCheckinTime());
+		col++;
+		DateTime creatTime = new DateTime(col, row, order.getCreateTime());
+		col++;
+		DateTime actualCheckIn = new DateTime(col, row, order.getActualCheckinTime());
+		col++;
+		DateTime actualCheckOut = new DateTime(col, row, order.getActualCheckoutTime());
+		col++;
+		DateTime cancelTime = new DateTime(col, row, order.getCancelTime());
+		col++;
+		Number roomNUM = new Number(col, row, order.getNumberOfRoom());
+		col++;
+		Number numOfClient = new Number(col, row, order.getNumberOfClient());
+		col++;
+		Number price = new Number(col, row, order.getPrice());
+		col++;
+		Number score = new Number(col, row, order.getScore());
+		col++;
+		Number recover = new Number(col, row, order.getRecover());
+		col++;
+		double kid = 0.0;
+		if(order.getHaveKids()){
+			kid = 1;
+		}
+		Number hasKid = new Number(col, row, kid);
+		col++;
+		Label roomName = new Label(col, row, order.getRoomName());
+		col++;
+		Number orderStatus = new Number(col, row, order.getOrderStatus().getV());
+
+		try {
+			sheet.addCell(memberID);
+			sheet.addCell(hotelID);
+			sheet.addCell(promotion);
+			sheet.addCell(evaluation);
+			sheet.addCell(checkIn);
+			sheet.addCell(checkOut);
+			sheet.addCell(latestCheckIn);
+			sheet.addCell(creatTime);
+			sheet.addCell(actualCheckIn);
+			sheet.addCell(actualCheckOut);
+			sheet.addCell(cancelTime);
+			sheet.addCell(numOfClient);
+			sheet.addCell(roomNUM);
+			sheet.addCell(price);
+			sheet.addCell(score);
+			sheet.addCell(recover);
+			sheet.addCell(hasKid);
+			sheet.addCell(roomName);
+			sheet.addCell(orderStatus);
+		} catch (WriteException e) {
+			e.printStackTrace();
+		}
+
+		try {
+			wBook.write();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		sync.updateOrder(order);
+		return true;
 	}
 
-	public boolean cancleOrder(String orderID) {
+	public boolean cancelOrder(String orderID) {
 		return false;
 	}
 
@@ -88,7 +162,20 @@ public class OrderDataForS implements OrderDataServiceMini {
 	}
 
 	public ArrayList<OrderPO> getOrderList(String userID) {
-		return null;
+		ArrayList<OrderPO> result = new ArrayList<OrderPO>();
+		int rows = sheet.getRows();
+		for (int i = 0; i < rows; i++) {
+			ArrayList<OrderPO> temp = getOrderList(i);
+			if(temp!=null){
+				for (OrderPO order:temp) {
+					if(order.getCreateTime()==new Date()){    //baidu
+						result.add(order);
+					}
+				}
+			}
+		}
+		if(result.size()==0) return null;   //does not have any abnormal order.
+		return result;
 	}
 
 	public ArrayList<OrderPO> getFinishedOrders(String userID) {
@@ -107,21 +194,18 @@ public class OrderDataForS implements OrderDataServiceMini {
 		return null;
 	}
 
-	public ArrayList<OrderPO> getAbnormalOrders(Date theDay) {
-		ArrayList<OrderPO> result = new ArrayList<OrderPO>();
-		int rows = sheet.getRows();
-		for (int i = 0; i < rows; i++) {
-			ArrayList<OrderPO> temp = getOrderList(i);
-			if(temp!=null){
-				for (OrderPO order:temp) {
-					if(order.getCreateTime()==theDay){
-						result.add(order);
-					}
-				}
-			}
+	/**
+	 *
+	 */
+	public void close() {
+		try {
+			wBook.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (WriteException e) {
+			e.printStackTrace();
 		}
-		if(result.size()==0) return null;   //does not have any abnormal order.
-		return result;
+		book.close();
 	}
 
 	private ArrayList<OrderPO> getOrderList(int row){

@@ -80,4 +80,18 @@ public class ManagerData implements ManagerDataService {
 
 		return new ManagerPO(managerID, password, name, tel);
 	}
+
+	/**
+	 *
+	 */
+	public void close() {
+		try {
+			wBook.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (WriteException e) {
+			e.printStackTrace();
+		}
+		book.close();
+	}
 }
