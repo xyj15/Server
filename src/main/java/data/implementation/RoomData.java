@@ -9,7 +9,6 @@ import java.util.Date;
 import data.dataservice.RoomDataService;
 import helper.RoomType;
 import jxl.NumberCell;
-import jxl.Sheet;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
 import jxl.write.Label;
@@ -150,7 +149,6 @@ public class RoomData implements RoomDataService {
 		int col=0;
 		while(!wSheet.getCell(col, row).getContents().equals(room.getRoomID())){
 			if(wSheet.getCell(col, row).getContents().equals("")){
-				close();
 				return false;       //Cannot find the room of the ID
 			}
 			col+=dataSize;
@@ -192,9 +190,9 @@ public class RoomData implements RoomDataService {
 	private boolean addRoom(int row, RoomPO room) {
 		// TODO Auto-generated method stub
 		int col=0;
-		while(wSheet.getCell(col, row).getContents()!=""){
+		while(wSheet.getCell(col, row).getContents()!=""&&(!wSheet.getCell(col, row).getContents().equals("-1"))){
 			if(wSheet.getCell(col, row).getContents().equals(room.getRoomID())){
-				return true;
+				return false;
 			}
 			col+=dataSize;
 		}
@@ -237,7 +235,6 @@ public class RoomData implements RoomDataService {
 		int col=0;
 		while(!wSheet.getCell(col, row).getContents().equals(roomNUM)){
 			if(wSheet.getCell(col, row).getContents().equals("")){
-				close();
 				return false;
 			}
 			col+=dataSize;
@@ -277,8 +274,11 @@ public class RoomData implements RoomDataService {
 	public boolean addSingleRoom(RoomPO room, String hotelID) {
 		createWritableSheet();
 		setwSheet(hotelID);
-		for(int i=0; i<daysOfMonth; i++){
-			if(!addRoom(i, room)) return false;
+		for(int i=1; i<=daysOfMonth; i++){
+			if(!addRoom(i, room)){
+				close();
+				return false;
+			}
 		}
 		close();
 		return true;
@@ -298,32 +298,39 @@ public class RoomData implements RoomDataService {
 	public boolean deleteSingleRoom(String roomNUM, String hotelID) {
 		createWritableSheet();
 		setwSheet(hotelID);
-		for (int i = 0; i < daysOfMonth; i++) {
-			if(!deleteRoom(i, roomNUM)) return false;
+		for (int i = 1; i <= daysOfMonth; i++) {
+			if(!deleteRoom(i, roomNUM)){
+				close();
+				return false;
+			}
 		}
 		close();
 		return true;
 	}
 
 	public ArrayList<RoomPO> getRoomsByTypeDate(Date day, RoomType roomType, String hotelID) {
-		ArrayList<RoomPO> result = getRoomsByDate(day, hotelID);
-		for (RoomPO temp: result) {
-			if(temp.getRoomType()!=roomType){
-				result.remove(temp);
+		ArrayList<RoomPO> temp = getRoomsByDate(day, hotelID);
+		ArrayList<RoomPO> result = new ArrayList<>();
+		if(temp==null) return null;        //there is no room of the hotel on the day
+		for (RoomPO thisRoom: temp) {
+			if(thisRoom.getRoomType()==roomType){
+				result.add(thisRoom);
 			}
 		}
-		if(result.size()==0) return null;  //there is no room of the hotel
+		if(result.size()==0) return null;  //there is no room whose type is roomType belongs to hotel on the day.
 		return result;
 	}
 
 	public ArrayList<RoomPO> getRoomsByNameDate(Date day, String roomName, String hotelID) {
-		ArrayList<RoomPO> result = getRoomsByDate(day, hotelID);
-		for (RoomPO temp: result) {
-			if(!temp.getRoomName().equals(roomName)){
-				result.remove(temp);
+		ArrayList<RoomPO> temp = getRoomsByDate(day, hotelID);
+		ArrayList<RoomPO> result = new ArrayList<>();
+		if(temp==null) return null;        //there is no room of the hotel on the day
+		for (RoomPO thisRoom: temp) {
+			if(thisRoom.getRoomName().equals(roomName)){
+				result.add(thisRoom);
 			}
 		}
-		if(result.size()==0) return null;  //there is no room of the hotel
+		if(result.size()==0) return null;  //there is no room whose name is roomName belongs to hotel on the day.
 		return result;
 	}
 
@@ -340,7 +347,7 @@ public class RoomData implements RoomDataService {
 			col+=dataSize;
 		}
 		close();
-		if(result.size()==0) return null;  //there is no room of the hotel
+		if(result.size()==0) return null;  //there is no room of the hotel on the day
 		return result;
 	}
 
@@ -360,7 +367,10 @@ public class RoomData implements RoomDataService {
 		}
 		col+=3;
 		int reserved = (int)((NumberCell) wSheet.getCell(col, row)).getValue();
-		if(reserved==1) return false;                 //This room on the day has already been reserved.
+		if(reserved==1) {
+			close();
+			return false;                 //This room on the day has already been reserved.
+		}
 		Number isReserved = new Number(col, row, 1.0);
 		try {
 			wSheet.addCell(isReserved);
@@ -387,11 +397,14 @@ public class RoomData implements RoomDataService {
 			col+=dataSize;
 		}
 		col+=2;
-		int reserved = (int)((NumberCell) wSheet.getCell(col, row)).getValue();
-		if(reserved==1) return false;                 //This room on the day has already been check in.
-		Number isReserved = new Number(col, row, 1.0);
+		int available = (int)((NumberCell) wSheet.getCell(col, row)).getValue();
+		if(available==0){
+			close();
+			return false;                 //This room on the day has already been check in.
+		}
+		Number isAvailable = new Number(col, row, 0.0);
 		try {
-			wSheet.addCell(isReserved);
+			wSheet.addCell(isAvailable);
 		} catch (WriteException e) {
 			e.printStackTrace();
 		}
@@ -415,11 +428,14 @@ public class RoomData implements RoomDataService {
 			col+=dataSize;
 		}
 		col+=2;
-		int reserved = (int)((NumberCell) wSheet.getCell(col, row)).getValue();
-		if(reserved==0) return false;                 //This room on the day has already been check out.
-		Number isReserved = new Number(col, row, 0.0);
+		int available = (int)((NumberCell) wSheet.getCell(col, row)).getValue();
+		if(available==1){
+			close();
+			return false;                 //This room on the day has already been check out.
+		}
+		Number isAvailable = new Number(col, row, 1.0);
 		try {
-			wSheet.addCell(isReserved);
+			wSheet.addCell(isAvailable);
 		} catch (WriteException e) {
 			e.printStackTrace();
 		}

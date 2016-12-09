@@ -54,7 +54,6 @@ public class DriverForCreditData {
 		for (CreditChangePO temp: result) {
 			System.out.println();
 			System.out.println("orderID: "+temp.getOrderID());
-
 			SimpleDateFormat bartDateFormat = new SimpleDateFormat("MM-dd-yyyy");
 			System.out.println("date: "+bartDateFormat.format(temp.getDate()));
 			System.out.println("orderAction: "+temp.getOrderAction());

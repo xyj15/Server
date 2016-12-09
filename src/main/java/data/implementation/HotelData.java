@@ -52,9 +52,9 @@ public class HotelData implements HotelDataService {
 		createWritableSheet();
 		int col = 0;
 		int row = hash(hotel.getCity()+hotel.getDistrict());
-		while(wSheet.getCell(col, row).getContents()!=""||(!wSheet.getCell(col, row).getContents().equals("-1"))){
+		while(wSheet.getCell(col, row).getContents()!=""&&(!wSheet.getCell(col, row).getContents().equals("-1"))){
 			if(wSheet.getCell(col, row).getContents().equals(hotel.getUserID())){
-				close();
+				out();
 				return false;     // the hotel with the same ID has already existed
 			}
 			col+=dataSize;
@@ -118,8 +118,8 @@ public class HotelData implements HotelDataService {
 
 		try {
 			Workbook roomBook = Workbook.getWorkbook(new File("RoomData.xls"));
-			WritableWorkbook wRoomBook = Workbook.createWorkbook(new File("RoomData.xls"),book);
-			WritableSheet wRoomSheet = wRoomBook.createSheet(hotel.getName(), Integer.parseInt(hotel.getUserID()));
+			WritableWorkbook wRoomBook = Workbook.createWorkbook(new File("RoomData.xls"),roomBook);
+			wRoomBook.createSheet(hotel.getName(), Integer.parseInt(hotel.getUserID()));
 			wRoomBook.write();
 			try {
 				wRoomBook.close();
@@ -144,15 +144,20 @@ public class HotelData implements HotelDataService {
 	 */
 	public boolean deleteHotel(String hotelID) {
 		createWritableSheet();
-		int col = 0;
-		int row = hash(hotelID);
-		while(!wSheet.getCell(col, row).getContents().equals(hotelID)){
-			if(wSheet.getCell(col, row).getContents().equals("")){
-				close();
-				return false;                         //The hotel with ID of hotelID does not exist.
-			}
-			col+=dataSize;
+		Cell hotelStart = wSheet.findCell(hotelID);
+		if(hotelStart==null){
+			out();
+			return false;
 		}
+		int col = hotelStart.getColumn();
+		int row = hotelStart.getRow();
+//		while(!wSheet.getCell(col, row).getContents().equals(hotelID)){
+//			if(wSheet.getCell(col, row).getContents().equals("")){
+//				close();
+//				return false;                         //The hotel with ID of hotelID does not exist.
+//			}
+//			col+=dataSize;
+//		}
 		for(int i=0;i<dataSize;i++){
 			Label label = new Label(col+i,row,"-1");
 			try {
@@ -161,6 +166,23 @@ public class HotelData implements HotelDataService {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		}
+
+		try {
+			Workbook roomBook = Workbook.getWorkbook(new File("RoomData.xls"));
+			WritableWorkbook wRoomBook = Workbook.createWorkbook(new File("RoomData.xls"),roomBook);
+			wRoomBook.removeSheet(Integer.parseInt(hotelID));
+			wRoomBook.write();
+			try {
+				wRoomBook.close();
+			} catch (WriteException e) {
+				e.printStackTrace();
+			}
+			roomBook.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (BiffException e) {
+			e.printStackTrace();
 		}
 
 		WritableSheet sumSheet = wBook.getSheet(1);
@@ -185,10 +207,11 @@ public class HotelData implements HotelDataService {
 	public boolean updateHotel(HotelPO hotel) {
 		createWritableSheet();
 		int col = 0;
-		int row = hash(hotel.getUserID());
+		int row = hash(hotel.getCity()+hotel.getDistrict());
 		while(!wSheet.getCell(col, row).getContents().equals(hotel.getUserID())){
 			if(wSheet.getCell(col, row).getContents().equals("")){
-				close();                         //The hotel with ID of hotelID does not exist.
+				out();                          //The hotel with ID of hotelID does not exist.
+				return false;
 			}
 			col+=dataSize;
 		}
@@ -251,6 +274,7 @@ public class HotelData implements HotelDataService {
 	public HotelPO getHotelByID(String hotelID) {
 		createSheet();
 		Cell hotelStart = sheet.findCell(hotelID);
+		if(hotelStart==null) return null;
 		int col = hotelStart.getColumn();
 		int row = hotelStart.getRow();
 		HotelPO result = getHotelByPosition(col, row);
@@ -265,6 +289,7 @@ public class HotelData implements HotelDataService {
 	public HotelPO getHotelByName(String hotelName) {
 		createSheet();
 		Cell hotelStart = sheet.findCell(hotelName);
+		if(hotelStart==null) return null;
 		int col = hotelStart.getColumn()-2;
 		int row = hotelStart.getRow();
 		HotelPO result = getHotelByPosition(col, row);
@@ -279,11 +304,14 @@ public class HotelData implements HotelDataService {
 	 */
 	public ArrayList<HotelPO> getHotelListByCityDistrict(String city, String district) {
 		createWritableSheet();
+		sheet = book.getSheet(0);
 		int col = 0;
 		int row = hash(city+district);
 		ArrayList<HotelPO> result = new ArrayList<HotelPO>();
 		while(wSheet.getCell(col, row).getContents()!=""){
-			if(!wSheet.getCell(col, row).getContents().equals("-1"))result.add(getHotelByPosition(col, row));
+			if(!wSheet.getCell(col, row).getContents().equals("-1")){
+				result.add(getHotelByPosition(col, row));
+			}
 			col+=dataSize;
 		}
 		close();
@@ -300,12 +328,15 @@ public class HotelData implements HotelDataService {
 	 * @return
 	 */
 	public ArrayList<HotelPO> getHotelListSortedByScore(double lowScore, double highScore, String city, String district) {
-		ArrayList<HotelPO> result = getHotelListByCityDistrict(city, district);
-		for (HotelPO thisHotel: result) {
-			if(thisHotel.getScore()<lowScore||thisHotel.getScore()>highScore){
-				result.remove(thisHotel);
+		ArrayList<HotelPO> temp = getHotelListByCityDistrict(city, district);
+		ArrayList<HotelPO> result = new ArrayList<>();
+		if(temp==null) return null;       //There is no hotel sighed in the district of the city.
+		for (HotelPO thisHotel: temp) {
+			if(thisHotel.getScore()>=lowScore&&thisHotel.getScore()<=highScore){
+				result.add(thisHotel);
 			}
 		}
+		if(result.size()==0) return null;       //There is no hotel sighed in the district of the city whose score is between lowScore and highScore.
 		return result;
 	}
 
@@ -317,12 +348,20 @@ public class HotelData implements HotelDataService {
 	 * @return
 	 */
 	public ArrayList<HotelPO> getHotelListFilteredByLevel(int level, String city, String district) {
-		ArrayList<HotelPO> result = getHotelListByCityDistrict(city, district);
-		for (HotelPO thisHotel: result) {
-			if(thisHotel.getLevel()!=level){
-				result.remove(thisHotel);
+		ArrayList<HotelPO> temp = getHotelListByCityDistrict(city, district);
+		ArrayList<HotelPO> result = new ArrayList<>();
+		if(temp==null) return null;       //There is no hotel sighed in the district of the city.
+		for (HotelPO thisHotel: temp) {
+			if(thisHotel.getLevel()==level){
+				result.add(thisHotel);
 			}
 		}
+//		for (int i = 0; i < result.size(); i++) {
+//			if(result.get(i).getLevel()!=level){
+//				result.remove(i);
+//			}
+//		}
+		if(result.size()==0) return null;       //There is no hotel sighed in the district of the city whose level equals to "level".
 		return result;
 	}
 
@@ -335,13 +374,13 @@ public class HotelData implements HotelDataService {
 	 * @return
 	 */
 	public ArrayList<HotelPO> getHotelListFilteredByPrice(double lowPrice, double highPrice, String city, String district) {
-		createWritableSheet();
+		ArrayList<HotelPO> temp = getHotelListByCityDistrict(city, district);
+		ArrayList<HotelPO> result = new ArrayList<>();
+		if(temp==null) return null;       //There is no hotel sighed in the district of the city.
 		RoomData rooms = new RoomData();
-		ArrayList<HotelPO> result = getHotelListByCityDistrict(city, district);
-		close();
-		for (HotelPO temp: result) {
-			if(!rooms.hasSuitableRoom(lowPrice, highPrice, temp.getUserID())){
-				result.remove(temp);
+		for (HotelPO thisHotel: temp) {
+			if(rooms.hasSuitableRoom(lowPrice, highPrice, thisHotel.getUserID())){
+				result.add(thisHotel);
 			}
 		}
 		if(result.size()==0) return null;  //There is no hotel fits the condition.
@@ -357,10 +396,11 @@ public class HotelData implements HotelDataService {
 		Sheet sumSheet = book.getSheet(1);
 		int sum = (int) ((NumberCell) sumSheet.getCell(0, 0)).getValue();
 		if(sum>999999) return null;   //The space for saving the information of Hotels has been full.
-		String ID = sum+1+"";
+		String ID = sum+"";
 		while(ID.length()<lengthOfID){
 			ID = '0'+ID;
 		}
+		book.close();
 		return ID;
 	}
 
@@ -378,6 +418,7 @@ public class HotelData implements HotelDataService {
 		}
 		book.close();
 	}
+
 
 	/**
 	 *
@@ -397,7 +438,8 @@ public class HotelData implements HotelDataService {
 	 */
 	private int hash(String hotelScope){
 		int result = hotelScope.hashCode();
-		result%=11;
+		if(result<0)result = 0-result;
+		result%=10;
 		return result;
 	}
 
@@ -478,6 +520,16 @@ public class HotelData implements HotelDataService {
 		}
 	}
 
+	private void out(){
+		try {
+			wBook.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (WriteException e) {
+			e.printStackTrace();
+		}
+		book.close();
+	}
 //	private boolean add(int col, int row, HotelPO hotel){
 //		return true;
 //	}
