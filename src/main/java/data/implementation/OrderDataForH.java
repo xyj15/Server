@@ -19,9 +19,9 @@ import java.util.Date;
  */
 public class OrderDataForH implements OrderDataService {
 	private int dataSize = 21;
-	private String sourceFile = "OrderForHotel.xls";
-	private OrderChanger changerForH = new OrderChanger("OrderForHotel.xls");
-	private OrderChanger changerForM = new OrderChanger("OrderForMember.xls");
+	private String sourceFile = "OrderDataForHotel.xls";
+	private OrderChanger changerForH = new OrderChanger("OrderDataForHotel.xls");
+	private OrderChanger changerForM = new OrderChanger("OrderDataForMember.xls");
 	private Workbook book;
 	private Sheet sheet;
 	private WritableWorkbook wBook;
