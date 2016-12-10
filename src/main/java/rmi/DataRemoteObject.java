@@ -63,6 +63,11 @@ public class DataRemoteObject extends UnicastRemoteObject implements CreditDataS
 	}
 	
 	@Override
+	public String getAvailableSalerID() {
+		return salerDataService.getAvailableSalerID();
+	}
+	
+	@Override
 	public boolean addMember(MemberPO member) {
 		return memberDataService.addMember(member);
 	}
@@ -80,6 +85,11 @@ public class DataRemoteObject extends UnicastRemoteObject implements CreditDataS
 	@Override
 	public MemberPO getMember(String ID) {
 		return memberDataService.getMember(ID);
+	}
+	
+	@Override
+	public String getAvailableMemberID() {
+		return memberDataService.getAvailableMemberID();
 	}
 	
 	@Override
@@ -208,31 +218,28 @@ public class DataRemoteObject extends UnicastRemoteObject implements CreditDataS
 	}
 	
 	@Override
+	public String getAvailableHotelID() {
+		return hotelDataService.getAvailableHotelID();
+	}
+	
+	@Override
 	public ArrayList<HotelPO> getHotelListByCityDistrict(String city, String district) {
 		return searchDataService.getHotelListByCityDistrict(city, district);
 	}
 	
 	@Override
 	public ArrayList<HotelPO> getHotelListSortedByScore(double lowScore, double highScore, String city, String district) {
-//		return searchDataService.getHotelListSortedByScore(lowScore, highScore, city, district);
-		return null;
+		return searchDataService.getHotelListSortedByScore(lowScore, highScore, city, district);
 	}
 	
 	@Override
 	public ArrayList<HotelPO> getHotelListFilteredByLevel(int level, String city, String district) {
-//		return searchDataService.getHotelListFilteredByLevel(level, city, district);
-		return null;
+		return searchDataService.getHotelListFilteredByLevel(level, city, district);
 	}
 	
 	@Override
 	public ArrayList<HotelPO> getHotelListFilteredByPrice(double lowPrice, double highPrice, String city, String district) {
-//		return searchDataService.getHotelListFilteredByPrice(lowPrice, highPrice, city, district);
-		return null;
-	}
-	
-	@Override
-	public String getAvailableID() {
-		return null;
+		return searchDataService.getHotelListFilteredByPrice(lowPrice, highPrice, city, district);
 	}
 	
 	@Override
@@ -268,6 +275,11 @@ public class DataRemoteObject extends UnicastRemoteObject implements CreditDataS
 	@Override
 	public ArrayList<PromotionPO> getPromotionList() {
 		return promotionDataService.getPromotionList();
+	}
+	
+	@Override
+	public String getAvailablePromotionID() {
+		return promotionDataService.getAvailablePromotionID();
 	}
 	
 	@Override

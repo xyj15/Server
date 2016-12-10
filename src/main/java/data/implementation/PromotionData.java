@@ -260,7 +260,7 @@ public class PromotionData implements PromotionDataService {
 	 *
 	 * @return
 	 */
-	public String getAvailableID() {
+	public String getAvailablePromotionID() {
 		long rows = wSheet.getRows();
 		if(rows>99999) return null;    //The space for saving the information of Members has been full.
 		String ID = rows+1+"";
