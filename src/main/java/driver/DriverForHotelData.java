@@ -27,6 +27,9 @@ public class DriverForHotelData {
 //		System.out.println(driver.testUpdate(new HotelPO("000001","jingjing","亚婧大酒店", "石鼓路", "新街口", "南京市", 3, 4.0,"健身房、自助餐厅、温泉","是亲子度假首选。"
 //				,"徐亚婧", "15205153967",enterprise)));
 //		driver.testGetHotelByID("000000");
+//		driver.testGetHotelByName("JavaHotel");
+//		System.out.println(driver.testGetHotelByID("000101"));
+//		System.out.println(driver.testGetHotelByName("CppHotel"));
 	}
 
 	/**

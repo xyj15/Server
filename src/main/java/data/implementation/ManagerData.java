@@ -1,6 +1,7 @@
 package data.implementation;
 
 import data.dataservice.ManagerDataService;
+import jxl.Sheet;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
 import jxl.write.Label;
@@ -19,29 +20,15 @@ import java.io.IOException;
  */
 public class ManagerData implements ManagerDataService {
 
-	String sourceFile = "ManagerData.xls";
-	Workbook book;
-	WritableWorkbook wBook;
-	WritableSheet wSheet;
-	int dataSize = 4;
-
-	public ManagerData(){
-		try {
-			try {
-				book = Workbook.getWorkbook(new File(sourceFile));
-			} catch (BiffException e) {
-				e.printStackTrace();
-			}
-			wBook = Workbook.createWorkbook(new File(sourceFile));
-			wSheet = wBook.getSheet(0);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
+	private String sourceFile = "ManagerData.xls";
+	private Workbook book;
+	private Sheet sheet;
+	private WritableWorkbook wBook;
+	private WritableSheet wSheet;
+	private int dataSize = 4;
 
 	public boolean updateManager(ManagerPO manager) {
+		createWritableSheet();
 		int col = 0;
 		int row = 0;
 		col++;
@@ -50,6 +37,7 @@ public class ManagerData implements ManagerDataService {
 		Label name = new Label(col, row, manager.getName());
 		col++;
 		Label tel = new Label(col, row, manager.getTel());
+
 		try {
 			wSheet.addCell(password);
 			wSheet.addCell(name);
@@ -59,32 +47,34 @@ public class ManagerData implements ManagerDataService {
 			e.printStackTrace();
 		}
 
-		try {
-			wBook.write();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		close();
 		return true;
 	}
 
 	public ManagerPO getManager() {
+		createSheet();
 		int col = 0;
 		int row = 0;
-		String managerID = wSheet.getCell(col, row).getContents();
+		String managerID = sheet.getCell(col, row).getContents();
 		col++;
-		String password = wSheet.getCell(col, row).getContents();
+		String password = sheet.getCell(col, row).getContents();
 		col++;
-		String name = wSheet.getCell(col, row).getContents();
+		String name = sheet.getCell(col, row).getContents();
 		col++;
-		String tel = wSheet.getCell(col, row).getContents();
-
+		String tel = sheet.getCell(col, row).getContents();
+		book.close();
 		return new ManagerPO(managerID, password, name, tel);
 	}
 
 	/**
 	 *
 	 */
-	public void close() {
+	private void close() {
+		try {
+			wBook.write();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		try {
 			wBook.close();
 		} catch (IOException e) {
@@ -93,5 +83,42 @@ public class ManagerData implements ManagerDataService {
 			e.printStackTrace();
 		}
 		book.close();
+	}
+
+	/**
+	 * 用来初始化sheet
+	 *
+	 */
+	private void createSheet(){
+		try {
+			try {
+				book=Workbook.getWorkbook(new File(sourceFile));
+				sheet = book.getSheet(0);
+			} catch (BiffException e) {
+				e.printStackTrace();
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 *用来初始化wSheet
+	 *
+	 */
+	private void createWritableSheet(){
+		try {
+			try {
+				book=Workbook.getWorkbook(new File(sourceFile));
+				wBook = Workbook.createWorkbook(new File(sourceFile),book);
+				wSheet = wBook.getSheet(0);
+			} catch (BiffException e) {
+				e.printStackTrace();
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

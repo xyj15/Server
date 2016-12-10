@@ -24,9 +24,6 @@ public class OrderDataForH implements OrderDataService {
 	private OrderChanger changerForM = new OrderChanger("OrderDataForMember.xls");
 	private Workbook book;
 	private Sheet sheet;
-	private WritableWorkbook wBook;
-	private WritableSheet wSheet;
-
 	/**
 	 *
 	 * @param order
@@ -102,7 +99,7 @@ public class OrderDataForH implements OrderDataService {
 		int col = orderStart.getColumn();
 		int row = orderStart.getRow();
 		OrderPO result = getOrder(col, row);
-		close();
+		book.close();
 		return result;
 	}
 
@@ -116,7 +113,7 @@ public class OrderDataForH implements OrderDataService {
 		ArrayList<OrderPO> result = new ArrayList<OrderPO>();
 		int col = 0;
 		int row = hash(userID);
-		for (int i = 0; i < sheet.getColumn(row).length; i+=dataSize) {
+		for (int i = 0; i < sheet.getRow(row).length; i+=dataSize) {
 			result.add(getOrder(col+i, row));
 		}
 		book.close();
@@ -202,20 +199,6 @@ public class OrderDataForH implements OrderDataService {
 
 	/**
 	 *
-	 */
-	private void close() {
-		try {
-			wBook.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (WriteException e) {
-			e.printStackTrace();
-		}
-		book.close();
-	}
-
-	/**
-	 *
 	 * @param ID
 	 * @return
 	 */
@@ -223,21 +206,6 @@ public class OrderDataForH implements OrderDataService {
 		int hashResult = Integer.parseInt(ID);
 		hashResult%=27;
 		return hashResult;
-	}
-
-	/**
-	 *
-	 */
-	private void createWritablSheet(){
-		try {
-			book = Workbook.getWorkbook(new File(sourceFile));
-			wBook = Workbook.createWorkbook(new File(sourceFile),book);
-			wSheet = wBook.getSheet(0);
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (BiffException e) {
-			e.printStackTrace();
-		}
 	}
 
 	/**
@@ -261,7 +229,7 @@ public class OrderDataForH implements OrderDataService {
 	 * @return
 	 */
 	private OrderPO getOrder(int col, int row){
-		int status = (int)((NumberCell) wSheet.getCell(col+dataSize-1, row)).getValue();
+		int status = (int)((NumberCell) sheet.getCell(col+dataSize-1, row)).getValue();
 		OrderStatus orderStatus = null;
 		switch (status) {
 			case 0:
@@ -277,25 +245,25 @@ public class OrderDataForH implements OrderDataService {
 				orderStatus = OrderStatus.Canceled;
 				break;
 		}
-		String orderID = wSheet.getCell(col, row).getContents();
+		String orderID = sheet.getCell(col, row).getContents();
 		col++;
-		String memberID = wSheet.getCell(col, row).getContents();
+		String memberID = sheet.getCell(col, row).getContents();
 		col++;
-		String hotelID = wSheet.getCell(col, row).getContents();
+		String hotelID = sheet.getCell(col, row).getContents();
 		col++;
-		String evaluation = wSheet.getCell(col, row).getContents();
+		String evaluation = sheet.getCell(col, row).getContents();
 		col++;
-		String promotion = wSheet.getCell(col, row).getContents();
+		String promotion = sheet.getCell(col, row).getContents();
 		col++;
-		String roomName = wSheet.getCell(col, row).getContents();
+		String roomName = sheet.getCell(col, row).getContents();
 		col++;
-		Date checkIn = ((DateCell) wSheet.getCell(col, row)).getDate();
+		Date checkIn = ((DateCell) sheet.getCell(col, row)).getDate();
 		col++;
-		Date checkOut = ((DateCell) wSheet.getCell(col, row)).getDate();
+		Date checkOut = ((DateCell) sheet.getCell(col, row)).getDate();
 		col++;
-		Date latestCheckIn = ((DateCell) wSheet.getCell(col, row)).getDate();
+		Date latestCheckIn = ((DateCell) sheet.getCell(col, row)).getDate();
 		col++;
-		Date creatTime = ((DateCell) wSheet.getCell(col, row)).getDate();
+		Date creatTime = ((DateCell) sheet.getCell(col, row)).getDate();
 		col++;
 		Date actualCheckIn = null;
 		Date actualCheckOut = null;
@@ -313,23 +281,23 @@ public class OrderDataForH implements OrderDataService {
 			cancelTime = ((DateCell) sheet.getCell(col, row)).getDate();
 		}
 		col++;
-		int roomNUM = (int)((NumberCell) wSheet.getCell(col, row)).getValue();
+		int roomNUM = (int)((NumberCell) sheet.getCell(col, row)).getValue();
 		col++;
-		int numOfClient = (int)((NumberCell) wSheet.getCell(col, row)).getValue();
+		int numOfClient = (int)((NumberCell) sheet.getCell(col, row)).getValue();
 		col++;
-		double price = ((NumberCell) wSheet.getCell(col, row)).getValue();
+		double price = ((NumberCell) sheet.getCell(col, row)).getValue();
 		col++;
-		double score = ((NumberCell) wSheet.getCell(col, row)).getValue();
+		double score = ((NumberCell) sheet.getCell(col, row)).getValue();
 		col++;
-		double recover = ((NumberCell) wSheet.getCell(col, row)).getValue();
+		double recover = ((NumberCell) sheet.getCell(col, row)).getValue();
 		col++;
 		boolean hasKid = true;
-		int kid = (int)((NumberCell) wSheet.getCell(col, row)).getValue();
+		int kid = (int)((NumberCell) sheet.getCell(col, row)).getValue();
 		if(kid==0){
 			hasKid=false;
 		}
 		col++;
-		int type = (int)((NumberCell) wSheet.getCell(col, row)).getValue();
+		int type = (int)((NumberCell) sheet.getCell(col, row)).getValue();
 		RoomType roomType = null;
 		switch (type){
 			case 0: roomType = RoomType.Single; break;

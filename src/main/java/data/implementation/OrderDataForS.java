@@ -119,9 +119,8 @@ public class OrderDataForS implements OrderDataService {
 	private ArrayList<OrderPO> getOrderList(int row){
 		ArrayList<OrderPO> result = new ArrayList<OrderPO>();
 		int col = 0;
-		while(sheet.getCell(col, row).getContents()!=""){
-			result.add(getOrder(col, row));
-			col+=dataSize;
+		for (int i = 0; i < sheet.getRow(row).length; i+=dataSize) {
+			result.add(getOrder(col+i, row));
 		}
 		if(result.size()==0) return null;   //This hotel does not have any order.
 		return result;
