@@ -86,8 +86,5 @@ public class DriverForMemberData {
 		return null;
 	}
 
-	public void close(){
-		test.close();
-	}
 
 }
