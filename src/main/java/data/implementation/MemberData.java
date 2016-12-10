@@ -319,7 +319,7 @@ public class MemberData implements MemberDataService {
 	 *
 	 * @return
 	 */
-	public String getAvailableID() {
+	public String getAvailableMemberID() {
 		createSheet();
 		long rows = sheet.getRows();
 		if(rows>99999999) return null;    //The space for saving the information of Members has been full.

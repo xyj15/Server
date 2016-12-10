@@ -7,5 +7,5 @@ public interface SalerDataService {
 	public boolean deleteSaler(String salerID);
 	public boolean updateSaler(SalerPO saler);
 	public SalerPO getSaler(String ID);
-	public String getAvailableID();   //得到可用的新增ID
+	public String getAvailableSalerID();   //得到可用的新增ID
 }

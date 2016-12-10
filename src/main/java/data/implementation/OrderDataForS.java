@@ -21,25 +21,10 @@ import java.util.Date;
 public class OrderDataForS implements OrderDataService {
 
 	private int dataSize = 21;
-	private String sourceFile = "OrderForMember.xls";
+	private String sourceFile = "OrderDataForMember.xls";
 	private Workbook book;
 	private Sheet sheet;
-	private WritableWorkbook wBook;
-	private WritableSheet wSheet;
-	private OrderDataForH sync;
-
-	public OrderDataForS(){
-		sync = new OrderDataForH();
-//		try {
-//			book = Workbook.getWorkbook(new File(sourceFile));
-//			wBook = Workbook.createWorkbook(new File(sourceFile),book);
-//			wSheet = wBook.getSheet(0);
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		} catch (BiffException e) {
-//			e.printStackTrace();
-//		}
-	}
+	private OrderDataForM memberOrder = new OrderDataForM();
 
 	public boolean addOrder(OrderPO order) {
 		return false;
@@ -51,96 +36,7 @@ public class OrderDataForS implements OrderDataService {
 	 * @return
 	 */
 	public boolean updateOrder(OrderPO order) {
-		createWritablSheet();
-		Cell orderStart = wSheet.findCell(order.getOrderID());
-		int col = orderStart.getColumn()+1;
-		int row = orderStart.getRow();
-		Label memberID = new Label(col,row,order.getMemberID());
-		col++;
-		Label hotelID = new Label(col, row, order.getHotelID());
-		col++;
-		Label evaluation = new Label(col, row, order.getEvaluation());
-		col++;
-		Label promotion = new Label(col, row, order.getPromotionID());
-		col++;
-		Label roomName = new Label(col, row, order.getRoomName());
-		col++;
-		DateTime checkIn = new DateTime(col, row, order.getCheckinTime());
-		col++;
-		DateTime checkOut = new DateTime(col, row, order.getCheckoutTime());
-		col++;
-		DateTime latestCheckIn = new DateTime(col, row, order.getLatestCheckinTime());
-		col++;
-		DateTime creatTime = new DateTime(col, row, order.getCreateTime());
-		col++;
-		DateTime actualCheckIn, actualCheckOut, cancelTime;
-		if(order.getOrderStatus()==OrderStatus.Executed){
-			actualCheckIn = new DateTime(col, row, order.getActualCheckinTime());
-			col++;
-			actualCheckOut = new DateTime(col, row, order.getActualCheckoutTime());
-			col++;
-		}
-		else{
-			actualCheckIn = new DateTime(col, row, new Date());
-			col++;
-			actualCheckOut = new DateTime(col, row, new Date());
-			col++;
-		}
-		if(order.getOrderStatus()==OrderStatus.Canceled){
-			cancelTime = new DateTime(col, row, order.getCancelTime());
-		}
-		else{
-			cancelTime = new DateTime(col, row, new Date());
-		}
-		col++;
-		Number roomNUM = new Number(col, row, order.getNumberOfRoom());
-		col++;
-		Number numOfClient = new Number(col, row, order.getNumberOfClient());
-		col++;
-		Number price = new Number(col, row, order.getPrice());
-		col++;
-		Number score = new Number(col, row, order.getScore());
-		col++;
-		Number recover = new Number(col, row, order.getRecover());
-		col++;
-		double kid = 0.0;
-		if(order.getHaveKids()){
-			kid = 1;
-		}
-		Number hasKid = new Number(col, row, kid);
-		col++;
-		Number roomType = new Number(col, row, order.getRoomType().getValue());
-		col++;
-		Number orderStatus = new Number(col, row, order.getOrderStatus().getV());
-
-		try {
-			wSheet.addCell(memberID);
-			wSheet.addCell(hotelID);
-			wSheet.addCell(promotion);
-			wSheet.addCell(roomName);
-			wSheet.addCell(evaluation);
-			wSheet.addCell(checkIn);
-			wSheet.addCell(checkOut);
-			wSheet.addCell(latestCheckIn);
-			wSheet.addCell(creatTime);
-			wSheet.addCell(actualCheckIn);
-			wSheet.addCell(actualCheckOut);
-			wSheet.addCell(cancelTime);
-			wSheet.addCell(numOfClient);
-			wSheet.addCell(roomNUM);
-			wSheet.addCell(price);
-			wSheet.addCell(score);
-			wSheet.addCell(recover);
-			wSheet.addCell(hasKid);
-			wSheet.addCell(roomType);
-			wSheet.addCell(orderStatus);
-		} catch (WriteException e) {
-			e.printStackTrace();
-		}
-
-		close();
-		sync.updateOrder(order);
-		return true;
+		return memberOrder.updateOrder(order);
 	}
 
 	public boolean cancelOrder(String orderID) {
@@ -158,23 +54,7 @@ public class OrderDataForS implements OrderDataService {
 	 * @return
 	 */
 	public boolean recoverOrder(String orderID, double recover) {
-		createWritablSheet();
-		Cell orderStart = wSheet.findCell(orderID);
-		int col = orderStart.getColumn();
-		int row = orderStart.getRow();
-		Number orderStatus = new Number(col+dataSize-1, row, OrderStatus.Canceled.getV());
-		Number recoverLocation = new Number(col+dataSize-4, row, recover);
-
-		try {
-			wSheet.addCell(orderStatus);
-			wSheet.addCell(recoverLocation);
-		} catch (WriteException e) {
-			e.printStackTrace();
-		}
-
-		close();
-		sync.recoverOrder(orderID,recover);
-		return true;
+		return memberOrder.recoverOrder(orderID, recover);
 	}
 
 	public OrderPO getOrder(String orderID) {
@@ -233,26 +113,6 @@ public class OrderDataForS implements OrderDataService {
 
 	/**
 	 *
-	 */
-	private void close() {
-		try {
-			wBook.write();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		try {
-			wBook.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (WriteException e) {
-			e.printStackTrace();
-		}
-		book.close();
-	}
-
-	/**
-	 *
 	 * @param row
 	 * @return
 	 */
@@ -274,7 +134,7 @@ public class OrderDataForS implements OrderDataService {
 	 * @return
 	 */
 	private OrderPO getOrder(int col, int row){
-		int status = (int)((NumberCell) wSheet.getCell(col+dataSize-1, row)).getValue();
+		int status = (int)((NumberCell) sheet.getCell(col+dataSize-1, row)).getValue();
 		OrderStatus orderStatus = null;
 		switch (status){
 			case 0: orderStatus = OrderStatus.Executed; break;
@@ -292,7 +152,7 @@ public class OrderDataForS implements OrderDataService {
 		col++;
 		String promotion = sheet.getCell(col, row).getContents();
 		col++;
-		String roomName = wSheet.getCell(col, row).getContents();
+		String roomName = sheet.getCell(col, row).getContents();
 		col++;
 		Date checkIn = ((DateCell) sheet.getCell(col, row)).getDate();
 		col++;
@@ -334,7 +194,7 @@ public class OrderDataForS implements OrderDataService {
 			hasKid=false;
 		}
 		col++;
-		int type = (int)((NumberCell) wSheet.getCell(col, row)).getValue();
+		int type = (int)((NumberCell) sheet.getCell(col, row)).getValue();
 		RoomType roomType = null;
 		switch (type){
 			case 0: roomType = RoomType.Single; break;
@@ -345,21 +205,6 @@ public class OrderDataForS implements OrderDataService {
 
 		return new OrderPO(memberID,hotelID,orderID,orderStatus,creatTime,checkIn,actualCheckIn,latestCheckIn,checkOut,actualCheckOut,
 				roomNUM,roomName,numOfClient,hasKid,score,evaluation,recover,promotion,price,cancelTime, roomType);
-	}
-
-	/**
-	 *
-	 */
-	private void createWritablSheet(){
-		try {
-			book = Workbook.getWorkbook(new File(sourceFile));
-			wBook = Workbook.createWorkbook(new File(sourceFile),book);
-			wSheet = wBook.getSheet(0);
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (BiffException e) {
-			e.printStackTrace();
-		}
 	}
 
 	/**

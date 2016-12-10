@@ -1,9 +1,7 @@
 package driver;
 
-import data.dataservice.MemberDataService;
 import data.implementation.MemberData;
 import helper.MemberType;
-import po.ManagerPO;
 import po.MemberPO;
 
 import java.text.ParseException;
@@ -73,7 +71,7 @@ public class DriverForMemberData {
 	}
 
 	public String testGetID(){
-		return test.getAvailableID();
+		return test.getAvailableMemberID();
 	}
 
 	public static Date getDate(String day){

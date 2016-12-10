@@ -156,7 +156,7 @@ public class SalerData implements SalerDataService {
 		return new SalerPO(ID, password, name, tel);
 	}
 
-	public String getAvailableID() {
+	public String getAvailableSalerID() {
 		long rows = wSheet.getRows();
 		if(rows>99999999) return null;    //The space for saving the information of Members has been full.
 		String ID = rows+1+"";

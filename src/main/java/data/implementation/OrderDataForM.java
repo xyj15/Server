@@ -8,12 +8,9 @@ import jxl.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
 import jxl.read.biff.BiffException;
-import jxl.write.*;
-import jxl.write.Number;
 import po.OrderPO;
 import helper.OrderStatus;
 
@@ -23,9 +20,9 @@ import helper.OrderStatus;
 public class OrderDataForM implements OrderDataService {
 
     private int dataSize = 21;
-    private String sourceFile = "OrderForMember.xls";
-    private OrderChanger changerForM = new OrderChanger("OrderForMember.xls");
-    private OrderChanger changerForH = new OrderChanger("OrderForHotel.xls");
+    private String sourceFile = "OrderDataForMember.xls";
+    private OrderChanger changerForM = new OrderChanger("OrderDataForMember.xls");
+    private OrderChanger changerForH = new OrderChanger("OrderDataForHotel.xls");
     private Workbook book;
     private Sheet sheet;
 
