@@ -1,6 +1,7 @@
 package po;
 
 import helper.OrderStatus;
+import helper.RoomType;
 
 import java.util.Date;
 
@@ -31,6 +32,7 @@ public class OrderPO {
 	private String promotionID;	//使用的促销策略
 	private double price;	//订单价值
 	private Date cancelTime;	//订单撤销时间
+	private RoomType roomType;    //订单中客房类型
 	
 	/**
 	 * 空构造方法
@@ -61,11 +63,12 @@ public class OrderPO {
 	 * @param promotionID 使用的促销策略ID
 	 * @param price 订单价值
 	 * @param cancelTime 订单撤销时间
+	 * @param roomType
 	 */
 	public OrderPO(String memberID, String hotelID, String orderID, OrderStatus orderStatus, Date createTime,
 	               Date checkinTime, Date actualCheckinTime, Date latestCheckinTime, Date checkoutTime,
 	               Date actualCheckoutTime, int numberOfRoom, String roomName, int numberOfClient, boolean haveKids,
-	               double score, String evaluation, double recover, String promotionID, double price, Date cancelTime) {
+	               double score, String evaluation, double recover, String promotionID, double price, Date cancelTime, RoomType roomType) {
 		this.memberID = memberID;
 		this.hotelID = hotelID;
 		this.orderID = orderID;
@@ -86,6 +89,7 @@ public class OrderPO {
 		this.promotionID = promotionID;
 		this.price = price;
 		this.cancelTime = cancelTime;
+		this.roomType = roomType;
 	}
 	
 	public String getMemberID() {
@@ -246,5 +250,13 @@ public class OrderPO {
 	
 	public void setCancelTime(Date cancelTime) {
 		this.cancelTime = cancelTime;
+	}
+
+	public RoomType getRoomType() {
+		return roomType;
+	}
+
+	public void setRoomType(RoomType roomType) {
+		this.roomType = roomType;
 	}
 }

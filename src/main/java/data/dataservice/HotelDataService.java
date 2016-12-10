@@ -17,5 +17,4 @@ public interface HotelDataService {
 	public ArrayList<HotelPO> getHotelListFilteredByLevel(int level, String city,String district);   //通过星级过滤目标酒店
 	public ArrayList<HotelPO> getHotelListFilteredByPrice(double lowPrice, double highPrice, String city,String district);   //通过价格过滤目标酒店
 	public String getAvailableID();   //得到可用的新增ID
-	public void close();   //关闭输入流
 }

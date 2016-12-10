@@ -9,5 +9,4 @@ public interface MemberDataService {
 	public boolean updateMember(MemberPO member);  //更新会员
 	public MemberPO getMember(String ID);  //查看会员
 	public String getAvailableID();  //得到可用的新增ID
-	public void close();   //关闭输入流
 }

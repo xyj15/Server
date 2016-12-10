@@ -1,10 +1,8 @@
 package data.implementation;
 
 import data.dataservice.OrderDataService;
-import jxl.Cell;
-import jxl.DateCell;
-import jxl.NumberCell;
-import jxl.Workbook;
+import helper.RoomType;
+import jxl.*;
 import jxl.read.biff.BiffException;
 import jxl.write.*;
 import jxl.write.Number;
@@ -14,6 +12,7 @@ import helper.OrderStatus;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -21,32 +20,39 @@ import java.util.Date;
  */
 public class OrderDataForS implements OrderDataService {
 
-	private int dataSize = 19;
+	private int dataSize = 21;
 	private String sourceFile = "OrderForMember.xls";
 	private Workbook book;
+	private Sheet sheet;
 	private WritableWorkbook wBook;
-	private WritableSheet sheet;
+	private WritableSheet wSheet;
 	private OrderDataForH sync;
 
 	public OrderDataForS(){
 		sync = new OrderDataForH();
-		try {
-			book = Workbook.getWorkbook(new File(sourceFile));
-			wBook = Workbook.createWorkbook(new File(sourceFile),book);
-			sheet = wBook.getSheet(0);
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (BiffException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			book = Workbook.getWorkbook(new File(sourceFile));
+//			wBook = Workbook.createWorkbook(new File(sourceFile),book);
+//			wSheet = wBook.getSheet(0);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		} catch (BiffException e) {
+//			e.printStackTrace();
+//		}
 	}
 
 	public boolean addOrder(OrderPO order) {
 		return false;
 	}
 
+	/**
+	 *
+	 * @param order
+	 * @return
+	 */
 	public boolean updateOrder(OrderPO order) {
-		WritableCell orderStart = (WritableCell) sheet.findCell(order.getOrderID());
+		createWritablSheet();
+		Cell orderStart = wSheet.findCell(order.getOrderID());
 		int col = orderStart.getColumn()+1;
 		int row = orderStart.getRow();
 		Label memberID = new Label(col,row,order.getMemberID());
@@ -57,6 +63,8 @@ public class OrderDataForS implements OrderDataService {
 		col++;
 		Label promotion = new Label(col, row, order.getPromotionID());
 		col++;
+		Label roomName = new Label(col, row, order.getRoomName());
+		col++;
 		DateTime checkIn = new DateTime(col, row, order.getCheckinTime());
 		col++;
 		DateTime checkOut = new DateTime(col, row, order.getCheckoutTime());
@@ -65,11 +73,25 @@ public class OrderDataForS implements OrderDataService {
 		col++;
 		DateTime creatTime = new DateTime(col, row, order.getCreateTime());
 		col++;
-		DateTime actualCheckIn = new DateTime(col, row, order.getActualCheckinTime());
-		col++;
-		DateTime actualCheckOut = new DateTime(col, row, order.getActualCheckoutTime());
-		col++;
-		DateTime cancelTime = new DateTime(col, row, order.getCancelTime());
+		DateTime actualCheckIn, actualCheckOut, cancelTime;
+		if(order.getOrderStatus()==OrderStatus.Executed){
+			actualCheckIn = new DateTime(col, row, order.getActualCheckinTime());
+			col++;
+			actualCheckOut = new DateTime(col, row, order.getActualCheckoutTime());
+			col++;
+		}
+		else{
+			actualCheckIn = new DateTime(col, row, new Date());
+			col++;
+			actualCheckOut = new DateTime(col, row, new Date());
+			col++;
+		}
+		if(order.getOrderStatus()==OrderStatus.Canceled){
+			cancelTime = new DateTime(col, row, order.getCancelTime());
+		}
+		else{
+			cancelTime = new DateTime(col, row, new Date());
+		}
 		col++;
 		Number roomNUM = new Number(col, row, order.getNumberOfRoom());
 		col++;
@@ -87,40 +109,36 @@ public class OrderDataForS implements OrderDataService {
 		}
 		Number hasKid = new Number(col, row, kid);
 		col++;
-		Label roomName = new Label(col, row, order.getRoomName());
+		Number roomType = new Number(col, row, order.getRoomType().getValue());
 		col++;
 		Number orderStatus = new Number(col, row, order.getOrderStatus().getV());
 
 		try {
-			sheet.addCell(memberID);
-			sheet.addCell(hotelID);
-			sheet.addCell(promotion);
-			sheet.addCell(evaluation);
-			sheet.addCell(checkIn);
-			sheet.addCell(checkOut);
-			sheet.addCell(latestCheckIn);
-			sheet.addCell(creatTime);
-			sheet.addCell(actualCheckIn);
-			sheet.addCell(actualCheckOut);
-			sheet.addCell(cancelTime);
-			sheet.addCell(numOfClient);
-			sheet.addCell(roomNUM);
-			sheet.addCell(price);
-			sheet.addCell(score);
-			sheet.addCell(recover);
-			sheet.addCell(hasKid);
-			sheet.addCell(roomName);
-			sheet.addCell(orderStatus);
+			wSheet.addCell(memberID);
+			wSheet.addCell(hotelID);
+			wSheet.addCell(promotion);
+			wSheet.addCell(roomName);
+			wSheet.addCell(evaluation);
+			wSheet.addCell(checkIn);
+			wSheet.addCell(checkOut);
+			wSheet.addCell(latestCheckIn);
+			wSheet.addCell(creatTime);
+			wSheet.addCell(actualCheckIn);
+			wSheet.addCell(actualCheckOut);
+			wSheet.addCell(cancelTime);
+			wSheet.addCell(numOfClient);
+			wSheet.addCell(roomNUM);
+			wSheet.addCell(price);
+			wSheet.addCell(score);
+			wSheet.addCell(recover);
+			wSheet.addCell(hasKid);
+			wSheet.addCell(roomType);
+			wSheet.addCell(orderStatus);
 		} catch (WriteException e) {
 			e.printStackTrace();
 		}
 
-		try {
-			wBook.write();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
+		close();
 		sync.updateOrder(order);
 		return true;
 	}
@@ -133,26 +151,28 @@ public class OrderDataForS implements OrderDataService {
 		return false;
 	}
 
+	/**
+	 *
+	 * @param orderID
+	 * @param recover
+	 * @return
+	 */
 	public boolean recoverOrder(String orderID, double recover) {
-		Cell orderStart = sheet.findCell(orderID);
+		createWritablSheet();
+		Cell orderStart = wSheet.findCell(orderID);
 		int col = orderStart.getColumn();
 		int row = orderStart.getRow();
 		Number orderStatus = new Number(col+dataSize-1, row, OrderStatus.Canceled.getV());
 		Number recoverLocation = new Number(col+dataSize-4, row, recover);
 
 		try {
-			sheet.addCell(orderStatus);
-			sheet.addCell(recoverLocation);
+			wSheet.addCell(orderStatus);
+			wSheet.addCell(recoverLocation);
 		} catch (WriteException e) {
 			e.printStackTrace();
 		}
 
-		try {
-			wBook.write();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
+		close();
 		sync.recoverOrder(orderID,recover);
 		return true;
 	}
@@ -161,19 +181,36 @@ public class OrderDataForS implements OrderDataService {
 		return null;
 	}
 
+	/**
+	 *
+	 * @param userID
+	 * @return
+	 */
 	public ArrayList<OrderPO> getOrderList(String userID) {
+		createSheet();
+		Calendar now = Calendar.getInstance();
+		int year = now.get(Calendar.YEAR);
+		int month = now.get(Calendar.MONTH);
+		int day = now.get(Calendar.DAY_OF_MONTH);
 		ArrayList<OrderPO> result = new ArrayList<OrderPO>();
 		int rows = sheet.getRows();
 		for (int i = 0; i < rows; i++) {
 			ArrayList<OrderPO> temp = getOrderList(i);
 			if(temp!=null){
 				for (OrderPO order:temp) {
-					if(order.getCreateTime()==new Date()){    //baidu
+					Date createTime = order.getCreateTime();
+					Calendar orderTime = Calendar.getInstance();
+					orderTime.setTime(createTime);
+					boolean yearEqual = (orderTime.get(Calendar.YEAR)==year);
+					boolean monthEqual = (orderTime.get(Calendar.MONTH)==month);
+					boolean dayEqual = (orderTime.get(Calendar.DAY_OF_MONTH)==day);
+					if(yearEqual&&monthEqual&&dayEqual){
 						result.add(order);
 					}
 				}
 			}
 		}
+		book.close();
 		if(result.size()==0) return null;   //does not have any abnormal order.
 		return result;
 	}
@@ -197,7 +234,13 @@ public class OrderDataForS implements OrderDataService {
 	/**
 	 *
 	 */
-	public void close() {
+	private void close() {
+		try {
+			wBook.write();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 		try {
 			wBook.close();
 		} catch (IOException e) {
@@ -208,6 +251,11 @@ public class OrderDataForS implements OrderDataService {
 		book.close();
 	}
 
+	/**
+	 *
+	 * @param row
+	 * @return
+	 */
 	private ArrayList<OrderPO> getOrderList(int row){
 		ArrayList<OrderPO> result = new ArrayList<OrderPO>();
 		int col = 0;
@@ -219,7 +267,21 @@ public class OrderDataForS implements OrderDataService {
 		return result;
 	}
 
+	/**
+	 *
+	 * @param col
+	 * @param row
+	 * @return
+	 */
 	private OrderPO getOrder(int col, int row){
+		int status = (int)((NumberCell) wSheet.getCell(col+dataSize-1, row)).getValue();
+		OrderStatus orderStatus = null;
+		switch (status){
+			case 0: orderStatus = OrderStatus.Executed; break;
+			case 1: orderStatus = OrderStatus.Unexecuted; break;
+			case 2: orderStatus = OrderStatus.Abnormal; break;
+			case 3: orderStatus = OrderStatus.Canceled; break;
+		}
 		String orderID = sheet.getCell(col, row).getContents();
 		col++;
 		String memberID = sheet.getCell(col, row).getContents();
@@ -230,6 +292,8 @@ public class OrderDataForS implements OrderDataService {
 		col++;
 		String promotion = sheet.getCell(col, row).getContents();
 		col++;
+		String roomName = wSheet.getCell(col, row).getContents();
+		col++;
 		Date checkIn = ((DateCell) sheet.getCell(col, row)).getDate();
 		col++;
 		Date checkOut = ((DateCell) sheet.getCell(col, row)).getDate();
@@ -238,11 +302,21 @@ public class OrderDataForS implements OrderDataService {
 		col++;
 		Date creatTime = ((DateCell) sheet.getCell(col, row)).getDate();
 		col++;
-		Date actualCheckIn = ((DateCell) sheet.getCell(col, row)).getDate();
-		col++;
-		Date actualCheckOut = ((DateCell) sheet.getCell(col, row)).getDate();
-		col++;
-		Date cancelTime = ((DateCell) sheet.getCell(col, row)).getDate();
+		Date actualCheckIn = null;
+		Date actualCheckOut = null;
+		Date cancelTime = null;
+		if(orderStatus==OrderStatus.Executed){
+			actualCheckIn = ((DateCell) sheet.getCell(col, row)).getDate();
+			col++;
+			actualCheckOut = ((DateCell) sheet.getCell(col, row)).getDate();
+			col++;
+		}
+		else{
+			col+=2;
+		}
+		if(orderStatus==OrderStatus.Canceled){
+			cancelTime = ((DateCell) sheet.getCell(col, row)).getDate();
+		}
 		col++;
 		int roomNUM = (int)((NumberCell) sheet.getCell(col, row)).getValue();
 		col++;
@@ -260,17 +334,46 @@ public class OrderDataForS implements OrderDataService {
 			hasKid=false;
 		}
 		col++;
-		String roomName = sheet.getCell(col, row).getContents();
-		col++;
-		int status = (int)((NumberCell) sheet.getCell(col, row)).getValue();
-		OrderStatus orderStatus = null;
-		switch (status){
-			case 0: orderStatus = OrderStatus.Executed; break;
-			case 1: orderStatus = OrderStatus.Unexecuted; break;
-			case 2: orderStatus = OrderStatus.Abnormal; break;
-			case 3: orderStatus = OrderStatus.Canceled; break;
+		int type = (int)((NumberCell) wSheet.getCell(col, row)).getValue();
+		RoomType roomType = null;
+		switch (type){
+			case 0: roomType = RoomType.Single; break;
+			case 1: roomType = RoomType.TwinBed; break;
+			case 2: roomType = RoomType.BigBed; break;
+			case 3: roomType = RoomType.Suite; break;
 		}
+
 		return new OrderPO(memberID,hotelID,orderID,orderStatus,creatTime,checkIn,actualCheckIn,latestCheckIn,checkOut,actualCheckOut,
-				roomNUM,roomName,numOfClient,hasKid,score,evaluation,recover,promotion,price,cancelTime);
+				roomNUM,roomName,numOfClient,hasKid,score,evaluation,recover,promotion,price,cancelTime, roomType);
 	}
+
+	/**
+	 *
+	 */
+	private void createWritablSheet(){
+		try {
+			book = Workbook.getWorkbook(new File(sourceFile));
+			wBook = Workbook.createWorkbook(new File(sourceFile),book);
+			wSheet = wBook.getSheet(0);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (BiffException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 *
+	 */
+	private void createSheet(){
+		try {
+			book = Workbook.getWorkbook(new File(sourceFile));
+			sheet = book.getSheet(0);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (BiffException e) {
+			e.printStackTrace();
+		}
+	}
+
 }

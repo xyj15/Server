@@ -10,5 +10,4 @@ import po.ManagerPO;
 public interface ManagerDataService {
 	public boolean updateManager(ManagerPO manager);
 	public ManagerPO getManager();
-	public void close();   //关闭输入流
 }

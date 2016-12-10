@@ -407,7 +407,7 @@ public class HotelData implements HotelDataService {
 	/**
 	 *
 	 */
-	public void close(){
+	private void close(){
 		write();
 		try {
 			wBook.close();

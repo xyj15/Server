@@ -344,7 +344,7 @@ public class MemberData implements MemberDataService {
 	/**
 	 *
 	 */
-	public void close(){
+	private void close(){
 		write();
 		try {
 			wBook.close();

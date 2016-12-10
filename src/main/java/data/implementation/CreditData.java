@@ -123,7 +123,7 @@ public class CreditData implements CreditDataService {
 		return true;
 	}
 
-	public void close() {
+	private void close() {
 		try {
 			wBook.close();
 		} catch (IOException e) {

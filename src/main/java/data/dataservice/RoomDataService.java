@@ -17,5 +17,4 @@ public interface RoomDataService {
 	public boolean reserveSingleRoom(Date day, String roomNUM, String hotelID);  //通过日期房间号预定某酒店房间
 	public boolean checkIn(Date day, String roomNUM, String hotelID);  //具体房间的入住执行
 	public boolean checkOut(Date day, String roomNUM, String hotelID);  //具体房间的退房执行
-	public void close();   //关闭输入流
 }

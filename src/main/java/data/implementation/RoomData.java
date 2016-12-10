@@ -260,6 +260,21 @@ public class RoomData implements RoomDataService {
 		wSheet = wBook.getSheet(location);
 	}
 
+	/**
+	 *
+	 */
+	private void close(){
+		write();
+		try {
+			wBook.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (WriteException e) {
+			e.printStackTrace();
+		}
+		book.close();
+	}
+
 	public RoomPO getSingleRoom(Date theDay, String roomNUM, String hotelID) {
 		createWritableSheet();
 		setwSheet(hotelID);
@@ -442,21 +457,6 @@ public class RoomData implements RoomDataService {
 
 		close();
 		return true;
-	}
-
-	/**
-	 *
-	 */
-	public void close(){
-		write();
-		try {
-			wBook.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (WriteException e) {
-			e.printStackTrace();
-		}
-		book.close();
 	}
 
 	/**

@@ -16,5 +16,4 @@ public interface OrderDataService {
 	public ArrayList<OrderPO> getUnfinishedOrders(String userID);  //根据客户编号查找其所有未执行订单列表
 	public ArrayList<OrderPO> getAbnormalOrders(String userID);  //根据客户编号查找其所有异常订单列表
 	public ArrayList<OrderPO> getCancledOrders(String userID);  //根据客户编号查找其所有取消订单列表
-	public void close();   //关闭输入流
 }
