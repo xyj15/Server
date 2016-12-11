@@ -16,5 +16,5 @@ public interface PromotionDataService {
 	public boolean deletePromotion(String promotionID);	//删除促销策略
 	public boolean updatePromotion(PromotionPO promotion);	//更新促销策略信息
 	public ArrayList<PromotionPO> getPromotionList();	//获得促销策略列表
-	public String getAvailableID();   //获得可用的PromotionID
+	public String getAvailablePromotionID();   //获得可用的PromotionID
 }
