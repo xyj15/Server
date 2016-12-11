@@ -22,7 +22,9 @@ public class DriverForOrderData {
 		DriverForOrderData driverForMember = new DriverForOrderData("00000000");
 		DriverForOrderData driverForHotel = new DriverForOrderData("000000");
 		DriverForOrderData driverForSaler = new DriverForOrderData("0000");
-//		Date createTime = new Date(2016, 12, 9);
+		SimpleDateFormat bartDateFormate = new SimpleDateFormat("MM-dd-yyyy");
+		Date createTime = new Date(2016, 12, 9);
+		System.err.println(bartDateFormate.format(createTime));
 //		Date checkInTime = new Date(2016, 12, 11);
 //		Date checkOutTime = new Date(2016, 12, 14);
 //		Date latestCheckInTime = new Date(2016, 12, 9);
@@ -68,8 +70,8 @@ public class DriverForOrderData {
 //				createTime,checkInTime,actualCheckInTime, latestCheckInTime,checkOutTime, actualCheckOutTime,3,
 //				"豪华湖景房", 6, false, 0, null, 0, "00000",4500, cancelTime, RoomType.BigBed));
 //		driverForMember.testGetOrder("2016120900000000");
-//		driverForHotel.testGetOrderList("000000");
-		driverForSaler.testGetOrderList("0000");
+//		driverForHotel.testGetOrderList("000001");
+//		driverForSaler.testGetOrderList("0000");
 	}
 
 	/**

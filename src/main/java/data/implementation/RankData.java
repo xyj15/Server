@@ -2,6 +2,7 @@ package data.implementation;
 
 import data.dataservice.RankDataService;
 import jxl.NumberCell;
+import jxl.Sheet;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
 import jxl.write.WritableSheet;
@@ -20,48 +21,42 @@ public class RankData implements RankDataService {
 
 	private String sourceFile = "RankData.xls";
 	private Workbook book;
+	private Sheet sheet;
 	private WritableWorkbook wBook;
 	private WritableSheet wSheet;
 
-	public RankData(){
-		try {
-			book = Workbook.getWorkbook(new File(sourceFile));
-			wBook = Workbook.createWorkbook(new File(sourceFile), book);
-			wSheet = wBook.getSheet(0);
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (BiffException e) {
-			e.printStackTrace();
-		}
-	}
-
 	public ArrayList<Double> getCreditList() {
+		createSheet();
 		int col = 0;
 		int row = 0;
-		int rows = wSheet.getRows();
+		int rows = sheet.getRows();
 		if(rows==0) return null;  //There is no rank.
 		ArrayList<Double> result = new ArrayList<Double>();
 		for (int i = 0; i < rows; i++) {
-			double temp = ((NumberCell) wSheet.getCell(col, row+i)).getValue();
+			double temp = ((NumberCell) sheet.getCell(col, row+i)).getValue();
 			result.add(new Double(temp));
 		}
+		book.close();
 		return result;
 	}
 
 	public ArrayList<Double> getDiscountList() {
+		createSheet();
 		int col = 1;
 		int row = 0;
-		int rows = wSheet.getRows();
+		int rows = sheet.getRows();
 		if(rows==0) return null;  //There is no rank.
 		ArrayList<Double> result = new ArrayList<Double>();
 		for (int i = 0; i < rows; i++) {
-			double temp = ((NumberCell) wSheet.getCell(col, row+i)).getValue();
+			double temp = ((NumberCell) sheet.getCell(col, row+i)).getValue();
 			result.add(new Double(temp));
 		}
+		book.close();
 		return result;
 	}
 
 	public boolean updateCreditList(ArrayList<Double> creditList) {
+		createWritableSheet();
 		int col = 0;
 		int row = 0;
 		for (int i = 0; i < creditList.size(); i++) {
@@ -73,15 +68,12 @@ public class RankData implements RankDataService {
 			}
 		}
 
-		try {
-			wBook.write();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		close();
 		return true;
 	}
 
 	public boolean updateDiscountList(ArrayList<Double> discountList) {
+		createWritableSheet();
 		int col = 1;
 		int row = 0;
 		for (int i = 0; i < discountList.size(); i++) {
@@ -93,18 +85,19 @@ public class RankData implements RankDataService {
 			}
 		}
 
-		try {
-			wBook.write();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		close();
 		return true;
 	}
 
 	/**
 	 *
 	 */
-	public void close() {
+	private void close() {
+		try {
+			wBook.write();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		try {
 			wBook.close();
 		} catch (IOException e) {
@@ -113,5 +106,42 @@ public class RankData implements RankDataService {
 			e.printStackTrace();
 		}
 		book.close();
+	}
+
+	/**
+	 * 用来初始化sheet
+	 *
+	 */
+	private void createSheet(){
+		try {
+			try {
+				book=Workbook.getWorkbook(new File(sourceFile));
+				sheet = book.getSheet(0);
+			} catch (BiffException e) {
+				e.printStackTrace();
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 *用来初始化wSheet
+	 *
+	 */
+	private void createWritableSheet(){
+		try {
+			try {
+				book=Workbook.getWorkbook(new File(sourceFile));
+				wBook = Workbook.createWorkbook(new File(sourceFile),book);
+				wSheet = wBook.getSheet(0);
+			} catch (BiffException e) {
+				e.printStackTrace();
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

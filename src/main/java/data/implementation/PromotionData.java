@@ -4,11 +4,14 @@ import data.dataservice.PromotionDataService;
 import helper.PromotionType;
 import helper.SaleType;
 import jxl.DateCell;
+import jxl.Sheet;
 import jxl.Workbook;
+import jxl.read.biff.BiffException;
 import jxl.write.*;
 import jxl.write.Number;
 import po.PromotionPO;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,51 +25,55 @@ public class PromotionData implements PromotionDataService {
 	int lengthOfID = 5;
 	private String sourceFile = "PromotionData.xls";
 	private Workbook book;
+	private Sheet sheet;
 	private WritableWorkbook wBook;
 	private WritableSheet wSheet;
 
 	public PromotionPO getPromotion(String promotionID) {
+		createSheet();
 		int col = 0;
 		int row = hash(promotionID);
-		while(!wSheet.getCell(col, row).getContents().equals(promotionID)){
-			if(wSheet.getCell(col, row).getContents()==""){
-				return null;  //The promotion with the ID of promotionID does not exist.
-			}
-			col+=dataSize;
+		if(row>=sheet.getRows()||col>=sheet.getColumns()){
+			book.close();
+			return null;
+		}
+		if(!sheet.getCell(col, row).getContents().equals(promotionID)){
+			book.close();
+			return null;
 		}
 		col++;
-		String promotionName = wSheet.getCell(col, row).getContents();
+		String promotionName = sheet.getCell(col, row).getContents();
 		col++;
-		String relatedHotelID = wSheet.getCell(col, row).getContents();
+		String relatedHotelID = sheet.getCell(col, row).getContents();
 		col++;
-		String enterprise = wSheet.getCell(col, row).getContents();
+		String enterprise = sheet.getCell(col, row).getContents();
 		col++;
-		String district = wSheet.getCell(col, row).getContents();
+		String district = sheet.getCell(col, row).getContents();
 		col++;
-		Date startDate = ((DateCell) wSheet.getCell(col, row)).getDate();
+		Date startDate = ((DateCell) sheet.getCell(col, row)).getDate();
 		col++;
-		Date endDate = ((DateCell) wSheet.getCell(col, row)).getDate();
+		Date endDate = ((DateCell) sheet.getCell(col, row)).getDate();
 		col++;
-		Date birthday = ((DateCell) wSheet.getCell(col, row)).getDate();
+		Date birthday = ((DateCell) sheet.getCell(col, row)).getDate();
 		col++;
-		int numberOfRoom = (int)((Number) wSheet.getCell(col, row)).getValue();
+		int numberOfRoom = (int)((Number) sheet.getCell(col, row)).getValue();
 		col++;
-		int level = (int)((Number) wSheet.getCell(col, row)).getValue();
+		int level = (int)((Number) sheet.getCell(col, row)).getValue();
 		col++;
-		double discount = ((Number) wSheet.getCell(col, row)).getValue();
+		double discount = ((Number) sheet.getCell(col, row)).getValue();
 		col++;
-		double neededPrice = ((Number) wSheet.getCell(col, row)).getValue();
+		double neededPrice = ((Number) sheet.getCell(col, row)).getValue();
 		col++;
-		double reducePrice = ((Number) wSheet.getCell(col, row)).getValue();
+		double reducePrice = ((Number) sheet.getCell(col, row)).getValue();
 		col++;
-		int pType = (int)((Number) wSheet.getCell(col, row)).getValue();
+		int pType = (int)((Number) sheet.getCell(col, row)).getValue();
 		PromotionType promotionType = null;
 		switch (pType){
 			case 0: promotionType = PromotionType.Discount; break;
 			case 1: promotionType = PromotionType.Reduce; break;
 		}
 		col++;
-		int sType = (int)((Number) wSheet.getCell(col, row)).getValue();
+		int sType = (int)((Number) sheet.getCell(col, row)).getValue();
 		SaleType saleType = null;
 		switch (sType){
 			case 0: saleType = SaleType.Rank; break;
@@ -88,14 +95,17 @@ public class PromotionData implements PromotionDataService {
 		result.setNeededPrice(neededPrice);
 		result.setReducePrice(reducePrice);
 		result.setSaleType(saleType);
+		book.close();
 		return result;
 	}
 
 	public boolean addPromotion(PromotionPO promotion) {
+		createWritableSheet();
 		int col = 0;
 		int row = hash(promotion.getPromotionID());
 		while(wSheet.getCell(col, row).getContents()!=""){
 			if(wSheet.getCell(col, row).getContents().equals(promotion.getPromotionID())){
+				close();
 				return false;  //The promotion with the same ID has already existed.
 			}
 			col+=dataSize;
@@ -147,19 +157,17 @@ public class PromotionData implements PromotionDataService {
 			e.printStackTrace();
 		}
 
-		try {
-			wBook.write();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		close();
 		return true;
 	}
 
 	public boolean deletePromotion(String promotionID) {
+		createWritableSheet();
 		int col = 0;
 		int row = hash(promotionID);
 		while(!wSheet.getCell(col, row).getContents().equals(promotionID)){
 			if(wSheet.getCell(col, row).getContents()==""){
+				close();
 				return false;  //The promotion with the ID of promotionID does not exist.
 			}
 			col+=dataSize;
@@ -173,19 +181,17 @@ public class PromotionData implements PromotionDataService {
 			}
 		}
 
-		try {
-			wBook.write();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		close();
 		return true;
 	}
 
 	public boolean updatePromotion(PromotionPO promotion) {
+		createWritableSheet();
 		int col = 0;
 		int row = hash(promotion.getPromotionID());
 		while(!wSheet.getCell(col, row).getContents().equals(promotion.getPromotionID())){
 			if(wSheet.getCell(col, row).getContents()==""){
+				close();
 				return false;  //The promotion with the ID of promotionID does not exist.
 			}
 			col+=dataSize;
@@ -235,11 +241,7 @@ public class PromotionData implements PromotionDataService {
 			e.printStackTrace();
 		}
 
-		try {
-			wBook.write();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		close();
 		return true;
 	}
 
@@ -273,7 +275,12 @@ public class PromotionData implements PromotionDataService {
 	/**
 	 *
 	 */
-	public void close() {
+	private void close() {
+		try {
+			wBook.write();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		try {
 			wBook.close();
 		} catch (IOException e) {
@@ -284,9 +291,45 @@ public class PromotionData implements PromotionDataService {
 		book.close();
 	}
 
+	/**
+	 * 用来初始化sheet
+	 *
+	 */
+	private void createSheet(){
+		try {
+			try {
+				book=Workbook.getWorkbook(new File(sourceFile));
+				sheet = book.getSheet(0);
+			} catch (BiffException e) {
+				e.printStackTrace();
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 *用来初始化wSheet
+	 *
+	 */
+	private void createWritableSheet(){
+		try {
+			try {
+				book=Workbook.getWorkbook(new File(sourceFile));
+				wBook = Workbook.createWorkbook(new File(sourceFile),book);
+				wSheet = wBook.getSheet(0);
+			} catch (BiffException e) {
+				e.printStackTrace();
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 	private int hash(String ID){
 		int hashResult = Integer.parseInt(ID);
-		hashResult %= 27;
 		return hashResult;
 	}
 

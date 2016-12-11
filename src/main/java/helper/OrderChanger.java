@@ -37,6 +37,7 @@ public class OrderChanger {
 		createWritablSheet();
 		while(wSheet.getCell(col, row).getContents()!=""){
 			if(wSheet.getCell(col, row).getContents().equals(order.getOrderID())){
+				close();
 				return false;                               //An order of the same number has already existed.
 			}
 			col+=dataSize;
@@ -139,6 +140,10 @@ public class OrderChanger {
 	public boolean updateOrder(OrderPO order){
 		createWritablSheet();
 		WritableCell orderStart = (WritableCell) wSheet.findCell(order.getOrderID());
+		if(orderStart==null){
+			close();
+			return false;    //Did not find the order.
+		}
 		int col = orderStart.getColumn()+1;
 		int row = orderStart.getRow();
 		Label memberID = new Label(col,row,order.getMemberID());
@@ -237,6 +242,10 @@ public class OrderChanger {
 	public boolean cancelOrder(String orderID){
 		createWritablSheet();
 		Cell orderStart = wSheet.findCell(orderID);
+		if(orderStart==null){
+			close();
+			return false;    //Did not find the order.
+		}
 		int col = orderStart.getColumn()+dataSize-1;
 		int row = orderStart.getRow();
 		Number orderStatus = new Number(col, row, OrderStatus.Canceled.getV());
@@ -263,6 +272,10 @@ public class OrderChanger {
 	public boolean makeOrderAbnormal(String orderID){
 		createWritablSheet();
 		Cell orderStart = wSheet.findCell(orderID);
+		if(orderStart==null){
+			close();
+			return false;    //Did not find the order.
+		}
 		int col = orderStart.getColumn()+dataSize-1;
 		int row = orderStart.getRow();
 		Number orderStatus = new Number(col, row, OrderStatus.Abnormal.getV());
@@ -280,6 +293,10 @@ public class OrderChanger {
 	public boolean recoverOrder(String orderID, double recover){
 		createWritablSheet();
 		Cell orderStart = wSheet.findCell(orderID);
+		if(orderStart==null){
+			close();
+			return false;    //Did not find the order.
+		}
 		int col = orderStart.getColumn();
 		int row = orderStart.getRow();
 		Number orderStatus = new Number(col+dataSize-1, row, OrderStatus.Canceled.getV());

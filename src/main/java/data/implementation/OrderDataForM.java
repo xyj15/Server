@@ -114,6 +114,10 @@ public class OrderDataForM implements OrderDataService {
         ArrayList<OrderPO> result = new ArrayList<OrderPO>();
         int col = 0;
         int row = hash(userID);
+        if(row>=sheet.getRows()||col>=sheet.getColumns()){
+            book.close();
+            return null;
+        }
         for (int i = 0; i < sheet.getRow(row).length; i+=dataSize) {
             result.add(getOrder(col+i, row));
         }
