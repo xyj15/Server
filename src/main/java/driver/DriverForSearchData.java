@@ -13,18 +13,16 @@ public class DriverForSearchData {
 	private SearchData test = new SearchData();
 
 	public static void main(String[] args){
-//		driver.testGetHotelByCityDistrict("南京市", "新街口");
-//		driver.testGetHotelByName("JavaHotel");
-//		System.out.println(driver.testGetHotelByID("000101"));
-//		System.out.println(driver.testGetHotelByName("CppHotel"));
-//		System.out.println(driver.testGetHotelByCityDistrict("上海市", "徐家汇"));
-//		driver.testGetHotelByLevel(5,"南京市", "新街口");
-//		System.out.println(driver.testGetHotelByLevel(2, "南京市", "新街口"));
-//		driver.testGetHotelByScore(4.5, 5.0, "南京市", "新街口");
-//		System.out.println(driver.testGetHotelByScore(2.0, 3.5, "南京市", "新街口"));
-//		driver.testGetHotelFilteredByPrice(450, 600, "南京市", "新街口");
-//		System.out.println(driver.testGetHotelFilteredByPrice(500, 2000, "南京市", "新街口"));
-//		System.out.println(driver.testGetHotelFilteredByPrice(1000, 2000, "南京市", "大行宫"));
+		DriverForSearchData driver = new DriverForSearchData();
+		driver.testGetHotelByCityDistrict("南京市", "新街口");
+		System.out.println(driver.testGetHotelByCityDistrict("上海市", "徐家汇"));
+		driver.testGetHotelByLevel(5,"南京市", "新街口");
+		System.out.println(driver.testGetHotelByLevel(2, "南京市", "新街口"));
+		driver.testGetHotelByScore(4.5, 5.0, "南京市", "新街口");
+		System.out.println(driver.testGetHotelByScore(2.0, 3.5, "南京市", "新街口"));
+		driver.testGetHotelFilteredByPrice(450, 600, "南京市", "新街口");
+		System.out.println(driver.testGetHotelFilteredByPrice(500, 2000, "南京市", "新街口"));
+		System.out.println(driver.testGetHotelFilteredByPrice(1000, 2000, "南京市", "大行宫"));
 	}
 
 	/**

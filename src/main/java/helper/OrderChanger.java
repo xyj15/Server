@@ -81,7 +81,7 @@ public class OrderChanger {
 			cancelTime = new DateTime(col, row, new Date());
 		}
 		col++;
-		jxl.write.Number roomNUM = new Number(col, row, order.getNumberOfRoom());
+		Number roomNUM = new Number(col, row, order.getNumberOfRoom());
 		col++;
 		Number numOfClient = new Number(col, row, order.getNumberOfClient());
 		col++;
@@ -315,6 +315,11 @@ public class OrderChanger {
 	 *
 	 */
 	private void close() {
+		try {
+			wBook.write();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		try {
 			wBook.close();
 		} catch (IOException e) {

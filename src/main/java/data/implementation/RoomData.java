@@ -249,12 +249,10 @@ public class RoomData implements RoomDataService {
 		return true;
 	}
 
-	private int hash(String roomNUM){
-		int hashResult = roomNUM.hashCode();
-		hashResult %= 100;
-		return hashResult;
-	}
-
+	/**
+	 *
+	 * @param hotelID
+	 */
 	private void setwSheet(String hotelID){
 		int location = Integer.parseInt(hotelID);
 		wSheet = wBook.getSheet(location);
