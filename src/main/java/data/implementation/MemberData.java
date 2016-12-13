@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Date;
 
 import data.dataservice.MemberDataService;
+import helper.Encryption;
 import jxl.DateCell;
 import jxl.NumberCell;
 import jxl.Sheet;
@@ -22,9 +23,11 @@ import helper.MemberType;
  */
 public class MemberData implements MemberDataService {
 
-	int dataSize = 9;
+	int dataSize = 8;
 	int lengthOfID = 8;
 	String sourceFile = "MemberData.xls";
+	private DateFormat theDateFormat = new DateFormat ("dd-mm-yyyy");
+	private WritableCellFormat dateFormat = new WritableCellFormat (theDateFormat);
 	Workbook book;
 	Sheet sheet;
 	WritableWorkbook wBook;
@@ -57,14 +60,14 @@ public class MemberData implements MemberDataService {
 		createWritableSheet();
 		int col = 0;
 		int row = hash(member.getMemberID());
-		while(wSheet.getCell(col, row).getContents()!=""){
-			if(wSheet.getCell(col, row).getContents().equals(member.getMemberID())){
+		while(wSheet.getCell(col, row).getContents()!=""&&!wSheet.getCell(col, row).getContents().equals("-1")){
+			if(wSheet.getCell(col, row).getContents().equals(Encryption.convertMD5(member.getMemberID()))){
 				close();
 				return false;   //The member with the same ID has already existed.
 			}
 			col+=dataSize;
 		}
-		Label label = new Label(col,row,member.getMemberID());
+		Label label = new Label(col,row, Encryption.convertMD5(member.getMemberID()));
 		try {
 			wSheet.addCell(label);
 		} catch (WriteException e) {
@@ -72,7 +75,7 @@ public class MemberData implements MemberDataService {
 			e.printStackTrace();
 		}
 		col++;
-		label = new Label(col,row,member.getPassword());
+		label = new Label(col,row, Encryption.convertMD5(member.getPassword()));
 		try {
 			wSheet.addCell(label);
 		} catch (WriteException e) {
@@ -80,7 +83,7 @@ public class MemberData implements MemberDataService {
 			e.printStackTrace();
 		}
 		col++;
-		label = new Label(col,row,member.getName());
+		label = new Label(col,row,Encryption.convertMD5(member.getName()));
 		try {
 			wSheet.addCell(label);
 		} catch (WriteException e) {
@@ -88,7 +91,7 @@ public class MemberData implements MemberDataService {
 			e.printStackTrace();
 		}
 		col++;
-		label = new Label(col,row,member.getPhone());
+		label = new Label(col,row,Encryption.convertMD5(member.getPhone()));
 		try {
 			wSheet.addCell(label);
 		} catch (WriteException e) {
@@ -122,7 +125,7 @@ public class MemberData implements MemberDataService {
 		col++;
 		switch(member.getMemberType().getValue()){
 			case 0: {
-				DateTime birthDay = new DateTime(col,row,member.getBirthday());
+				DateTime birthDay = new DateTime(col,row,member.getBirthday(), dateFormat);
 				try {
 					wSheet.addCell(birthDay);
 				} catch (WriteException e) {
@@ -157,7 +160,7 @@ public class MemberData implements MemberDataService {
 		createWritableSheet();
 		int col = 0;
 		int row = hash(memberID);
-		while(!wSheet.getCell(col, row).getContents().equals(memberID)){
+		while(!wSheet.getCell(col, row).getContents().equals(Encryption.convertMD5(memberID))){
 			if(wSheet.getCell(col, row).getContents().equals("")){
 				close();
 				return false;     //The member with the ID of memberID does not exist.
@@ -165,7 +168,7 @@ public class MemberData implements MemberDataService {
 			col+=dataSize;
 		}
 		for(int i=0;i<dataSize;i++){
-			Label label = new Label(col+i,row,"");
+			Label label = new Label(col+i,row,"-1");
 			try {
 				wSheet.addCell(label);
 			} catch (WriteException e) {
@@ -188,14 +191,15 @@ public class MemberData implements MemberDataService {
 		createWritableSheet();
 		int col = 0;
 		int row = hash(member.getMemberID());
-		while(!wSheet.getCell(col, row).getContents().equals(member.getMemberID())){
+		while(!wSheet.getCell(col, row).getContents().equals(Encryption.convertMD5(member.getMemberID()))){
 			if(wSheet.getCell(col, row).getContents().equals("")){
 				close();
 				return false;    //The member with the ID of memberID does not exist.
 			}
 			col+=dataSize;
 		}
-		Label label = new Label(col,row,member.getMemberID());
+		col++;
+		Label label = new Label(col,row,Encryption.convertMD5(member.getPassword()));
 		try {
 			wSheet.addCell(label);
 		} catch (WriteException e) {
@@ -203,7 +207,7 @@ public class MemberData implements MemberDataService {
 			e.printStackTrace();
 		}
 		col++;
-		label = new Label(col,row,member.getPassword());
+		label = new Label(col,row,Encryption.convertMD5(member.getName()));
 		try {
 			wSheet.addCell(label);
 		} catch (WriteException e) {
@@ -211,15 +215,7 @@ public class MemberData implements MemberDataService {
 			e.printStackTrace();
 		}
 		col++;
-		label = new Label(col,row,member.getName());
-		try {
-			wSheet.addCell(label);
-		} catch (WriteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		col++;
-		label = new Label(col,row,member.getPhone());
+		label = new Label(col,row,Encryption.convertMD5(member.getPhone()));
 		try {
 			wSheet.addCell(label);
 		} catch (WriteException e) {
@@ -246,7 +242,7 @@ public class MemberData implements MemberDataService {
 		col++;
 		switch(member.getMemberType().getValue()){
 			case 0: {
-				DateTime birthDay = new DateTime(col,row,member.getBirthday());
+				DateTime birthDay = new DateTime(col,row,member.getBirthday(), dateFormat);
 				try {
 					wSheet.addCell(birthDay);
 				} catch (WriteException e) {
@@ -281,37 +277,43 @@ public class MemberData implements MemberDataService {
 		createSheet();
 		int col = 0;
 		int row = hash(ID);
-		while(!sheet.getCell(col, row).getContents().equals(ID)){
-			if(sheet.getCell(col, row).getContents().equals("")){
-				return null;   //cannot find the member with the given ID
-			}
-			col+=dataSize;
+		if(row>=sheet.getRows()||col>=sheet.getColumns()){
+			book.close();
+			return null;
 		}
-		col++;
-		String password = sheet.getCell(col, row).getContents();
-		col++;
-		String name = sheet.getCell(col, row).getContents();
-		col++;
-		String phone = sheet.getCell(col,row).getContents();
-		col++;
-		NumberCell nCell = (NumberCell)sheet.getCell(col, row);
-		double discount = nCell.getValue();
-		col++;
-		int level = (int)((NumberCell)sheet.getCell(col, row)).getValue();
-		col++;
-		int type = (int)((NumberCell)sheet.getCell(col, row)).getValue();
-		col++;
-		switch (type){
-			case 0:{
-				Date birthday = ((DateCell)sheet.getCell(col,row)).getDate();
-				return new MemberPO(ID,name,password,phone,level,discount,MemberType.Orinary,birthday,"");
-			}
-			case 1:{
-				String enterprise = sheet.getCell(col, row).getContents();
-				return new MemberPO(ID,name,password,phone,level,discount,MemberType.Bussiness,null,enterprise);
+		for (int i = 0; i < sheet.getRow(row).length; i+=dataSize) {
+			if(sheet.getCell(i, row).getContents().equals(Encryption.convertMD5(ID))){
+				col=i;
+				col++;
+				String password = Encryption.convertMD5(sheet.getCell(col, row).getContents());
+				col++;
+				String name = Encryption.convertMD5(sheet.getCell(col, row).getContents());
+				col++;
+				String phone = Encryption.convertMD5(sheet.getCell(col, row).getContents());
+				col++;
+				NumberCell nCell = (NumberCell)sheet.getCell(col, row);
+				double discount = nCell.getValue();
+				col++;
+				int level = (int)((NumberCell)sheet.getCell(col, row)).getValue();
+				col++;
+				int type = (int)((NumberCell)sheet.getCell(col, row)).getValue();
+				col++;
+				switch (type){
+					case 0:{
+						Date birthday = ((DateCell)sheet.getCell(col,row)).getDate();
+						book.close();
+						return new MemberPO(ID,name,password,phone,level,discount,MemberType.Orinary,birthday,"");
+					}
+					case 1:{
+						String enterprise = sheet.getCell(col, row).getContents();
+						book.close();
+						return new MemberPO(ID,name,password,phone,level,discount,MemberType.Bussiness,null,enterprise);
+					}
+				}
 			}
 		}
 
+		book.close();
 		return null;
 	}
 

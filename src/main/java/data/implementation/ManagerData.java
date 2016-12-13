@@ -1,6 +1,7 @@
 package data.implementation;
 
 import data.dataservice.ManagerDataService;
+import helper.Encryption;
 import jxl.Sheet;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
@@ -32,11 +33,11 @@ public class ManagerData implements ManagerDataService {
 		int col = 0;
 		int row = 0;
 		col++;
-		Label password = new Label(col,row,manager.getPassword());
+		Label password = new Label(col,row, Encryption.convertMD5(manager.getPassword()));
 		col++;
-		Label name = new Label(col, row, manager.getName());
+		Label name = new Label(col, row, Encryption.convertMD5(manager.getName()));
 		col++;
-		Label tel = new Label(col, row, manager.getTel());
+		Label tel = new Label(col, row, Encryption.convertMD5(manager.getTel()));
 
 		try {
 			wSheet.addCell(password);
@@ -55,13 +56,13 @@ public class ManagerData implements ManagerDataService {
 		createSheet();
 		int col = 0;
 		int row = 0;
-		String managerID = sheet.getCell(col, row).getContents();
+		String managerID = Encryption.convertMD5(sheet.getCell(col, row).getContents());
 		col++;
-		String password = sheet.getCell(col, row).getContents();
+		String password = Encryption.convertMD5(sheet.getCell(col, row).getContents());
 		col++;
-		String name = sheet.getCell(col, row).getContents();
+		String name = Encryption.convertMD5(sheet.getCell(col, row).getContents());
 		col++;
-		String tel = sheet.getCell(col, row).getContents();
+		String tel = Encryption.convertMD5(sheet.getCell(col, row).getContents());
 		book.close();
 		return new ManagerPO(managerID, password, name, tel);
 	}

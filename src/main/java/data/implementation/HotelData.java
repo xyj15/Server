@@ -1,6 +1,7 @@
 package data.implementation;
 
 import data.dataservice.HotelDataService;
+import helper.Encryption;
 import jxl.Cell;
 import jxl.NumberCell;
 import jxl.Sheet;
@@ -53,15 +54,15 @@ public class HotelData implements HotelDataService {
 		int col = 0;
 		int row = hash(hotel.getCity()+hotel.getDistrict());
 		while(wSheet.getCell(col, row).getContents()!=""&&(!wSheet.getCell(col, row).getContents().equals("-1"))){
-			if(wSheet.getCell(col, row).getContents().equals(hotel.getUserID())){
+			if(wSheet.getCell(col, row).getContents().equals(Encryption.convertMD5(hotel.getUserID()))){
 				out();
 				return false;     // the hotel with the same ID has already existed
 			}
 			col+=dataSize;
 		}
-		Label ID = new Label(col, row, hotel.getUserID());
+		Label ID = new Label(col, row, Encryption.convertMD5(hotel.getUserID()));
 		col++;
-		Label password = new Label(col, row, hotel.getPassword());
+		Label password = new Label(col, row, Encryption.convertMD5(hotel.getPassword()));
 		col++;
 		Label name = new Label(col, row, hotel.getName());
 		col++;
@@ -144,7 +145,7 @@ public class HotelData implements HotelDataService {
 	 */
 	public boolean deleteHotel(String hotelID) {
 		createWritableSheet();
-		Cell hotelStart = wSheet.findCell(hotelID);
+		Cell hotelStart = wSheet.findCell(Encryption.convertMD5(hotelID));
 		if(hotelStart==null){
 			out();
 			return false;
@@ -208,14 +209,14 @@ public class HotelData implements HotelDataService {
 		createWritableSheet();
 		int col = 0;
 		int row = hash(hotel.getCity()+hotel.getDistrict());
-		while(!wSheet.getCell(col, row).getContents().equals(hotel.getUserID())){
+		while(!wSheet.getCell(col, row).getContents().equals(Encryption.convertMD5(hotel.getUserID()))){
 			if(wSheet.getCell(col, row).getContents().equals("")){
 				out();                          //The hotel with ID of hotelID does not exist.
 				return false;
 			}
 			col+=dataSize;
 		}
-		Label ID = new Label(col, row, hotel.getUserID());
+		Label ID = new Label(col, row, Encryption.convertMD5(hotel.getPassword()));
 		col++;
 		Label password = new Label(col, row, hotel.getPassword());
 		col++;
@@ -273,7 +274,7 @@ public class HotelData implements HotelDataService {
 	 */
 	public HotelPO getHotelByID(String hotelID) {
 		createSheet();
-		Cell hotelStart = sheet.findCell(hotelID);
+		Cell hotelStart = sheet.findCell(Encryption.convertMD5(hotelID));
 		if(hotelStart==null) return null;
 		int col = hotelStart.getColumn();
 		int row = hotelStart.getRow();
@@ -359,9 +360,9 @@ public class HotelData implements HotelDataService {
 	 * @return
 	 */
 	private HotelPO getHotelByPosition(int col, int row){
-		String ID = sheet.getCell(col, row).getContents();
+		String ID = Encryption.convertMD5(sheet.getCell(col, row).getContents());
 		col++;
-		String password = sheet.getCell(col, row).getContents();
+		String password = Encryption.convertMD5(sheet.getCell(col, row).getContents());
 		col++;
 		String name = sheet.getCell(col, row).getContents();
 		col++;

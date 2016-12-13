@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import data.dataservice.SalerDataService;
+import helper.Encryption;
 import jxl.NumberCell;
 import jxl.Sheet;
 import jxl.Workbook;
@@ -33,19 +34,19 @@ public class SalerData implements SalerDataService {
 		int col = 0;
 		int row = hash(saler.getUserID());
 		while(wSheet.getCell(col, row).getContents()!=""&&(!wSheet.getCell(col, row).getContents().equals("-1"))){
-			if(wSheet.getCell(col, row).getContents().equals(saler.getUserID())){
+			if(wSheet.getCell(col, row).getContents().equals(Encryption.convertMD5(saler.getUserID()))){
 				close();
 				return false;
 			}
 			col+=dataSize;
 		}
-		Label account = new Label(col,row,saler.getAccount());
+		Label account = new Label(col, row, Encryption.convertMD5(saler.getUserID()));
 		col++;
-		Label password = new Label(col,row,saler.getPassword());
+		Label password = new Label(col, row, Encryption.convertMD5(saler.getPassword()));
 		col++;
-		Label name = new Label(col, row, saler.getName());
+		Label name = new Label(col, row, Encryption.convertMD5(saler.getName()));
 		col++;
-		Label tel = new Label(col, row, saler.getTel());
+		Label tel = new Label(col, row, Encryption.convertMD5(saler.getTel()));
 		try {
 			wSheet.addCell(account);
 			wSheet.addCell(password);
@@ -74,7 +75,7 @@ public class SalerData implements SalerDataService {
 		createWritableSheet();
 		int col = 0;
 		int row = hash(salerID);
-		while(!wSheet.getCell(col, row).getContents().equals(salerID)){
+		while(!wSheet.getCell(col, row).getContents().equals(Encryption.convertMD5(salerID))){
 			if(wSheet.getCell(col, row).getContents().equals("")){
 				close();
 				return false;
@@ -110,7 +111,7 @@ public class SalerData implements SalerDataService {
 		createWritableSheet();
 		int col = 0;
 		int row = hash(saler.getAccount());
-		while(!wSheet.getCell(col, row).getContents().equals(saler.getUserID())){
+		while(!wSheet.getCell(col, row).getContents().equals(Encryption.convertMD5(saler.getUserID()))){
 			if(wSheet.getCell(col, row).getContents().equals("")){
 				close();
 				return false;
@@ -118,11 +119,11 @@ public class SalerData implements SalerDataService {
 			col+=dataSize;
 		}
 		col++;
-		Label password = new Label(col,row,saler.getPassword());
+		Label password = new Label(col, row, Encryption.convertMD5(saler.getPassword()));
 		col++;
-		Label name = new Label(col, row, saler.getName());
+		Label name = new Label(col, row, Encryption.convertMD5(saler.getName()));
 		col++;
-		Label tel = new Label(col, row, saler.getTel());
+		Label tel = new Label(col, row, Encryption.convertMD5(saler.getTel()));
 		try {
 			wSheet.addCell(password);
 			wSheet.addCell(name);
@@ -146,14 +147,14 @@ public class SalerData implements SalerDataService {
 			return null;
 		}
 		for (int i = 0; i < sheet.getRow(row).length; i+=dataSize) {
-			if(sheet.getCell(i, row).getContents().equals(ID)){
+			if(sheet.getCell(i, row).getContents().equals(Encryption.convertMD5(ID))){
 				col=i;
 				col++;
-				String password = sheet.getCell(col, row).getContents();
+				String password = Encryption.convertMD5(sheet.getCell(col, row).getContents());
 				col++;
-				String name = sheet.getCell(col, row).getContents();
+				String name = Encryption.convertMD5(sheet.getCell(col, row).getContents());
 				col++;
-				String tel = sheet.getCell(col, row).getContents();
+				String tel = Encryption.convertMD5(sheet.getCell(col, row).getContents());
 				book.close();
 				return new SalerPO(ID, password, name, tel);
 			}

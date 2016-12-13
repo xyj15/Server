@@ -14,9 +14,9 @@ public class DriverForHotelData {
 
 	public static void main(String[] args){
 		DriverForHotelData driver = new DriverForHotelData();
-//		ArrayList<String> enterprise = new ArrayList<String>();
-//		enterprise.add("刚轻厂");
-//		enterprise.add("新悦集团");
+		ArrayList<String> enterprise = new ArrayList<String>();
+		enterprise.add("刚轻厂");
+		enterprise.add("新悦集团");
 //		System.out.println(driver.testAdd(new HotelPO(driver.testGetID(),"kunkun","CroffHotel", "珠江路", "新街口", "南京市",5, 4.8,"健身房、游泳池、spa","是一家专门针对高端人群的酒店。"
 //				,"张新悦", "15205153967",enterprise)));
 //		System.out.println(driver.testAdd(new HotelPO(driver.testGetID(),"jingjing","亚婧大酒店", "石鼓路", "新街口", "南京市",5, 4.8,"健身房、自助餐厅、温泉","是亲子度假首选。"
@@ -27,7 +27,7 @@ public class DriverForHotelData {
 //		System.out.println(driver.testUpdate(new HotelPO("000001","jingjing","亚婧大酒店", "石鼓路", "新街口", "南京市", 3, 4.0,"健身房、自助餐厅、温泉","是亲子度假首选。"
 //				,"徐亚婧", "15205153967",enterprise)));
 //		driver.testGetHotelByID("000000");
-//		driver.testGetHotelByName("JavaHotel");
+		driver.testGetHotelByName("JavaHotel");
 //		System.out.println(driver.testGetHotelByID("000101"));
 //		System.out.println(driver.testGetHotelByName("CppHotel"));
 	}
@@ -82,7 +82,7 @@ public class DriverForHotelData {
 	 */
 	public boolean testGetHotelByName(String hotelName){
 		System.out.println("Find a hotel whose name is "+hotelName);
-		HotelPO result = test.getHotelByID(hotelName);
+		HotelPO result = test.getHotelByName(hotelName);
 		if(result==null) return false;
 		outputHotel(result);
 		return true;

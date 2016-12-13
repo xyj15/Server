@@ -4,6 +4,7 @@ import data.dataservice.PromotionDataService;
 import helper.PromotionType;
 import helper.SaleType;
 import jxl.DateCell;
+import jxl.NumberCell;
 import jxl.Sheet;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
@@ -21,9 +22,10 @@ import java.util.Date;
  */
 public class PromotionData implements PromotionDataService {
 
-	private int dataSize = 14;
-	int lengthOfID = 5;
+	private int lengthOfID = 5;
 	private String sourceFile = "PromotionData.xls";
+	private DateFormat theDateFormat = new DateFormat ("yyyy-mm-dd");
+	private WritableCellFormat dateFormat = new WritableCellFormat (theDateFormat);
 	private Workbook book;
 	private Sheet sheet;
 	private WritableWorkbook wBook;
@@ -41,74 +43,16 @@ public class PromotionData implements PromotionDataService {
 			book.close();
 			return null;
 		}
-		col++;
-		String promotionName = sheet.getCell(col, row).getContents();
-		col++;
-		String relatedHotelID = sheet.getCell(col, row).getContents();
-		col++;
-		String enterprise = sheet.getCell(col, row).getContents();
-		col++;
-		String district = sheet.getCell(col, row).getContents();
-		col++;
-		Date startDate = ((DateCell) sheet.getCell(col, row)).getDate();
-		col++;
-		Date endDate = ((DateCell) sheet.getCell(col, row)).getDate();
-		col++;
-		Date birthday = ((DateCell) sheet.getCell(col, row)).getDate();
-		col++;
-		int numberOfRoom = (int)((Number) sheet.getCell(col, row)).getValue();
-		col++;
-		int level = (int)((Number) sheet.getCell(col, row)).getValue();
-		col++;
-		double discount = ((Number) sheet.getCell(col, row)).getValue();
-		col++;
-		double neededPrice = ((Number) sheet.getCell(col, row)).getValue();
-		col++;
-		double reducePrice = ((Number) sheet.getCell(col, row)).getValue();
-		col++;
-		int pType = (int)((Number) sheet.getCell(col, row)).getValue();
-		PromotionType promotionType = null;
-		switch (pType){
-			case 0: promotionType = PromotionType.Discount; break;
-			case 1: promotionType = PromotionType.Reduce; break;
-		}
-		col++;
-		int sType = (int)((Number) sheet.getCell(col, row)).getValue();
-		SaleType saleType = null;
-		switch (sType){
-			case 0: saleType = SaleType.Rank; break;
-			case 1: saleType = SaleType.Date; break;
-			case 2: saleType = SaleType.Birthday; break;
-			case 3: saleType = SaleType.RoomNumber; break;
-			case 4: saleType = SaleType.Enterprise; break;
-			case 5: saleType = SaleType.District; break;
-		}
-		PromotionPO result = new PromotionPO(promotionID,promotionName,promotionType,relatedHotelID);
-		result.setEnterprise(enterprise);
-		result.setDistrict(district);
-		result.setStartDate(startDate);
-		result.setEndDate(endDate);
-		result.setBirthday(birthday);
-		result.setNumberOfRoom(numberOfRoom);
-		//result.setLevel(level);
-		result.setDiscount(discount);
-		result.setNeededPrice(neededPrice);
-		result.setReducePrice(reducePrice);
-		result.setSaleType(saleType);
-		book.close();
-		return result;
+		return getPromotionByRow(row);
 	}
 
 	public boolean addPromotion(PromotionPO promotion) {
 		createWritableSheet();
 		int col = 0;
 		int row = hash(promotion.getPromotionID());
-		while(wSheet.getCell(col, row).getContents()!=""){
-			if(wSheet.getCell(col, row).getContents().equals(promotion.getPromotionID())){
-				close();
-				return false;  //The promotion with the same ID has already existed.
-			}
-			col+=dataSize;
+		if(wSheet.getCell(col, row).getContents()!=""&&!wSheet.getCell(col, row).getContents().equals("-1")){
+			close();
+			return false;  //The promotion with the same ID has already existed.
 		}
 		Label promotionID = new Label(col, row, promotion.getPromotionID());
 		col++;
@@ -116,43 +60,88 @@ public class PromotionData implements PromotionDataService {
 		col++;
 		Label relatedHotelID = new Label(col, row, promotion.getRelatedHotelID());
 		col++;
-		Label district = new Label(col, row, promotion.getDistrict());
+		Number saleType = new Number(col, row, promotion.getSaleType().getValue());
 		col++;
-		Label enterprise = new Label(col, row, promotion.getEnterprise());
-		col++;
-		DateTime startDate = new DateTime(col, row, promotion.getStartDate());
-		col++;
-		DateTime endDate = new DateTime(col, row, promotion.getEndDate());
-		col++;
-		DateTime birthday = new DateTime(col, row, promotion.getBirthday());
-		col++;
-		Number numberOfRoom = new Number(col, row,promotion.getNumberOfRoom());
-		col++;
-		Number discount = new Number(col, row, promotion.getDiscount());
-		col++;
-		Number neededPrice = new Number(col, row, promotion.getNeededPrice());
-		col++;
-		Number reducePrice = new Number(col, row, promotion.getReducePrice());
-		col++;
+		switch (promotion.getSaleType().getValue()){
+			case 1: {
+				DateTime startDate = new DateTime(col, row, promotion.getStartDate(), dateFormat);
+				col++;
+				DateTime endDate = new DateTime(col, row, promotion.getEndDate(), dateFormat);
+				col++;
+				try {
+					wSheet.addCell(startDate);
+					wSheet.addCell(endDate);
+				} catch (WriteException e) {
+					e.printStackTrace();
+				}
+				break;
+			}
+			case 3: {
+				Number numberOfRoom = new Number(col, row,promotion.getNumberOfRoom());
+				col++;
+				try {
+					wSheet.addCell(numberOfRoom);
+				} catch (WriteException e) {
+					e.printStackTrace();
+				}
+				break;
+			}
+			case 4: {
+				Label enterprise = new Label(col, row, promotion.getEnterprise());
+				col++;
+				try {
+					wSheet.addCell(enterprise);
+				} catch (WriteException e) {
+					e.printStackTrace();
+				}
+				break;
+			}
+			case 5: {
+				Label district = new Label(col, row, promotion.getDistrict());
+				col++;
+				try {
+					wSheet.addCell(district);
+				} catch (WriteException e) {
+					e.printStackTrace();
+				}
+				break;
+			}
+			default:
+				break;
+		}
 		Number promotionType = new Number(col, row, promotion.getPromotionType().getValue());
 		col++;
-		Number saleType = new Number(col, row, promotion.getSaleType().getValue());
-
+		switch (promotion.getPromotionType().getValue()){
+			case 0:{
+				Number discount = new Number(col, row, promotion.getDiscount());
+				col++;
+				try {
+					wSheet.addCell(discount);
+				} catch (WriteException e) {
+					e.printStackTrace();
+				}
+				break;
+			}
+			case 1: {
+				Number neededPrice = new Number(col, row, promotion.getNeededPrice());
+				col++;
+				Number reducePrice = new Number(col, row, promotion.getReducePrice());
+				col++;
+				try {
+					wSheet.addCell(neededPrice);
+					wSheet.addCell(reducePrice);
+				} catch (WriteException e) {
+					e.printStackTrace();
+				}
+				break;
+			}
+		}
 		try {
+			wSheet.addCell(saleType);
+			wSheet.addCell(promotionType);
 			wSheet.addCell(promotionID);
 			wSheet.addCell(name);
 			wSheet.addCell(relatedHotelID);
-			wSheet.addCell(district);
-			wSheet.addCell(enterprise);
-			wSheet.addCell(startDate);
-			wSheet.addCell(endDate);
-			wSheet.addCell(birthday);
-			wSheet.addCell(numberOfRoom);
-			wSheet.addCell(discount);
-			wSheet.addCell(neededPrice);
-			wSheet.addCell(reducePrice);
-			wSheet.addCell(promotionType);
-			wSheet.addCell(saleType);
 		} catch (WriteException e) {
 			e.printStackTrace();
 		}
@@ -165,20 +154,15 @@ public class PromotionData implements PromotionDataService {
 		createWritableSheet();
 		int col = 0;
 		int row = hash(promotionID);
-		while(!wSheet.getCell(col, row).getContents().equals(promotionID)){
-			if(wSheet.getCell(col, row).getContents()==""){
-				close();
-				return false;  //The promotion with the ID of promotionID does not exist.
-			}
-			col+=dataSize;
+		if(!wSheet.getCell(col, row).getContents().equals(promotionID)){
+			close();
+			return false;  //The promotion with the ID of promotionID does not exist.
 		}
-		for (int i=0;i<dataSize;i++){
-			Label delete = new Label(col+i, row, "");
-			try {
-				wSheet.addCell(delete);
-			} catch (WriteException e) {
-				e.printStackTrace();
-			}
+		Label delete = new Label(col, row, "-1");
+		try {
+			wSheet.addCell(delete);
+		} catch (WriteException e) {
+			e.printStackTrace();
 		}
 
 		close();
@@ -189,54 +173,96 @@ public class PromotionData implements PromotionDataService {
 		createWritableSheet();
 		int col = 0;
 		int row = hash(promotion.getPromotionID());
-		while(!wSheet.getCell(col, row).getContents().equals(promotion.getPromotionID())){
-			if(wSheet.getCell(col, row).getContents()==""){
-				close();
-				return false;  //The promotion with the ID of promotionID does not exist.
-			}
-			col+=dataSize;
+		if(!wSheet.getCell(col, row).getContents().equals(promotion.getPromotionID())){
+			close();
+			return false;  //The promotion with the ID of promotionID does not exist.
 		}
 		col++;
 		Label name = new Label(col, row, promotion.getPromotionName());
 		col++;
 		Label relatedHotelID = new Label(col, row, promotion.getRelatedHotelID());
 		col++;
-		Label district = new Label(col, row, promotion.getDistrict());
+		Number saleType = new Number(col, row, promotion.getSaleType().getValue());
 		col++;
-		Label enterprise = new Label(col, row, promotion.getEnterprise());
-		col++;
-		DateTime startDate = new DateTime(col, row, promotion.getStartDate());
-		col++;
-		DateTime endDate = new DateTime(col, row, promotion.getEndDate());
-		col++;
-		DateTime birthday = new DateTime(col, row, promotion.getBirthday());
-		col++;
-		Number numberOfRoom = new Number(col, row,promotion.getNumberOfRoom());
-		col++;
-		Number discount = new Number(col, row, promotion.getDiscount());
-		col++;
-		Number neededPrice = new Number(col, row, promotion.getNeededPrice());
-		col++;
-		Number reducePrice = new Number(col, row, promotion.getReducePrice());
-		col++;
+		switch (promotion.getSaleType().getValue()){
+			case 1: {
+				DateTime startDate = new DateTime(col, row, promotion.getStartDate(), dateFormat);
+				col++;
+				DateTime endDate = new DateTime(col, row, promotion.getEndDate(), dateFormat);
+				col++;
+				try {
+					wSheet.addCell(startDate);
+					wSheet.addCell(endDate);
+				} catch (WriteException e) {
+					e.printStackTrace();
+				}
+				break;
+			}
+			case 3: {
+				Number numberOfRoom = new Number(col, row,promotion.getNumberOfRoom());
+				col++;
+				try {
+					wSheet.addCell(numberOfRoom);
+				} catch (WriteException e) {
+					e.printStackTrace();
+				}
+				break;
+			}
+			case 4: {
+				Label enterprise = new Label(col, row, promotion.getEnterprise());
+				col++;
+				try {
+					wSheet.addCell(enterprise);
+				} catch (WriteException e) {
+					e.printStackTrace();
+				}
+				break;
+			}
+			case 5: {
+				Label district = new Label(col, row, promotion.getDistrict());
+				col++;
+				try {
+					wSheet.addCell(district);
+				} catch (WriteException e) {
+					e.printStackTrace();
+				}
+				break;
+			}
+			default:
+				break;
+		}
 		Number promotionType = new Number(col, row, promotion.getPromotionType().getValue());
 		col++;
-		Number saleType = new Number(col, row, promotion.getSaleType().getValue());
-
+		switch (promotion.getPromotionType().getValue()){
+			case 0:{
+				Number discount = new Number(col, row, promotion.getDiscount());
+				col++;
+				try {
+					wSheet.addCell(discount);
+				} catch (WriteException e) {
+					e.printStackTrace();
+				}
+				break;
+			}
+			case 1: {
+				Number neededPrice = new Number(col, row, promotion.getNeededPrice());
+				col++;
+				Number reducePrice = new Number(col, row, promotion.getReducePrice());
+				col++;
+				try {
+					wSheet.addCell(neededPrice);
+					wSheet.addCell(reducePrice);
+				} catch (WriteException e) {
+					e.printStackTrace();
+				}
+				break;
+			}
+		}
 		try {
+			wSheet.addCell(saleType);
+			wSheet.addCell(promotionType);
 			wSheet.addCell(name);
 			wSheet.addCell(relatedHotelID);
-			wSheet.addCell(district);
-			wSheet.addCell(enterprise);
-			wSheet.addCell(startDate);
-			wSheet.addCell(endDate);
-			wSheet.addCell(birthday);
-			wSheet.addCell(numberOfRoom);
-			wSheet.addCell(discount);
-			wSheet.addCell(neededPrice);
-			wSheet.addCell(reducePrice);
-			wSheet.addCell(promotionType);
-			wSheet.addCell(saleType);
 		} catch (WriteException e) {
 			e.printStackTrace();
 		}
@@ -246,7 +272,9 @@ public class PromotionData implements PromotionDataService {
 	}
 
 	public ArrayList<PromotionPO> getPromotionList() {
-		int rows = wSheet.getRows();
+		createSheet();
+		int rows = sheet.getRows();
+		System.err.println(rows);
 		ArrayList<PromotionPO> result = new ArrayList<PromotionPO>();
 		for (int i = 0; i < rows; i++) {
 			PromotionPO temp = getPromotionByRow(i);
@@ -263,9 +291,10 @@ public class PromotionData implements PromotionDataService {
 	 * @return
 	 */
 	public String getAvailablePromotionID() {
-		long rows = wSheet.getRows();
+		createSheet();
+		long rows = sheet.getRows();
 		if(rows>99999) return null;    //The space for saving the information of Members has been full.
-		String ID = rows+1+"";
+		String ID = rows+"";
 		while(ID.length()<lengthOfID){
 			ID = '0'+ID;
 		}
@@ -335,56 +364,76 @@ public class PromotionData implements PromotionDataService {
 
 	private PromotionPO getPromotionByRow(int row){
 		int col = 0;
-		if(wSheet.getCell(col, row).getContents()=="") return null;
-		String promotionID = wSheet.getCell(col, row).getContents();
+		Date startDate = null;
+		Date endDate = null;
+		int numberOfRoom = 0;
+		String enterprise = null;
+		String district = null;
+		double discount = 0;
+		double neededPrice = 0;
+		double reducePrice = 0;
+		String promotionID = sheet.getCell(col, row).getContents();
 		col++;
-		String promotionName = wSheet.getCell(col, row).getContents();
+		String promotionName = sheet.getCell(col, row).getContents();
 		col++;
-		String relatedHotelID = wSheet.getCell(col, row).getContents();
+		String relatedHotelID = sheet.getCell(col, row).getContents();
+		if(relatedHotelID=="") relatedHotelID=null;
 		col++;
-		String enterprise = wSheet.getCell(col, row).getContents();
+		int sType = (int)((NumberCell) sheet.getCell(col, row)).getValue();
 		col++;
-		String district = wSheet.getCell(col, row).getContents();
-		col++;
-		Date startDate = ((DateCell) wSheet.getCell(col, row)).getDate();
-		col++;
-		Date endDate = ((DateCell) wSheet.getCell(col, row)).getDate();
-		col++;
-		Date birthday = ((DateCell) wSheet.getCell(col, row)).getDate();
-		col++;
-		int numberOfRoom = (int)((Number) wSheet.getCell(col, row)).getValue();
-		col++;
-		int level = (int)((Number) wSheet.getCell(col, row)).getValue();
-		col++;
-		double discount = ((Number) wSheet.getCell(col, row)).getValue();
-		col++;
-		double neededPrice = ((Number) wSheet.getCell(col, row)).getValue();
-		col++;
-		double reducePrice = ((Number) wSheet.getCell(col, row)).getValue();
-		col++;
-		int pType = (int)((Number) wSheet.getCell(col, row)).getValue();
-		PromotionType promotionType = null;
-		switch (pType){
-			case 0: promotionType = PromotionType.Discount; break;
-			case 1: promotionType = PromotionType.Reduce; break;
-		}
-		col++;
-		int sType = (int)((Number) wSheet.getCell(col, row)).getValue();
 		SaleType saleType = null;
 		switch (sType){
-			case 0: saleType = SaleType.Rank; break;
-			case 1: saleType = SaleType.Date; break;
+			case 0: {
+				saleType = SaleType.Rank;
+			} break;
+			case 1: {
+				saleType = SaleType.Date;
+				startDate = ((DateCell) sheet.getCell(col, row)).getDate();
+				col++;
+				endDate = ((DateCell) sheet.getCell(col, row)).getDate();
+				col++;
+			} break;
 			case 2: saleType = SaleType.Birthday; break;
-			case 3: saleType = SaleType.RoomNumber; break;
-			case 4: saleType = SaleType.Enterprise; break;
-			case 5: saleType = SaleType.District; break;
+			case 3: {
+				saleType = SaleType.RoomNumber;
+				numberOfRoom = (int)((NumberCell) sheet.getCell(col, row)).getValue();
+				col++;
+			} break;
+			case 4: {
+				saleType = SaleType.Enterprise;
+				enterprise = sheet.getCell(col, row).getContents();
+				col++;
+			} break;
+			case 5: {
+				saleType = SaleType.District;
+				district = sheet.getCell(col, row).getContents();
+				col++;
+			} break;
+			default: break;
 		}
+		int pType = (int)((NumberCell) sheet.getCell(col, row)).getValue();
+		col++;
+		PromotionType promotionType = null;
+		switch (pType){
+			case 0: {
+				promotionType = PromotionType.Discount;
+				discount = ((NumberCell) sheet.getCell(col, row)).getValue();
+				col++;
+			} break;
+			case 1: {
+				promotionType = PromotionType.Reduce;
+				neededPrice = ((NumberCell) sheet.getCell(col, row)).getValue();
+				col++;
+				reducePrice = ((NumberCell) sheet.getCell(col, row)).getValue();
+				col++;
+			} break;
+		}
+
 		PromotionPO result = new PromotionPO(promotionID,promotionName,promotionType,relatedHotelID);
 		result.setEnterprise(enterprise);
 		result.setDistrict(district);
 		result.setStartDate(startDate);
 		result.setEndDate(endDate);
-		result.setBirthday(birthday);
 		result.setNumberOfRoom(numberOfRoom);
 		result.setDiscount(discount);
 		result.setNeededPrice(neededPrice);
