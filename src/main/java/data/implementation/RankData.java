@@ -1,6 +1,6 @@
 package data.implementation;
 
-import data.dataservice.RankDataService;
+import data.service.RankDataService;
 import jxl.NumberCell;
 import jxl.Sheet;
 import jxl.Workbook;
