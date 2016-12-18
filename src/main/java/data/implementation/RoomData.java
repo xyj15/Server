@@ -101,38 +101,14 @@ public class RoomData implements RoomDataService {
 		// TODO Auto-generated method stub
 		int col=0;
 		int i = 0;
-		while(!sheet.getCell(col+i, row).getContents().equals(roomNUM)){
-			if(sheet.getCell(col+i, row).getContents().equals("")){
-				return null;
+		int range = sheet.getRow(row).length;
+		while(i<range){
+			if(sheet.getCell(col+i, row).getContents().equals(roomNUM)){
+				return getRoomByCol(col+i, row);
 			}
 			i+=dataSize;
 		}
-		col++;
-		String roomName = sheet.getCell(col, row).getContents();
-		col++;
-		int valid = (int)((NumberCell)sheet.getCell(col,row)).getValue();
-		boolean isValid = true;
-		if(valid==0){
-			isValid=false;
-		}
-		col++;
-		int reserved = (int)((NumberCell) sheet.getCell(col, row)).getValue();
-		boolean isReserved = true;
-		if(reserved==0){
-			isReserved = false;
-		}
-		col++;
-		double price = ((NumberCell) sheet.getCell(col,row)).getValue();
-		col++;
-		int type = (int)((NumberCell) sheet.getCell(col, row)).getValue();
-		switch (type) {
-			case 0: return new RoomPO(isReserved, isValid,roomNUM,roomName,price, RoomType.Single);
-			case 1: return new RoomPO(isReserved, isValid, roomNUM, roomName, price, RoomType.TwinBed);
-			case 2: return new RoomPO(isReserved, isValid, roomNUM, roomName, price, RoomType.BigBed);
-			case 3: return new RoomPO(isReserved, isValid, roomNUM, roomName, price, RoomType.Suite);
-		}
 		return null;
-
 	}
 
 	private RoomPO getRoomByCol(int col, int row){
@@ -278,6 +254,11 @@ public class RoomData implements RoomDataService {
 		wSheet = wBook.getSheet(location);
 	}
 
+	private void setSheet(String hotelID){
+		int location = Integer.parseInt(hotelID);
+		sheet = book.getSheet(location);
+	}
+
 	/**
 	 *
 	 */
@@ -294,13 +275,13 @@ public class RoomData implements RoomDataService {
 	}
 
 	public RoomPO getSingleRoom(Date theDay, String roomNUM, String hotelID) {
-		createWritableSheet();
-		setwSheet(hotelID);
+		createSheet();
+		setSheet(hotelID);
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(theDay);
 		int row = cal.get(Calendar.DAY_OF_MONTH);
 		RoomPO result = getRoomByNumber(row, roomNUM);
-		close();
+		book.close();
 		return result;
 	}
 
@@ -368,16 +349,15 @@ public class RoomData implements RoomDataService {
 	}
 
 	public ArrayList<RoomPO> getRoomsByDate(Date day, String hotelID) {
-		createWritableSheet();
-		setwSheet(hotelID);
+		createSheet();
+		setSheet(hotelID);
 		int col = 0;
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(day);
 		int row = cal.get(Calendar.DAY_OF_MONTH);
 		ArrayList<RoomPO> result = new ArrayList<RoomPO>();
-		while(wSheet.getCell(col, row).getContents()!=""){
-			if(!wSheet.getCell(col, row).getContents().equals("-1"))result.add(getRoomByCol(col, row));
-			col+=dataSize;
+		for (int i = 0; i < sheet.getRow(row).length; i+=dataSize) {
+			if(!sheet.getCell(col+i, row).getContents().equals("-1"))result.add(getRoomByCol(col, row));
 		}
 		close();
 		if(result.size()==0) return null;  //there is no room of the hotel on the day
@@ -485,14 +465,13 @@ public class RoomData implements RoomDataService {
 	 * @return
 	 */
 	public boolean hasSuitableRoom(double low, double high, String hotelID){
-		createWritableSheet();
-		setwSheet(hotelID);
+		createSheet();
+		setSheet(hotelID);
 		int col = 0;
 		int row = 1;
 		ArrayList<RoomPO> result = new ArrayList<RoomPO>();
-		while(wSheet.getCell(col, row).getContents()!=""){
-			result.add(getRoomByCol(col, row));
-			col+=dataSize;
+		for (int i = 0; i < sheet.getRow(row).length; i++) {
+			result.add(getRoomByCol(col+i, row));
 		}
 		close();
 		for (RoomPO temp: result) {
