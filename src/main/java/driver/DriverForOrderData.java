@@ -1,12 +1,12 @@
 package driver;
 
-import data.dataservice.OrderDataService;
+import data.service.OrderDataService;
 import data.factory.OrderDataObstractFactory;
 import data.factoryImpl.OrderDataConFactory;
 import helper.OrderStatus;
-import helper.RoomType;
 import po.OrderPO;
 
+import java.rmi.RemoteException;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ public class DriverForOrderData {
 
 	private OrderDataService test;
 
-	public static void main(String[] args){
+	public static void main(String[] args) {
 		DriverForOrderData driverForMember = new DriverForOrderData("00000000");
 		DriverForOrderData driverForHotel = new DriverForOrderData("000000");
 		DriverForOrderData driverForSaler = new DriverForOrderData("0000");
@@ -88,7 +88,7 @@ public class DriverForOrderData {
 	 * @param order
 	 * @return
 	 */
-	public boolean testAddOrder(OrderPO order){
+	public boolean testAddOrder(OrderPO order) throws RemoteException {
 		System.out.println("Add an order whose ID is "+order.getOrderID());
 		return test.addOrder(order);
 	}
@@ -98,7 +98,7 @@ public class DriverForOrderData {
 	 * @param order
 	 * @return
 	 */
-	public boolean testUpdateOrder(OrderPO order){
+	public boolean testUpdateOrder(OrderPO order) throws RemoteException {
 		System.out.println("Update an order whose ID is "+order.getOrderID());
 		return test.updateOrder(order);
 	}
@@ -108,7 +108,7 @@ public class DriverForOrderData {
 	 * @param orderID
 	 * @return
 	 */
-	public boolean testGetOrder(String orderID){
+	public boolean testGetOrder(String orderID) throws RemoteException {
 		System.out.println("Look up for an order whose ID is "+orderID);
 		OrderPO result = test.getOrder(orderID);
 		if(result==null) return false;
@@ -121,7 +121,7 @@ public class DriverForOrderData {
 	 * @param userID
 	 * @return
 	 */
-	public boolean testGetOrderList(String userID){
+	public boolean testGetOrderList(String userID) throws RemoteException {
 		System.out.println("Look up for orders belong to "+userID);
 		ArrayList<OrderPO> result = test.getOrderList(userID);
 		if(result==null) return false;
@@ -137,7 +137,7 @@ public class DriverForOrderData {
 	 * @param orderID
 	 * @return
 	 */
-	public boolean testCancelOrder(String orderID){
+	public boolean testCancelOrder(String orderID) throws RemoteException {
 		System.out.println("Cancel an order whose ID is "+orderID);
 		return test.cancelOrder(orderID);
 	}
@@ -148,7 +148,7 @@ public class DriverForOrderData {
 	 * @param recover
 	 * @return
 	 */
-	public boolean testRecoverOrder(String orderID, double recover){
+	public boolean testRecoverOrder(String orderID, double recover) throws RemoteException {
 		System.out.println("Recover an order whose ID is "+orderID);
 		return test.recoverOrder(orderID, recover);
 	}
@@ -158,7 +158,7 @@ public class DriverForOrderData {
 	 * @param orderID
 	 * @return
 	 */
-	public boolean testMakeOrderAbnormal(String orderID){
+	public boolean testMakeOrderAbnormal(String orderID) throws RemoteException {
 		System.out.println("Make an order whose ID is "+orderID+" abnormal");
 		return test.makeOrderAbnormal(orderID);
 	}
@@ -168,7 +168,7 @@ public class DriverForOrderData {
 	 * @param userID
 	 * @return
 	 */
-	public boolean testGetUnfinishedOrders(String userID){
+	public boolean testGetUnfinishedOrders(String userID) throws RemoteException {
 		ArrayList<OrderPO> result = test.getUnfinishedOrders(userID);
 		if(result==null) return false;
 		for (OrderPO thisOrder: result
@@ -183,7 +183,7 @@ public class DriverForOrderData {
 	 * @param userID
 	 * @return
 	 */
-	public boolean testGetFinishedOrders(String userID){
+	public boolean testGetFinishedOrders(String userID) throws RemoteException {
 		ArrayList<OrderPO> result = test.getFinishedOrders(userID);
 		if(result==null) return false;
 		for (OrderPO thisOrder: result
@@ -198,7 +198,7 @@ public class DriverForOrderData {
 	 * @param userID
 	 * @return
 	 */
-	public boolean testGetCanceledOrders(String userID){
+	public boolean testGetCanceledOrders(String userID) throws RemoteException {
 		ArrayList<OrderPO> result = test.getCancledOrders(userID);
 		if(result==null) return false;
 		for (OrderPO thisOrder: result
@@ -213,7 +213,7 @@ public class DriverForOrderData {
 	 * @param userID
 	 * @return
 	 */
-	public boolean testGetAbnormalOrders(String userID){
+	public boolean testGetAbnormalOrders(String userID) throws RemoteException {
 		ArrayList<OrderPO> result = test.getAbnormalOrders(userID);
 		if(result==null) return false;
 		for (OrderPO thisOrder: result

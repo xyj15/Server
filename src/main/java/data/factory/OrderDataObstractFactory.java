@@ -1,6 +1,6 @@
 package data.factory;
 
-import data.dataservice.OrderDataService;
+import data.service.OrderDataService;
 
 /**
  * Created by apple on 2016/11/29.
