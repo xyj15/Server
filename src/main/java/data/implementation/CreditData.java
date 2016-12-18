@@ -29,53 +29,14 @@ public class CreditData implements CreditDataService {
 	private WritableSheet wSheet;
 
 	public CreditData(){
-//		try {
-//			book = Workbook.getWorkbook(new File(sourceFile));
-//			wBook = Workbook.createWorkbook(new File(sourceFile), book);
-//			wSheet = wBook.getSheet(0);
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		} catch (BiffException e) {
-//			e.printStackTrace();
-//		}
 	}
 
-	public double getCredit(String memberID) {
-		try {
-			book = Workbook.getWorkbook(new File(sourceFile));
-			sheet = book.getSheet(0);
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (BiffException e) {
-			e.printStackTrace();
-		}
-		int col = 0;
-		int row = hash(memberID);
-		if(!sheet.getCell(col, row).getContents().equals(memberID)) return -1.0;  //This member does not exist;
-		double credit = ((NumberCell) sheet.getCell(col+1, row)).getValue();
-		return credit;
-	}
-
-	public ArrayList<CreditChangePO> getCreditChange(String memberID) {
-		createWritableSheet();
-		int col = 0;
-		int row = hash(memberID);
-		if(!wSheet.getCell(col, row).getContents().equals(memberID)) return null;  //This member does not exist;
-		ArrayList<CreditChangePO> result = new ArrayList<CreditChangePO>();
-		col += 2;
-		while(wSheet.getCell(col, row).getContents()!=""){
-			result.add(getCreditChange(col, row));
-			col+=dateSize;
-		}
-		try {
-			wBook.write();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		close();
-		return result;
-	}
-
+	/**
+	 *
+	 * @param memberID
+	 * @param creditChange
+	 * @return
+	 */
 	public boolean addCreditChange(String memberID, CreditChangePO creditChange) {
 		createWritableSheet();
 		int col = 0;
@@ -100,7 +61,7 @@ public class CreditData implements CreditDataService {
 		col++;
 		Number result = new Number(col, row, creditChange.getResult());
 		col++;
-		DateTime changeDate = new DateTime(col, row, creditChange.getDate());
+		Number changeDate = new Number(col, row, creditChange.getDate().getTime());
 		col++;
 		Number orderAction = new Number(col, row, creditChange.getOrderAction().getValue());
 		try {
@@ -123,6 +84,44 @@ public class CreditData implements CreditDataService {
 		return true;
 	}
 
+	/**
+	 *
+	 * @param memberID
+	 * @return
+	 */
+	public double getCredit(String memberID) {
+		createSheet();
+		int col = 0;
+		int row = hash(memberID);
+		if(!sheet.getCell(col, row).getContents().equals(memberID)) return -1.0;  //This member does not exist;
+		double credit = ((NumberCell) sheet.getCell(col+1, row)).getValue();
+		book.close();
+		return credit;
+	}
+
+	/**
+	 *
+	 * @param memberID
+	 * @return
+	 */
+	public ArrayList<CreditChangePO> getCreditChange(String memberID) {
+		createSheet();
+		int col = 0;
+		int row = hash(memberID);
+		if(!sheet.getCell(col, row).getContents().equals(memberID)) return null;  //This member does not exist;
+		ArrayList<CreditChangePO> result = new ArrayList<CreditChangePO>();
+		col += 2;
+		System.out.println(sheet.getRow(row).length);
+		for (int i = 0; i < sheet.getRow(row).length-2; i+=dateSize) {
+			result.add(getCreditChange(col+i, row));
+		}
+		book.close();
+		return result;
+	}
+
+	/**
+	 *
+	 */
 	private void close() {
 		try {
 			wBook.close();
@@ -134,21 +133,33 @@ public class CreditData implements CreditDataService {
 		book.close();
 	}
 
+	/**
+	 *
+	 * @param memberID
+	 * @return
+	 */
 	private int hash(String memberID){
 		int hashResult = Integer.parseInt(memberID);
 		return hashResult;
 	}
 
+	/**
+	 *
+	 * @param col
+	 * @param row
+	 * @return
+	 */
 	private CreditChangePO getCreditChange(int col, int row){
-		String orderID = wSheet.getCell(col, row).getContents();
+		String orderID = sheet.getCell(col, row).getContents();
 		col++;
-		double change = ((NumberCell) wSheet.getCell(col, row)).getValue();
+		double change = ((NumberCell) sheet.getCell(col, row)).getValue();
 		col++;
-		double result = ((NumberCell) wSheet.getCell(col, row)).getValue();
+		double result = ((NumberCell) sheet.getCell(col, row)).getValue();
 		col++;
-		Date changeDate = ((DateCell) wSheet.getCell(col, row)).getDate();
+		long dateHelper = (long)((NumberCell) sheet.getCell(col, row)).getValue();
+		Date changeDate = new Date(dateHelper);
 		col++;
-		int action = (int) ((NumberCell) wSheet.getCell(col, row)).getValue();
+		int action = (int) ((NumberCell) sheet.getCell(col, row)).getValue();
 		switch (action){
 			case 0: return new CreditChangePO(changeDate, orderID, OrderAction.ExecuteOrder, change, result);
 			case 1: return new CreditChangePO(changeDate, orderID, OrderAction.AbnormalOrder, change, result);
@@ -158,11 +169,28 @@ public class CreditData implements CreditDataService {
 		return null;
 	}
 
+	/**
+	 *
+	 */
 	private void createWritableSheet(){
 		try {
 			book = Workbook.getWorkbook(new File(sourceFile));
 			wBook = Workbook.createWorkbook(new File(sourceFile), book);
 			wSheet = wBook.getSheet(0);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (BiffException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 *
+	 */
+	private void createSheet(){
+		try {
+			book = Workbook.getWorkbook(new File(sourceFile));
+			sheet = book.getSheet(0);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (BiffException e) {

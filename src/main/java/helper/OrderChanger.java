@@ -1,11 +1,13 @@
 package helper;
 
 import jxl.Cell;
+import jxl.NumberCell;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
 import jxl.write.*;
 import jxl.write.Number;
 import po.OrderPO;
+import sun.security.x509.DNSName;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,8 +23,6 @@ public class OrderChanger {
 	private WritableSheet wSheet;
 	private String sourceFile;
 	private int dataSize = 21;
-	private DateFormat theDateFormat = new DateFormat ("yyyy-mm-dd");
-	private WritableCellFormat dateFormat = new WritableCellFormat (theDateFormat);
 
 	public OrderChanger(String sourceFile){
 		this.sourceFile = sourceFile;
@@ -56,32 +56,32 @@ public class OrderChanger {
 		col++;
 		Label roomName = new Label(col, row, order.getRoomName());
 		col++;
-		DateTime checkIn = new DateTime(col, row, order.getCheckinTime(), dateFormat);
+		Number checkIn = new Number(col, row, order.getCheckinTime().getTime());
 		col++;
-		DateTime checkOut = new DateTime(col, row, order.getCheckoutTime(), dateFormat);
+		Number checkOut = new Number(col, row, order.getCheckoutTime().getTime());
 		col++;
-		DateTime latestCheckIn = new DateTime(col, row, order.getLatestCheckinTime(), dateFormat);
+		Number latestCheckIn = new Number(col, row, order.getLatestCheckinTime().getTime());
 		col++;
-		DateTime creatTime = new DateTime(col, row, order.getCreateTime(), dateFormat);
+		Number creatTime = new Number(col, row, order.getCreateTime().getTime());
 		col++;
-		DateTime actualCheckIn, actualCheckOut, cancelTime;
+		Number actualCheckIn, actualCheckOut, cancelTime;
 		if(order.getOrderStatus()==OrderStatus.Executed){
-			actualCheckIn = new DateTime(col, row, order.getActualCheckinTime(),dateFormat);
+			actualCheckIn = new Number(col, row, order.getActualCheckinTime().getTime());
 			col++;
-			actualCheckOut = new DateTime(col, row, order.getActualCheckoutTime(), dateFormat);
+			actualCheckOut = new Number(col, row, order.getActualCheckoutTime().getTime());
 			col++;
 		}
 		else{
-			actualCheckIn = new DateTime(col, row, new Date(), dateFormat);
+			actualCheckIn = new Number(col, row, new Date().getTime());
 			col++;
-			actualCheckOut = new DateTime(col, row, new Date(), dateFormat);
+			actualCheckOut = new Number(col, row, new Date().getTime());
 			col++;
 		}
 		if(order.getOrderStatus()==OrderStatus.Canceled){
-			cancelTime = new DateTime(col, row, order.getCancelTime(), dateFormat);
+			cancelTime = new Number(col, row, order.getCancelTime().getTime());
 		}
 		else{
-			cancelTime = new DateTime(col, row, new Date(), dateFormat);
+			cancelTime = new Number(col, row, new Date().getTime());
 		}
 		col++;
 		Number roomNUM = new Number(col, row, order.getNumberOfRoom());
@@ -99,8 +99,6 @@ public class OrderChanger {
 			kid = 1;
 		}
 		Number hasKid = new Number(col, row, kid);
-		col++;
-		Number roomType = new Number(col, row, order.getRoomType().getValue());
 		col++;
 		Number orderStatus = new Number(col, row, order.getOrderStatus().getV());
 
@@ -124,7 +122,6 @@ public class OrderChanger {
 			wSheet.addCell(score);
 			wSheet.addCell(recover);
 			wSheet.addCell(hasKid);
-			wSheet.addCell(roomType);
 			wSheet.addCell(orderStatus);
 		} catch (WriteException e) {
 			e.printStackTrace();
@@ -158,32 +155,32 @@ public class OrderChanger {
 		col++;
 		Label roomName = new Label(col, row, order.getRoomName());
 		col++;
-		DateTime checkIn = new DateTime(col, row, order.getCheckinTime(), dateFormat);
+		Number checkIn = new Number(col, row, order.getCheckinTime().getTime());
 		col++;
-		DateTime checkOut = new DateTime(col, row, order.getCheckoutTime(), dateFormat);
+		Number checkOut = new Number(col, row, order.getCheckoutTime().getTime());
 		col++;
-		DateTime latestCheckIn = new DateTime(col, row, order.getLatestCheckinTime(), dateFormat);
+		Number latestCheckIn = new Number(col, row, order.getLatestCheckinTime().getTime());
 		col++;
-		DateTime creatTime = new DateTime(col, row, order.getCreateTime(), dateFormat);
+		Number creatTime = new Number(col, row, order.getCreateTime().getTime());
 		col++;
-		DateTime actualCheckIn, actualCheckOut, cancelTime;
+		Number actualCheckIn, actualCheckOut, cancelTime;
 		if(order.getOrderStatus()==OrderStatus.Executed){
-			actualCheckIn = new DateTime(col, row, order.getActualCheckinTime(), dateFormat);
+			actualCheckIn = new Number(col, row, order.getActualCheckinTime().getTime());
 			col++;
-			actualCheckOut = new DateTime(col, row, order.getActualCheckoutTime(), dateFormat);
+			actualCheckOut = new Number(col, row, order.getActualCheckoutTime().getTime());
 			col++;
 		}
 		else{
-			actualCheckIn = new DateTime(col, row, new Date(), dateFormat);
+			actualCheckIn = new Number(col, row, new Date().getTime());
 			col++;
-			actualCheckOut = new DateTime(col, row, new Date(), dateFormat);
+			actualCheckOut = new Number(col, row, new Date().getTime());
 			col++;
 		}
 		if(order.getOrderStatus()==OrderStatus.Canceled){
-			cancelTime = new DateTime(col, row, order.getCancelTime(), dateFormat);
+			cancelTime = new Number(col, row, order.getCancelTime().getTime());
 		}
 		else{
-			cancelTime = new DateTime(col, row, new Date(), dateFormat);
+			cancelTime = new Number(col, row, new Date().getTime());
 		}
 		col++;
 		Number roomNUM = new Number(col, row, order.getNumberOfRoom());
@@ -201,8 +198,6 @@ public class OrderChanger {
 			kid = 1;
 		}
 		Number hasKid = new Number(col, row, kid);
-		col++;
-		Number roomType = new Number(col, row, order.getRoomType().getValue());
 		col++;
 		Number orderStatus = new Number(col, row, order.getOrderStatus().getV());
 
@@ -225,7 +220,6 @@ public class OrderChanger {
 			wSheet.addCell(score);
 			wSheet.addCell(recover);
 			wSheet.addCell(hasKid);
-			wSheet.addCell(roomType);
 			wSheet.addCell(orderStatus);
 		} catch (WriteException e) {
 			e.printStackTrace();
@@ -251,9 +245,9 @@ public class OrderChanger {
 		int col = orderStart.getColumn()+dataSize-1;
 		int row = orderStart.getRow();
 		Number orderStatus = new Number(col, row, OrderStatus.Canceled.getV());
-		col -= 8;
+		col -= 7;
 		Calendar cal = Calendar.getInstance();
-		DateTime cancelTime = new DateTime(col, row, cal.getTime(), dateFormat);
+		Number cancelTime = new Number(col, row, cal.getTime().getTime());
 
 		try {
 			wSheet.addCell(orderStatus);

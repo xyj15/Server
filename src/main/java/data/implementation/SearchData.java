@@ -1,6 +1,7 @@
 package data.implementation;
 
 import data.dataservice.SearchDataService;
+import helper.Encryption;
 import jxl.NumberCell;
 import jxl.Sheet;
 import jxl.Workbook;
@@ -20,10 +21,9 @@ import java.util.ArrayList;
 public class SearchData implements SearchDataService {
 
 	private int dataSize = 13;
-	private String sourceFile = "HotelData.xls";private Workbook book;
+	private String sourceFile = "HotelData.xls";
+	private Workbook book;
 	private Sheet sheet;
-	private WritableWorkbook wBook;
-	private WritableSheet wSheet;
 
 	/**
 	 *
@@ -32,16 +32,19 @@ public class SearchData implements SearchDataService {
 	 * @return
 	 */
 	public ArrayList<HotelPO> getHotelListByCityDistrict(String city, String district) {
-		createWritableSheet();
+		createSheet();
 		sheet = book.getSheet(0);
 		int col = 0;
 		int row = hash(city+district);
 		ArrayList<HotelPO> result = new ArrayList<HotelPO>();
-		while(wSheet.getCell(col, row).getContents()!=""){
-			if(!wSheet.getCell(col, row).getContents().equals("-1")){
-				result.add(getHotelByPosition(col, row));
+		if(row>=sheet.getRows()||col>=sheet.getColumns()){
+			close();
+			return null;
+		}
+		for (int i = 0; i < sheet.getRow(row).length; i+=dataSize) {
+			if(!sheet.getCell(col+i, row).getContents().equals("-1")){
+				result.add(getHotelByPosition(col+i, row));
 			}
-			col+=dataSize;
 		}
 		close();
 		if(result.size()==0) return null;       //There is no hotel sighed in the district of the city.
@@ -119,28 +122,9 @@ public class SearchData implements SearchDataService {
 	 *
 	 */
 	private void close(){
-		write();
-		try {
-			wBook.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (WriteException e) {
-			e.printStackTrace();
-		}
 		book.close();
 	}
 
-
-	/**
-	 *
-	 */
-	private void write(){
-		try {
-			wBook.write();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 
 	/**
 	 *
@@ -161,9 +145,9 @@ public class SearchData implements SearchDataService {
 	 * @return
 	 */
 	private HotelPO getHotelByPosition(int col, int row){
-		String ID = sheet.getCell(col, row).getContents();
+		String ID = Encryption.convertMD5(sheet.getCell(col, row).getContents());
 		col++;
-		String password = sheet.getCell(col, row).getContents();
+		String password = Encryption.convertMD5(sheet.getCell(col, row).getContents());
 		col++;
 		String name = sheet.getCell(col, row).getContents();
 		col++;
@@ -212,22 +196,4 @@ public class SearchData implements SearchDataService {
 		}
 	}
 
-	/**
-	 *用来初始化wSheet
-	 *
-	 */
-	private void createWritableSheet(){
-		try {
-			try {
-				book=Workbook.getWorkbook(new File(sourceFile));
-				wBook = Workbook.createWorkbook(new File(sourceFile),book);
-				wSheet = wBook.getSheet(0);
-			} catch (BiffException e) {
-				e.printStackTrace();
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 }

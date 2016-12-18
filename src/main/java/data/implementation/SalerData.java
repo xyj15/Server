@@ -56,14 +56,6 @@ public class SalerData implements SalerDataService {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		WritableSheet wSheet2 = wBook.getSheet(1);
-		int sum = (int)((NumberCell) wSheet2.getCell(0, 0)).getValue();
-		Number total = new Number(0, 0,sum+1);
-		try {
-			wSheet2.addCell(total);
-		} catch (WriteException e) {
-			e.printStackTrace();
-		}
 
 		close();
 		return true;
@@ -90,15 +82,6 @@ public class SalerData implements SalerDataService {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}
-
-		WritableSheet wSheet2 = wBook.getSheet(1);
-		int sum = (int)((NumberCell) wSheet2.getCell(0, 0)).getValue();
-		Number total = new Number(0, 0,sum-1);
-		try {
-			wSheet2.addCell(total);
-		} catch (WriteException e) {
-			e.printStackTrace();
 		}
 
 		close();
@@ -165,10 +148,9 @@ public class SalerData implements SalerDataService {
 
 	public String getAvailableSalerID() {
 		createSheet();
-		Sheet sheet2 = book.getSheet(1);
-		int sum = (int)((NumberCell) sheet2.getCell(0, 0)).getValue();
+		int sum = sheet.getRows();
 		if(sum>9999) return null;    //The space for saving the information of Members has been full.
-		String ID = sum+1+"";
+		String ID = sum+"";
 		while(ID.length()<lengthOfID){
 			ID = '0'+ID;
 		}
@@ -177,7 +159,6 @@ public class SalerData implements SalerDataService {
 
 	private int hash(String ID){
 		int hashResult = Integer.parseInt(ID);
-		hashResult%=10;
 		return hashResult;
 	}
 

@@ -24,8 +24,6 @@ public class PromotionData implements PromotionDataService {
 
 	private int lengthOfID = 5;
 	private String sourceFile = "PromotionData.xls";
-	private DateFormat theDateFormat = new DateFormat ("yyyy-mm-dd");
-	private WritableCellFormat dateFormat = new WritableCellFormat (theDateFormat);
 	private Workbook book;
 	private Sheet sheet;
 	private WritableWorkbook wBook;
@@ -64,9 +62,9 @@ public class PromotionData implements PromotionDataService {
 		col++;
 		switch (promotion.getSaleType().getValue()){
 			case 1: {
-				DateTime startDate = new DateTime(col, row, promotion.getStartDate(), dateFormat);
+				Number startDate = new Number(col, row, promotion.getStartDate().getTime());
 				col++;
-				DateTime endDate = new DateTime(col, row, promotion.getEndDate(), dateFormat);
+				Number endDate = new Number(col, row, promotion.getEndDate().getTime());
 				col++;
 				try {
 					wSheet.addCell(startDate);
@@ -186,9 +184,9 @@ public class PromotionData implements PromotionDataService {
 		col++;
 		switch (promotion.getSaleType().getValue()){
 			case 1: {
-				DateTime startDate = new DateTime(col, row, promotion.getStartDate(), dateFormat);
+				Number startDate = new Number(col, row, promotion.getStartDate().getTime());
 				col++;
-				DateTime endDate = new DateTime(col, row, promotion.getEndDate(), dateFormat);
+				Number endDate = new Number(col, row, promotion.getEndDate().getTime());
 				col++;
 				try {
 					wSheet.addCell(startDate);
@@ -282,7 +280,10 @@ public class PromotionData implements PromotionDataService {
 				result.add(temp);
 			}
 		}
-		if(result.size()==0) return null;  //There is no promotion.
+		book.close();
+		if(result.size()==0){
+			return null;  //There is no promotion.
+		}
 		return result;
 	}
 
@@ -298,6 +299,7 @@ public class PromotionData implements PromotionDataService {
 		while(ID.length()<lengthOfID){
 			ID = '0'+ID;
 		}
+		book.close();
 		return ID;
 	}
 
@@ -388,9 +390,11 @@ public class PromotionData implements PromotionDataService {
 			} break;
 			case 1: {
 				saleType = SaleType.Date;
-				startDate = ((DateCell) sheet.getCell(col, row)).getDate();
+				long dateHelper = (long)((NumberCell)sheet.getCell(col, row)).getValue();
+				startDate = new Date(dateHelper);
 				col++;
-				endDate = ((DateCell) sheet.getCell(col, row)).getDate();
+				dateHelper = (long)((NumberCell)sheet.getCell(col, row)).getValue();
+				endDate = new Date(dateHelper);
 				col++;
 			} break;
 			case 2: saleType = SaleType.Birthday; break;

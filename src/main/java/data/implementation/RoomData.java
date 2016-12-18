@@ -9,6 +9,7 @@ import java.util.Date;
 import data.dataservice.RoomDataService;
 import helper.RoomType;
 import jxl.NumberCell;
+import jxl.Sheet;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
 import jxl.write.Label;
@@ -24,6 +25,7 @@ public class RoomData implements RoomDataService {
 	private int daysOfMonth = 31;
 	private String sourceFile = "RoomData.xls";
 	private Workbook book;
+	private Sheet sheet;
 	private WritableWorkbook wBook;
 	private WritableSheet wSheet;
 	
@@ -71,6 +73,23 @@ public class RoomData implements RoomDataService {
 			e.printStackTrace();
 		}
 	}
+	/**
+	 * 用来初始化sheet
+	 *
+	 */
+	private void createSheet(){
+		try {
+			try {
+				book=Workbook.getWorkbook(new File(sourceFile));
+				sheet = book.getSheet(0);
+			} catch (BiffException e) {
+				e.printStackTrace();
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	/**
 	 *
@@ -81,30 +100,31 @@ public class RoomData implements RoomDataService {
 	private RoomPO getRoomByNumber(int row, String roomNUM) {
 		// TODO Auto-generated method stub
 		int col=0;
-		while(!wSheet.getCell(col, row).getContents().equals(roomNUM)){
-			if(wSheet.getCell(col, row).getContents().equals("")){
+		int i = 0;
+		while(!sheet.getCell(col+i, row).getContents().equals(roomNUM)){
+			if(sheet.getCell(col+i, row).getContents().equals("")){
 				return null;
 			}
-			col+=dataSize;
+			i+=dataSize;
 		}
 		col++;
-		String roomName = wSheet.getCell(col, row).getContents();
+		String roomName = sheet.getCell(col, row).getContents();
 		col++;
-		int valid = (int)((NumberCell)wSheet.getCell(col,row)).getValue();
+		int valid = (int)((NumberCell)sheet.getCell(col,row)).getValue();
 		boolean isValid = true;
 		if(valid==0){
 			isValid=false;
 		}
 		col++;
-		int reserved = (int)((NumberCell) wSheet.getCell(col, row)).getValue();
+		int reserved = (int)((NumberCell) sheet.getCell(col, row)).getValue();
 		boolean isReserved = true;
 		if(reserved==0){
 			isReserved = false;
 		}
 		col++;
-		double price = ((NumberCell) wSheet.getCell(col,row)).getValue();
+		double price = ((NumberCell) sheet.getCell(col,row)).getValue();
 		col++;
-		int type = (int)((NumberCell) wSheet.getCell(col, row)).getValue();
+		int type = (int)((NumberCell) sheet.getCell(col, row)).getValue();
 		switch (type) {
 			case 0: return new RoomPO(isReserved, isValid,roomNUM,roomName,price, RoomType.Single);
 			case 1: return new RoomPO(isReserved, isValid, roomNUM, roomName, price, RoomType.TwinBed);
@@ -116,25 +136,25 @@ public class RoomData implements RoomDataService {
 	}
 
 	private RoomPO getRoomByCol(int col, int row){
-		String roomNUM = wSheet.getCell(col, row).getContents();
+		String roomNUM = sheet.getCell(col, row).getContents();
 		col++;
-		String roomName = wSheet.getCell(col, row).getContents();
+		String roomName = sheet.getCell(col, row).getContents();
 		col++;
-		int valid = (int)((NumberCell)wSheet.getCell(col,row)).getValue();
+		int valid = (int)((NumberCell)sheet.getCell(col,row)).getValue();
 		boolean isValid = true;
 		if(valid==0){
 			isValid=false;
 		}
 		col++;
-		int reserved = (int)((NumberCell) wSheet.getCell(col, row)).getValue();
+		int reserved = (int)((NumberCell) sheet.getCell(col, row)).getValue();
 		boolean isReserved = true;
 		if(reserved==0){
 			isReserved = false;
 		}
 		col++;
-		double price = ((NumberCell) wSheet.getCell(col,row)).getValue();
+		double price = ((NumberCell) sheet.getCell(col,row)).getValue();
 		col++;
-		int type = (int)((NumberCell) wSheet.getCell(col, row)).getValue();
+		int type = (int)((NumberCell) sheet.getCell(col, row)).getValue();
 		switch (type) {
 			case 0: return new RoomPO(isReserved, isValid,roomNUM,roomName,price, RoomType.Single);
 			case 1: return new RoomPO(isReserved, isValid, roomNUM, roomName, price, RoomType.TwinBed);

@@ -32,6 +32,7 @@ public class ManagerData implements ManagerDataService {
 		createWritableSheet();
 		int col = 0;
 		int row = 0;
+		Label ID = new Label(col, row, Encryption.convertMD5(manager.getUserID()));
 		col++;
 		Label password = new Label(col,row, Encryption.convertMD5(manager.getPassword()));
 		col++;
@@ -40,6 +41,7 @@ public class ManagerData implements ManagerDataService {
 		Label tel = new Label(col, row, Encryption.convertMD5(manager.getTel()));
 
 		try {
+			wSheet.addCell(ID);
 			wSheet.addCell(password);
 			wSheet.addCell(name);
 			wSheet.addCell(tel);

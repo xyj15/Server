@@ -55,7 +55,7 @@ public class HotelData implements HotelDataService {
 		int row = hash(hotel.getCity()+hotel.getDistrict());
 		while(wSheet.getCell(col, row).getContents()!=""&&(!wSheet.getCell(col, row).getContents().equals("-1"))){
 			if(wSheet.getCell(col, row).getContents().equals(Encryption.convertMD5(hotel.getUserID()))){
-				out();
+				close();
 				return false;     // the hotel with the same ID has already existed
 			}
 			col+=dataSize;
@@ -147,7 +147,7 @@ public class HotelData implements HotelDataService {
 		createWritableSheet();
 		Cell hotelStart = wSheet.findCell(Encryption.convertMD5(hotelID));
 		if(hotelStart==null){
-			out();
+			close();
 			return false;
 		}
 		int col = hotelStart.getColumn();
@@ -186,16 +186,6 @@ public class HotelData implements HotelDataService {
 			e.printStackTrace();
 		}
 
-		WritableSheet sumSheet = wBook.getSheet(1);
-		int sum = (int) ((NumberCell) sumSheet.getCell(0, 0)).getValue();
-		sum--;
-		Number sumOfHotel = new Number(0,0,sum);
-		try {
-			sumSheet.addCell(sumOfHotel);
-		} catch (WriteException e) {
-			e.printStackTrace();
-		}
-
 		close();
 		return true;
 	}
@@ -211,14 +201,14 @@ public class HotelData implements HotelDataService {
 		int row = hash(hotel.getCity()+hotel.getDistrict());
 		while(!wSheet.getCell(col, row).getContents().equals(Encryption.convertMD5(hotel.getUserID()))){
 			if(wSheet.getCell(col, row).getContents().equals("")){
-				out();                          //The hotel with ID of hotelID does not exist.
+				close();                         //The hotel with ID of hotelID does not exist.
 				return false;
 			}
 			col+=dataSize;
 		}
-		Label ID = new Label(col, row, Encryption.convertMD5(hotel.getPassword()));
+		Label ID = new Label(col, row, Encryption.convertMD5(hotel.getUserID()));
 		col++;
-		Label password = new Label(col, row, hotel.getPassword());
+		Label password = new Label(col, row, Encryption.convertMD5(hotel.getPassword()));
 		col++;
 		Label name = new Label(col, row, hotel.getName());
 		col++;
@@ -279,6 +269,7 @@ public class HotelData implements HotelDataService {
 		int col = hotelStart.getColumn();
 		int row = hotelStart.getRow();
 		HotelPO result = getHotelByPosition(col, row);
+		book.close();
 		return result;
 	}
 
@@ -294,6 +285,7 @@ public class HotelData implements HotelDataService {
 		int col = hotelStart.getColumn()-2;
 		int row = hotelStart.getRow();
 		HotelPO result = getHotelByPosition(col, row);
+		book.close();
 		return result;
 	}
 

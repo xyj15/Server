@@ -236,11 +236,19 @@ public class OrderDataForM implements OrderDataService {
     private OrderPO getOrder(int col, int row){
         int status = (int)((NumberCell) sheet.getCell(col+dataSize-1, row)).getValue();
         OrderStatus orderStatus = null;
-        switch (status){
-            case 0: orderStatus = OrderStatus.Executed; break;
-            case 1: orderStatus = OrderStatus.Unexecuted; break;
-            case 2: orderStatus = OrderStatus.Abnormal; break;
-            case 3: orderStatus = OrderStatus.Canceled; break;
+        switch (status) {
+            case 0:
+                orderStatus = OrderStatus.Executed;
+                break;
+            case 1:
+                orderStatus = OrderStatus.Unexecuted;
+                break;
+            case 2:
+                orderStatus = OrderStatus.Abnormal;
+                break;
+            case 3:
+                orderStatus = OrderStatus.Canceled;
+                break;
         }
         String orderID = sheet.getCell(col, row).getContents();
         col++;
@@ -254,28 +262,35 @@ public class OrderDataForM implements OrderDataService {
         col++;
         String roomName = sheet.getCell(col, row).getContents();
         col++;
-        Date checkIn = ((DateCell) sheet.getCell(col, row)).getDate();
+        long dateHelper = (long)((NumberCell) sheet.getCell(col, row)).getValue();
+        Date checkIn = new Date(dateHelper);
         col++;
-        Date checkOut = ((DateCell) sheet.getCell(col, row)).getDate();
+        dateHelper = (long)((NumberCell) sheet.getCell(col, row)).getValue();
+        Date checkOut = new Date(dateHelper);
         col++;
-        Date latestCheckIn = ((DateCell) sheet.getCell(col, row)).getDate();
+        dateHelper = (long)((NumberCell) sheet.getCell(col, row)).getValue();
+        Date latestCheckIn = new Date(dateHelper);
         col++;
-        Date creatTime = ((DateCell) sheet.getCell(col, row)).getDate();
+        dateHelper = (long)((NumberCell) sheet.getCell(col, row)).getValue();
+        Date creatTime = new Date(dateHelper);
         col++;
         Date actualCheckIn = null;
         Date actualCheckOut = null;
         Date cancelTime = null;
         if(orderStatus==OrderStatus.Executed){
-            actualCheckIn = ((DateCell) sheet.getCell(col, row)).getDate();
+            dateHelper = (long)((NumberCell) sheet.getCell(col, row)).getValue();
+            actualCheckIn = new Date(dateHelper);
             col++;
-            actualCheckOut = ((DateCell) sheet.getCell(col, row)).getDate();
+            dateHelper = (long)((NumberCell) sheet.getCell(col, row)).getValue();
+            actualCheckOut = new Date(dateHelper);
             col++;
         }
         else{
             col+=2;
         }
         if(orderStatus==OrderStatus.Canceled){
-            cancelTime = ((DateCell) sheet.getCell(col, row)).getDate();
+            dateHelper = (long)((NumberCell) sheet.getCell(col, row)).getValue();
+            cancelTime = new Date(dateHelper);
         }
         col++;
         int roomNUM = (int)((NumberCell) sheet.getCell(col, row)).getValue();
@@ -293,17 +308,8 @@ public class OrderDataForM implements OrderDataService {
         if(kid==0){
             hasKid=false;
         }
-        col++;
-        int type = (int)((NumberCell) sheet.getCell(col, row)).getValue();
-        RoomType roomType = null;
-        switch (type){
-            case 0: roomType = RoomType.Single; break;
-            case 1: roomType = RoomType.TwinBed; break;
-            case 2: roomType = RoomType.BigBed; break;
-            case 3: roomType = RoomType.Suite; break;
-        }
         return new OrderPO(memberID,hotelID,orderID,orderStatus,creatTime,checkIn,actualCheckIn,latestCheckIn,checkOut,actualCheckOut,
-                roomNUM,roomName,numOfClient,hasKid,score,evaluation,recover,promotion,price,cancelTime, roomType);
+                roomNUM,roomName,numOfClient,hasKid,score,evaluation,recover,promotion,price,cancelTime);
     }
 
 }

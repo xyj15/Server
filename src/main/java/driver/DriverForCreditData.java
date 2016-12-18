@@ -21,13 +21,13 @@ public class DriverForCreditData {
 		day.setYear(2016);
 		day.setMonth(3);
 		day.setDate(12);
-		driver.testAdd("00000000", new CreditChangePO(day,"2016120400000000", OrderAction.ExecuteOrder, 200, 400));
+		driver.testAdd("00000000", new CreditChangePO(day,"2016120400000000", OrderAction.ExecuteOrder, 200, 1050));
 		day.setDate(6);
 		day.setMonth(28);
-		driver.testAdd("00000000", new CreditChangePO(day,"2016280700000000", OrderAction.CancelOrder, -50, 350));
+		driver.testAdd("00000000", new CreditChangePO(day,"2016280700000000", OrderAction.CancelOrder, -50, 1000));
 		day.setDate(21);
 		day.setMonth(9);
-		driver.testAdd("00000000", new CreditChangePO(day,"2016211000000000", OrderAction.RechargeCredit, 500, 850));
+		driver.testAdd("00000000", new CreditChangePO(day,"2016211000000000", OrderAction.RechargeCredit, 500, 1500));
 		day.setMonth(4);
 		day.setDate(15);
 		driver.testAdd("00000001", new CreditChangePO(day,"2016150500000000", OrderAction.ExecuteOrder, 200, 300));
@@ -35,7 +35,7 @@ public class DriverForCreditData {
 		day.setMonth(10);
 		driver.testAdd("00000001", new CreditChangePO(day,"2016081100000000", OrderAction.AbnormalOrder, -200, 100));
 		driver.testGetChanges("00000000");
-		driver.testGetCredit("00000001");
+//		driver.testGetCredit("00000001");
 	}
 
 	public boolean testAdd(String memberID, CreditChangePO credit){

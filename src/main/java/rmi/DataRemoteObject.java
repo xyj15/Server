@@ -1,6 +1,8 @@
 package rmi;
 
 import data.dataservice.*;
+import data.factory.OrderDataObstractFactory;
+import data.factoryImpl.OrderDataConFactory;
 import data.implementation.*;
 import helper.RoomType;
 import po.*;
@@ -14,20 +16,21 @@ import java.util.Date;
  * Created by CROFF on 2016/12/10.
  */
 public class DataRemoteObject extends UnicastRemoteObject implements CreditDataService,
-		HotelDataService, ManagerDataService, MemberDataService, OrderDataService,
+		HotelDataService, ManagerDataService, MemberDataService, OrderDataObstractFactory,
 		PromotionDataService, RankDataService, RoomDataService, SalerDataService, SearchDataService {
 	
-	private static final long serialVersionUID = 2805284943456756093L;
+	private static final long serialVersionUID = 4666870661827494597L;
 	private CreditDataService creditDataService;
 	private HotelDataService hotelDataService;
 	private ManagerDataService managerDataService;
 	private MemberDataService memberDataService;
-	private OrderDataService orderDataService;
+//	private OrderDataService orderDataService;
 	private PromotionDataService promotionDataService;
 	private RankDataService rankDataService;
 	private RoomDataService roomDataService;
 	private SalerDataService salerDataService;
 	private SearchDataService searchDataService;
+	private OrderDataObstractFactory orderDataFactory;
 	
 	protected DataRemoteObject() throws RemoteException {
 		creditDataService = new CreditData();
@@ -40,6 +43,7 @@ public class DataRemoteObject extends UnicastRemoteObject implements CreditDataS
 		roomDataService = new RoomData();
 		salerDataService = new SalerData();
 		searchDataService = new SearchData();
+		orderDataFactory = new OrderDataConFactory();
 	}
 	
 	@Override
@@ -92,61 +96,61 @@ public class DataRemoteObject extends UnicastRemoteObject implements CreditDataS
 		return memberDataService.getAvailableMemberID();
 	}
 	
-	@Override
-	public boolean addOrder(OrderPO order) {
-		return orderDataService.addOrder(order);
-	}
-	
-	@Override
-	public boolean updateOrder(OrderPO order) {
-		return orderDataService.updateOrder(order);
-	}
-	
-	@Override
-	public boolean cancelOrder(String orderID) {
-		return orderDataService.cancelOrder(orderID);
-	}
-	
-	@Override
-	public boolean makeOrderAbnormal(String orderID) {
-		return orderDataService.makeOrderAbnormal(orderID);
-	}
-	
-	@Override
-	public boolean recoverOrder(String orderID, double recover) {
-		return orderDataService.recoverOrder(orderID, recover);
-	}
-	
-	@Override
-	public OrderPO getOrder(String orderID) {
-		return orderDataService.getOrder(orderID);
-	}
-	
-	@Override
-	public ArrayList<OrderPO> getOrderList(String userID) {
-		return orderDataService.getOrderList(userID);
-	}
-	
-	@Override
-	public ArrayList<OrderPO> getFinishedOrders(String userID) {
-		return orderDataService.getFinishedOrders(userID);
-	}
-	
-	@Override
-	public ArrayList<OrderPO> getUnfinishedOrders(String userID) {
-		return orderDataService.getUnfinishedOrders(userID);
-	}
-	
-	@Override
-	public ArrayList<OrderPO> getAbnormalOrders(String userID) {
-		return orderDataService.getAbnormalOrders(userID);
-	}
-	
-	@Override
-	public ArrayList<OrderPO> getCancledOrders(String userID) {
-		return orderDataService.getCancledOrders(userID);
-	}
-	
+//	@Override
+//	public boolean addOrder(OrderPO order) {
+//		return orderDataService.addOrder(order);
+//	}
+//
+//	@Override
+//	public boolean updateOrder(OrderPO order) {
+//		return orderDataService.updateOrder(order);
+//	}
+//
+//	@Override
+//	public boolean cancelOrder(String orderID) {
+//		return orderDataService.cancelOrder(orderID);
+//	}
+//
+//	@Override
+//	public boolean makeOrderAbnormal(String orderID) {
+//		return orderDataService.makeOrderAbnormal(orderID);
+//	}
+//
+//	@Override
+//	public boolean recoverOrder(String orderID, double recover) {
+//		return orderDataService.recoverOrder(orderID, recover);
+//	}
+//
+//	@Override
+//	public OrderPO getOrder(String orderID) {
+//		return orderDataService.getOrder(orderID);
+//	}
+//
+//	@Override
+//	public ArrayList<OrderPO> getOrderList(String userID) {
+//		return orderDataService.getOrderList(userID);
+//	}
+//
+//	@Override
+//	public ArrayList<OrderPO> getFinishedOrders(String userID) {
+//		return orderDataService.getFinishedOrders(userID);
+//	}
+//
+//	@Override
+//	public ArrayList<OrderPO> getUnfinishedOrders(String userID) {
+//		return orderDataService.getUnfinishedOrders(userID);
+//	}
+//
+//	@Override
+//	public ArrayList<OrderPO> getAbnormalOrders(String userID) {
+//		return orderDataService.getAbnormalOrders(userID);
+//	}
+//
+//	@Override
+//	public ArrayList<OrderPO> getCancledOrders(String userID) {
+//		return orderDataService.getCancledOrders(userID);
+//	}
+//
 	@Override
 	public RoomPO getSingleRoom(Date theDay, String roomNUM, String hotelID) {
 		return roomDataService.getSingleRoom(theDay, roomNUM, hotelID);
@@ -315,5 +319,10 @@ public class DataRemoteObject extends UnicastRemoteObject implements CreditDataS
 	@Override
 	public boolean addCreditChange(String memberID, CreditChangePO creditChange) {
 		return creditDataService.addCreditChange(memberID, creditChange);
+	}
+
+	@Override
+	public OrderDataService getOrdaerData(String userID) {
+		return orderDataFactory.getOrdaerData(userID);
 	}
 }

@@ -26,8 +26,6 @@ public class MemberData implements MemberDataService {
 	int dataSize = 8;
 	int lengthOfID = 8;
 	String sourceFile = "MemberData.xls";
-	private DateFormat theDateFormat = new DateFormat ("dd-mm-yyyy");
-	private WritableCellFormat dateFormat = new WritableCellFormat (theDateFormat);
 	Workbook book;
 	Sheet sheet;
 	WritableWorkbook wBook;
@@ -125,7 +123,8 @@ public class MemberData implements MemberDataService {
 		col++;
 		switch(member.getMemberType().getValue()){
 			case 0: {
-				DateTime birthDay = new DateTime(col,row,member.getBirthday(), dateFormat);
+				long dateHelper = member.getBirthday().getTime();
+				Number birthDay = new Number(col,row, dateHelper);
 				try {
 					wSheet.addCell(birthDay);
 				} catch (WriteException e) {
@@ -242,7 +241,8 @@ public class MemberData implements MemberDataService {
 		col++;
 		switch(member.getMemberType().getValue()){
 			case 0: {
-				DateTime birthDay = new DateTime(col,row,member.getBirthday(), dateFormat);
+				long dateHelper = member.getBirthday().getTime();
+				Number birthDay = new Number(col,row, dateHelper);
 				try {
 					wSheet.addCell(birthDay);
 				} catch (WriteException e) {
@@ -300,7 +300,8 @@ public class MemberData implements MemberDataService {
 				col++;
 				switch (type){
 					case 0:{
-						Date birthday = ((DateCell)sheet.getCell(col,row)).getDate();
+						long dateHelper = (long)((NumberCell)sheet.getCell(col,row)).getValue();
+						Date birthday = new Date(dateHelper);
 						book.close();
 						return new MemberPO(ID,name,password,phone,level,discount,MemberType.Orinary,birthday,"");
 					}
