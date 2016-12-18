@@ -16,5 +16,6 @@ public interface CreditDataService {
 	public double getCredit(String memberID);    //根据客户ID获取最新客户信用
 
 	public ArrayList<CreditChangePO> getCreditChange(String memberID);    //根据客户ID获取客户信用变化情况列表
-	//public boolean setCredit(String memberID, double credit);	//设置客户的信用
+
+	public boolean setCredit(String memberID, double credit);	//设置客户的信用
 }

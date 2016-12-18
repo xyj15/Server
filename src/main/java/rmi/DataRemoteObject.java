@@ -315,7 +315,12 @@ public class DataRemoteObject extends UnicastRemoteObject implements CreditDataS
 	public ArrayList<CreditChangePO> getCreditChange(String memberID) {
 		return creditDataService.getCreditChange(memberID);
 	}
-	
+
+	@Override
+	public boolean setCredit(String memberID, double credit) {
+		return creditDataService.setCredit(memberID, credit);
+	}
+
 	@Override
 	public boolean addCreditChange(String memberID, CreditChangePO creditChange) {
 		return creditDataService.addCreditChange(memberID, creditChange);

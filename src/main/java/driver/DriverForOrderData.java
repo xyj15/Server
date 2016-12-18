@@ -237,7 +237,6 @@ public class DriverForOrderData {
 			System.out.println("cancel: "+bartDateFormate.format(order.getCancelTime()));
 		}
 		System.out.println("roomName: "+order.getRoomName());
-		System.out.println("roomType: "+order.getRoomType());
 		System.out.println("numberOfRoom: "+order.getNumberOfRoom());
 		System.out.println("numberOfClient: "+order.getNumberOfClient());
 		System.out.println("hasKid: "+order.getHaveKids());

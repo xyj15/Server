@@ -67,4 +67,9 @@ public class CreditDataTest {
 		assertEquals(expected.get(1).getOrderID(),result.get(1).getOrderID());
 	}
 
+	@Test
+	public void setCredit() throws Exception{
+		assertEquals(true, creditData.setCredit("00000002", 560));
+	}
+
 }

@@ -93,6 +93,7 @@ public class CreditData implements CreditDataService {
 		createSheet();
 		int col = 0;
 		int row = hash(memberID);
+		if(row>=sheet.getRows()) return -1.0;
 		if(!sheet.getCell(col, row).getContents().equals(memberID)) return -1.0;  //This member does not exist;
 		double credit = ((NumberCell) sheet.getCell(col+1, row)).getValue();
 		book.close();
@@ -108,6 +109,7 @@ public class CreditData implements CreditDataService {
 		createSheet();
 		int col = 0;
 		int row = hash(memberID);
+		if(row>=sheet.getRows()) return null;
 		if(!sheet.getCell(col, row).getContents().equals(memberID)) return null;  //This member does not exist;
 		ArrayList<CreditChangePO> result = new ArrayList<CreditChangePO>();
 		col += 2;
@@ -117,6 +119,37 @@ public class CreditData implements CreditDataService {
 		}
 		book.close();
 		return result;
+	}
+
+	/**
+	 *
+	 * @param memberID
+	 * @param credit
+	 * @return
+	 */
+	@Override
+	public boolean setCredit(String memberID, double credit) {
+		createWritableSheet();
+		int col = 0;
+		int row = hash(memberID);
+		if(!wSheet.getCell(col, row).getContents().equals(memberID)){
+			Label member = new Label(col, row, memberID);
+			try {
+				wSheet.addCell(member);
+			} catch (WriteException e) {
+				e.printStackTrace();
+			}
+		}
+		col++;
+		Number thisCredit = new Number(col, row, credit);
+		try {
+			wSheet.addCell(thisCredit);
+		} catch (WriteException e) {
+			e.printStackTrace();
+		}
+
+		close();
+		return true;
 	}
 
 	/**
