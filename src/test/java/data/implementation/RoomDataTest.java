@@ -24,22 +24,22 @@ public class RoomDataTest {
 	@Test
 	public void getSingleRoom() throws Exception {
 		Date day = new Date();
-		assertEquals("314", roomData.getSingleRoom(day, "314", "000002").getRoomID());
+		assertEquals("314", roomData.getSingleRoom(day, "314", "000002").getRoomNumber());
 	}
 
 	@Test
 	public void addSingleRoom() throws Exception {
-		assertEquals(true, roomData.addSingleRoom(new RoomPO(false, true, "1308", "浪漫沙滩海景大床房", 350, RoomType.BigBed), "000001"));
-		assertEquals(true, roomData.addSingleRoom(new RoomPO(false, true, "1516", "舒适阳光单人房", 210, RoomType.Single), "000001"));
-		assertEquals(true, roomData.addSingleRoom(new RoomPO(false, true, "2001", "豪华泰式温泉套房", 520, RoomType.Suite), "000001"));
-		assertEquals(true, roomData.addSingleRoom(new RoomPO(false, true, "906", "标准双床房", 370, RoomType.TwinBed), "000001"));
+		assertEquals(true, roomData.addSingleRoom(new RoomPO(false, true, "1308", "浪漫沙滩海景大床房", RoomType.BigBed, 350), "000001"));
+		assertEquals(true, roomData.addSingleRoom(new RoomPO(false, true, "1516", "舒适阳光单人房", RoomType.Single, 210), "000001"));
+		assertEquals(true, roomData.addSingleRoom(new RoomPO(false, true, "2001", "豪华泰式温泉套房", RoomType.Suite, 520), "000001"));
+		assertEquals(true, roomData.addSingleRoom(new RoomPO(false, true, "906", "标准双床房", RoomType.TwinBed, 370), "000001"));
 	}
 
 	@Test
 	public void updateSingleRoom() throws Exception {
 		Date day = new Date(2016, 11, 1);
-		assertEquals(true, roomData.updateSingleRoom(day, new RoomPO(false, true, "906", "标准舒适商务双床房", 370, RoomType.TwinBed), "000001"));
-		assertEquals(false, roomData.updateSingleRoom(day, new RoomPO(false, true, "903", "标准舒适商务双床房", 370, RoomType.TwinBed), "000001"));
+		assertEquals(true, roomData.updateSingleRoom(day, new RoomPO(false, true, "906", "标准舒适商务双床房", RoomType.TwinBed, 370), "000001"));
+		assertEquals(false, roomData.updateSingleRoom(day, new RoomPO(false, true, "903", "标准舒适商务双床房", RoomType.TwinBed, 370), "000001"));
 	}
 
 	@Test

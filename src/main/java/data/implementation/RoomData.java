@@ -132,10 +132,10 @@ public class RoomData implements RoomDataService {
 		col++;
 		int type = (int)((NumberCell) sheet.getCell(col, row)).getValue();
 		switch (type) {
-			case 0: return new RoomPO(isReserved, isValid,roomNUM,roomName,price, RoomType.Single);
-			case 1: return new RoomPO(isReserved, isValid, roomNUM, roomName, price, RoomType.TwinBed);
-			case 2: return new RoomPO(isReserved, isValid, roomNUM, roomName, price, RoomType.BigBed);
-			case 3: return new RoomPO(isReserved, isValid, roomNUM, roomName, price, RoomType.Suite);
+			case 0: return new RoomPO(isReserved, isValid,roomNUM,roomName, RoomType.Single,price);
+			case 1: return new RoomPO(isReserved, isValid, roomNUM, roomName,RoomType.TwinBed,price);
+			case 2: return new RoomPO(isReserved, isValid, roomNUM, roomName, RoomType.BigBed,price);
+			case 3: return new RoomPO(isReserved, isValid, roomNUM, roomName, RoomType.Suite ,price);
 		}
 		return null;
 	}
@@ -143,13 +143,13 @@ public class RoomData implements RoomDataService {
 	private boolean updateRoom(int row, RoomPO room) {
 		// TODO Auto-generated method stub
 		int col=0;
-		while(!wSheet.getCell(col, row).getContents().equals(room.getRoomID())){
+		while(!wSheet.getCell(col, row).getContents().equals(room.getRoomNumber())){
 			if(wSheet.getCell(col, row).getContents().equals("")){
 				return false;       //Cannot find the room of the ID
 			}
 			col+=dataSize;
 		}
-		Label roomID = new Label(col,row,room.getRoomID());
+		Label roomID = new Label(col,row,room.getRoomNumber());
 		col++;
 		Label roomName = new Label(col, row, room.getRoomName());
 		col++;
@@ -187,12 +187,12 @@ public class RoomData implements RoomDataService {
 		// TODO Auto-generated method stub
 		int col=0;
 		while(wSheet.getCell(col, row).getContents()!=""&&(!wSheet.getCell(col, row).getContents().equals("-1"))){
-			if(wSheet.getCell(col, row).getContents().equals(room.getRoomID())){
+			if(wSheet.getCell(col, row).getContents().equals(room.getRoomNumber())){
 				return false;
 			}
 			col+=dataSize;
 		}
-		Label roomID = new Label(col,row,room.getRoomID());
+		Label roomID = new Label(col,row,room.getRoomNumber());
 		col++;
 		Label roomName = new Label(col, row, room.getRoomName());
 		col++;
@@ -282,6 +282,7 @@ public class RoomData implements RoomDataService {
 		int row = cal.get(Calendar.DAY_OF_MONTH);
 		RoomPO result = getRoomByNumber(row, roomNUM);
 		book.close();
+		result.setHotelID(hotelID);
 		return result;
 	}
 
@@ -361,6 +362,10 @@ public class RoomData implements RoomDataService {
 		}
 		close();
 		if(result.size()==0) return null;  //there is no room of the hotel on the day
+		for (RoomPO thisRoom: result
+		     ) {
+			thisRoom.setHotelID(hotelID);
+		}
 		return result;
 	}
 

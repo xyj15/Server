@@ -3,49 +3,90 @@ package po;
 import helper.User;
 import helper.UserType;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class HotelPO extends User {
+/**
+ * 存储Hotel信息的PO类
+ * @author CROFF
+ * @version 2016-12-1
+ */
+public class HotelPO extends User implements Serializable {
 	
-	private String name;
-	private int level;
-	private String city;
-	private String address;
-	private String district;
+	private String name;	//酒店名称
+	private String city;	//酒店所在城市名
+	private String district;	//酒店所属商圈
+	private String address;	//酒店地址
+	private int level;	//酒店星级
 	private double score;	//酒店评分
 	private String service;	//酒店设施服务
 	private String introduction;	//酒店简介
 	private String managerName;	//酒店管理人员的姓名
 	private String managerTel;	//酒店管理人员的联系方式
-	
 	private ArrayList<String> enterpriseList;	//合作企业列表
 	
+	/**
+	 * 空构造方法
+	 */
 	public HotelPO() {
 		enterpriseList = new ArrayList<String>();
+		super.setUserType(UserType.Hotel);
 	}
 	
-	public HotelPO(String name, String address, String district, String city, int level, double score, String service,
+	/**
+	 * 无用户名和密码的构造方法
+	 * @param name 酒店名称
+	 * @param city 酒店所在城市名
+	 * @param district 酒店所属商圈
+	 * @param address 酒店地址
+	 * @param level 酒店星级
+	 * @param score 酒店评分
+	 * @param service 酒店设施服务
+	 * @param introduction 酒店简介
+	 * @param managerName 酒店工作人员姓名
+	 * @param managerTel 酒店工作人员联系方式
+	 * @param enterpriseList 合作企业列表
+	 */
+	public HotelPO(String name, String city, String district, String address, int level, double score, String service,
 	               String introduction, String managerName, String managerTel, ArrayList<String> enterpriseList) {
 		this.name = name;
-		this.address = address;
-		this.district = district;
 		this.city = city;
+		this.district = district;
+		this.address = address;
 		this.level = level;
 		this.score = score;
+		this.service = service;
 		this.introduction = introduction;
 		this.managerName = managerName;
 		this.managerTel = managerTel;
 		this.enterpriseList = enterpriseList;
+		super.setUserType(UserType.Hotel);
 	}
 	
-	public HotelPO(String userID, String password, String name, String address, String district, String city,
+	/**
+	 * 有用户名和密码的构造方法
+	 * @param userID 酒店ID
+	 * @param password 酒店登陆的密码
+	 * @param name 酒店名称
+	 * @param city 酒店所在城市名
+	 * @param district 酒店所属商圈
+	 * @param address 酒店地址
+	 * @param level 酒店星级
+	 * @param score 酒店评分
+	 * @param service 酒店设施服务
+	 * @param introduction 酒店简介
+	 * @param managerName 酒店工作人员姓名
+	 * @param managerTel 酒店工作人员联系方式
+	 * @param enterpriseList 合作企业列表
+	 */
+	public HotelPO(String userID, String password, String name, String city, String district, String address,
 	               int level, double score, String service, String introduction, String managerName,
 	               String managerTel, ArrayList<String> enterpriseList) {
 		super(userID, password, UserType.Hotel);
 		this.name = name;
-		this.address = address;
-		this.district = district;
 		this.city = city;
+		this.district = district;
+		this.address = address;
 		this.level = level;
 		this.score = score;
 		this.service = service;

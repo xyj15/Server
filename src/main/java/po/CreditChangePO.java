@@ -2,6 +2,7 @@ package po;
 
 import helper.OrderAction;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -10,7 +11,7 @@ import java.util.Date;
  * @author CROFF
  * @version 2016-12-1
  */
-public class CreditChangePO {
+public class CreditChangePO implements Serializable {
 
     private Date date;  //信用变化日期和时间
     private String orderID; //相关订单号

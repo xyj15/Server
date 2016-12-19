@@ -1,6 +1,7 @@
 package rmi;
 
 
+import data.factoryImpl.OrderDataConFactory;
 import data.service.*;
 import data.implementation.*;
 import helper.RoomType;
@@ -16,7 +17,7 @@ import java.util.Date;
  */
 public class RemoteDataService extends UnicastRemoteObject implements CreditDataService,
 		HotelDataService, ManagerDataService, MemberDataService, OrderDataService,
-		PromotionDataService, RankDataService, RoomDataService, SalerDataService, SearchDataService {
+		PromotionDataService, RankDataService, RoomDataService, SalerDataService, SearchDataService , OrderDataAbstractFactory{
 	
 	private static final long serialVersionUID = 4029039744279087136L;
 	private CreditDataService creditDataService;
@@ -29,6 +30,7 @@ public class RemoteDataService extends UnicastRemoteObject implements CreditData
 	private RoomDataService roomDataService;
 	private SalerDataService salerDataService;
 	private SearchDataService searchDataService;
+	private OrderDataAbstractFactory orderDataAbstractFactory;
 	protected RemoteDataService() throws RemoteException {
 		creditDataService = new CreditData();
 		hotelDataService = new HotelData();
@@ -40,7 +42,7 @@ public class RemoteDataService extends UnicastRemoteObject implements CreditData
 		roomDataService = new RoomData();
 		salerDataService = new SalerData();
 		searchDataService = new SearchData();
-//		orderDataFactory = new OrderDataConFactory();
+		orderDataAbstractFactory = new OrderDataConFactory();
 	}
 	
 	@Override
@@ -321,5 +323,10 @@ public class RemoteDataService extends UnicastRemoteObject implements CreditData
 	@Override
 	public boolean addCreditChange(String memberID, CreditChangePO creditChange) throws RemoteException {
 		return creditDataService.addCreditChange(memberID, creditChange);
+	}
+
+	@Override
+	public OrderDataService getOrdaerData(String userID) throws RemoteException {
+		return orderDataAbstractFactory.getOrdaerData(userID);
 	}
 }

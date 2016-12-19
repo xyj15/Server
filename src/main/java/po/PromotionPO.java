@@ -3,6 +3,7 @@ package po;
 import helper.PromotionType;
 import helper.SaleType;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -10,7 +11,7 @@ import java.util.Date;
  * @author CROFF
  * @version 2016-12-7
  */
-public class PromotionPO {
+public class PromotionPO implements Serializable {
 	
 	private String promotionID;	//营销策略编号
 	private String promotionName;	//营销策略名称

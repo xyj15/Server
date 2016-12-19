@@ -17,26 +17,26 @@ public class DriverForRoomData {
 
 	public static void main(String[] args){
 		DriverForRoomData driver = new DriverForRoomData();
-		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "314", "豪华代码房", 650, RoomType.BigBed), "000002"));
-		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "313", "豪华代码房", 650, RoomType.BigBed), "000002"));
-		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "312", "豪华代码房", 650, RoomType.BigBed), "000002"));
-		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "503", "简约debug房", 480, RoomType.Single), "000002"));
-		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "504", "简约debug房", 480, RoomType.Single), "000002"));
-		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "505", "简约debug房", 480, RoomType.Single), "000002"));
-		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "1024", "奢华海景测试房", 1024, RoomType.Suite), "000002"));
-		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "1023", "奢华海景测试房", 1024, RoomType.Suite), "000002"));
-		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "1025", "奢华海景测试房", 1024, RoomType.Suite), "000002"));
-		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "609", "标准结对编程房", 760, RoomType.TwinBed), "000002"));
-		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "608", "标准结对编程房", 760, RoomType.TwinBed), "000002"));
-		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "610", "标准结对编程房", 760, RoomType.TwinBed), "000002"));
-		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "3406", "豪华湖景房", 1500, RoomType.BigBed), "000000"));
-		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "902", "商务单人间", 830, RoomType.Single), "000000"));
-		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "817", "高档温馨家庭套房", 2050, RoomType.Suite), "000000"));
-		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "2107", "景观园林双床房", 998, RoomType.TwinBed), "000000"));
-		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "1308", "浪漫沙滩海景大床房", 350, RoomType.BigBed), "000001"));
-		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "1516", "舒适阳光单人房", 210, RoomType.Single), "000001"));
-		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "2001", "豪华泰式温泉套房", 520, RoomType.Suite), "000001"));
-		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "906", "标准双床房", 370, RoomType.TwinBed), "000001"));
+		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "314", "豪华代码房",  RoomType.BigBed, 650), "000002"));
+		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "313", "豪华代码房", RoomType.BigBed, 650), "000002"));
+		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "312", "豪华代码房", RoomType.BigBed, 650), "000002"));
+		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "503", "简约debug房", RoomType.Single, 480), "000002"));
+		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "504", "简约debug房", RoomType.Single, 480), "000002"));
+		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "505", "简约debug房", RoomType.Single, 480), "000002"));
+		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "1024", "奢华海景测试房", RoomType.Suite, 1024), "000002"));
+		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "1023", "奢华海景测试房", RoomType.Suite, 1024), "000002"));
+		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "1025", "奢华海景测试房", RoomType.Suite, 1024), "000002"));
+		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "609", "标准结对编程房", RoomType.TwinBed, 760), "000002"));
+		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "608", "标准结对编程房", RoomType.TwinBed, 760), "000002"));
+		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "610", "标准结对编程房", RoomType.TwinBed, 760), "000002"));
+		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "3406", "豪华湖景房", RoomType.BigBed, 1500), "000000"));
+		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "902", "商务单人间", RoomType.Single, 830), "000000"));
+		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "817", "高档温馨家庭套房", RoomType.Suite, 2050), "000000"));
+		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "2107", "景观园林双床房", RoomType.TwinBed, 998), "000000"));
+		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "1308", "浪漫沙滩海景大床房", RoomType.BigBed, 350), "000001"));
+		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "1516", "舒适阳光单人房", RoomType.Single, 210), "000001"));
+		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "2001", "豪华泰式温泉套房", RoomType.Suite, 520), "000001"));
+		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "906", "标准双床房", RoomType.TwinBed, 370), "000001"));
 //		Date day = new Date(2016, 11, 1);
 //		System.out.println(driver.testUpdateSingleRoom(day, new RoomPO(false, true, "903", "标准舒适商务双床房", 370, RoomType.TwinBed), "000001"));
 //		System.out.println(driver.testDeleteSingleRoom("2010", "000001"));
@@ -63,7 +63,7 @@ public class DriverForRoomData {
 	 * @return
 	 */
 	public boolean testAddSingleRoom(RoomPO room, String hotelID){
-		System.out.println("Add a single room whose ID is "+room.getRoomID());
+		System.out.println("Add a single room whose ID is "+room.getRoomNumber());
 		return test.addSingleRoom(room, hotelID);
 	}
 
@@ -101,7 +101,7 @@ public class DriverForRoomData {
 	 * @return
 	 */
 	public boolean testUpdateSingleRoom(Date day, RoomPO room, String hotelID){
-		System.out.println("Update a single room whose ID is "+room.getRoomID());
+		System.out.println("Update a single room whose ID is "+room.getRoomNumber());
 		return test.updateSingleRoom(day, room, hotelID);
 	}
 
@@ -207,7 +207,7 @@ public class DriverForRoomData {
 	private void output(RoomPO room){
 		System.out.println("roomType: "+room.getRoomType());
 		System.out.println("roomName: "+room.getRoomName());
-		System.out.println("roomID: "+room.getRoomID());
+		System.out.println("roomID: "+room.getRoomNumber());
 		System.out.println("price: "+room.getPrice());
 		System.out.println("isRserved: "+room.isReserved());
 		System.out.println("isAvailable: "+room.isAvailable());

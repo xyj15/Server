@@ -1,8 +1,8 @@
 package po;
 
 import helper.OrderStatus;
-import helper.RoomType;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -10,7 +10,7 @@ import java.util.Date;
  * @author CROFF
  * @version 2016-12-1
  */
-public class OrderPO {
+public class OrderPO implements Serializable {
 	
 	private String memberID;	//订单相关客户
 	private String hotelID;	//订单相关酒店
@@ -52,8 +52,8 @@ public class OrderPO {
 	 * @param latestCheckinTime 最晚入住时间
 	 * @param checkoutTime 预计退房时间
 	 * @param actualCheckoutTime 实际退房时间
-	 * @param numberOfRoom 订单中客房名称高
-	 * @param roomName 订单中客房数量
+	 * @param numberOfRoom 订单中客房数量
+	 * @param roomName 订单中客房名称
 	 * @param numberOfClient 预计入住人数
 	 * @param haveKids 有无儿童
 	 * @param score 订单评分

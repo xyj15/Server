@@ -4,9 +4,16 @@ import helper.MemberType;
 import helper.User;
 import helper.UserType;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class MemberPO extends User {
+
+/**
+ * 存储Member信息的PO类
+ * @author CROFF
+ * @version 2016-12-1
+ */
+public class MemberPO extends User implements Serializable {
 	
 	private String name;
 	private String phone;
@@ -16,11 +23,23 @@ public class MemberPO extends User {
 	private Date birthday;
 	private String enterprise;
 	
+	/**
+	 * 空构造方法
+	 */
 	public MemberPO() {
-		memberType = null;
-		birthday = null;
+		super.setUserType(UserType.Member);
 	}
 	
+	/**
+	 * 无用户名和密码的构造方法
+	 * @param name 姓名或名称
+	 * @param phone 联系方式
+	 * @param level 会员等级
+	 * @param discount 当前会员等级享受折扣
+	 * @param memberType 客户类型
+	 * @param birthday 生日
+	 * @param enterprise 合作企业名称
+	 */
 	public MemberPO(String name, String phone, int level, double discount,
 	                MemberType memberType, Date birthday, String enterprise) {
 		this.name = name;
@@ -30,8 +49,21 @@ public class MemberPO extends User {
 		this.memberType = memberType;
 		this.birthday = birthday;
 		this.enterprise = enterprise;
+		super.setUserType(UserType.Member);
 	}
 	
+	/**
+	 * 有用户名和密码的构造方法
+	 * @param userID 用户名
+	 * @param password 密码
+	 * @param name 姓名或名称
+	 * @param phone 联系方式
+	 * @param level 会员等级
+	 * @param discount 当前会员等级享受折扣
+	 * @param memberType 客户类型
+	 * @param birthday 生日
+	 * @param enterprise 合作企业名称
+	 */
 	public MemberPO(String userID, String password, String name, String phone,
 	                int level, double discount, MemberType memberType, Date birthday, String enterprise) {
 		super(userID, password, UserType.Member);

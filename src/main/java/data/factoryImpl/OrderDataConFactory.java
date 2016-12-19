@@ -1,7 +1,7 @@
 package data.factoryImpl;
 
 import data.service.OrderDataService;
-import data.factory.OrderDataObstractFactory;
+import data.service.OrderDataAbstractFactory;
 import data.implementation.OrderDataForH;
 import data.implementation.OrderDataForM;
 import data.implementation.OrderDataForS;
@@ -9,7 +9,7 @@ import data.implementation.OrderDataForS;
 /**
  * Created by apple on 2016/11/29.
  */
-public class OrderDataConFactory implements OrderDataObstractFactory {
+public class OrderDataConFactory implements OrderDataAbstractFactory {
     public OrderDataService getOrdaerData(String userID) {
         switch(userID.length()) {
             case 8: return new OrderDataForM();

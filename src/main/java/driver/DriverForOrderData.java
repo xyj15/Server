@@ -1,7 +1,7 @@
 package driver;
 
 import data.service.OrderDataService;
-import data.factory.OrderDataObstractFactory;
+import data.service.OrderDataAbstractFactory;
 import data.factoryImpl.OrderDataConFactory;
 import helper.OrderStatus;
 import po.OrderPO;
@@ -79,8 +79,12 @@ public class DriverForOrderData {
 	 * @param userID
 	 */
 	public DriverForOrderData(String userID){
-		OrderDataObstractFactory factory = new OrderDataConFactory();
-		test = factory.getOrdaerData(userID);
+		OrderDataAbstractFactory factory = new OrderDataConFactory();
+		try {
+			test = factory.getOrdaerData(userID);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
