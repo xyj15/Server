@@ -1,6 +1,6 @@
 package driver;
 
-import helper.Encryption;
+import other.Encryption;
 
 /**
  * Created by apple on 2016/12/14.

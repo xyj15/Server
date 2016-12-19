@@ -1,7 +1,7 @@
 package data.implementation;
 
 import data.service.SearchDataService;
-import helper.Encryption;
+import other.Encryption;
 import jxl.NumberCell;
 import jxl.Sheet;
 import jxl.Workbook;

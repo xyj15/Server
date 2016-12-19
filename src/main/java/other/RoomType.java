@@ -1,4 +1,4 @@
-package helper;
+package other;
 
 /**
  * 客房类型枚举类，分为单人房、双床房、大床房、套房

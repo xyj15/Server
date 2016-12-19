@@ -1,7 +1,6 @@
 package data.implementation;
 
-import helper.RoomType;
-import org.junit.After;
+import other.RoomType;
 import org.junit.Before;
 import org.junit.Test;
 import po.RoomPO;

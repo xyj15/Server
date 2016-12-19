@@ -1,8 +1,7 @@
 package data.implementation;
 
-import helper.PromotionType;
-import helper.SaleType;
-import org.junit.After;
+import other.PromotionType;
+import other.SaleType;
 import org.junit.Before;
 import org.junit.Test;
 import po.PromotionPO;

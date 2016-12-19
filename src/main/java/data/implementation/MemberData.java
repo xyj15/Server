@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.Date;
 
 import data.service.MemberDataService;
-import helper.Encryption;
+import other.Encryption;
 import jxl.NumberCell;
 import jxl.Sheet;
 import jxl.Workbook;
@@ -13,7 +13,7 @@ import jxl.read.biff.BiffException;
 import jxl.write.*;
 import jxl.write.Number;
 import po.MemberPO;
-import helper.MemberType;
+import other.MemberType;
 
 /**
  * 

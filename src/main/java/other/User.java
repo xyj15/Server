@@ -1,6 +1,4 @@
-package helper;
-
-import helper.UserType;
+package other;
 
 /**
  * 所有用户的父类，存储用户名和密码，提供验证用户名和密码的功能

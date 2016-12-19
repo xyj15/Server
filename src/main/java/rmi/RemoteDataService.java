@@ -4,7 +4,7 @@ package rmi;
 import data.factoryImpl.OrderDataConFactory;
 import data.service.*;
 import data.implementation.*;
-import helper.RoomType;
+import other.RoomType;
 import po.*;
 
 import java.rmi.RemoteException;

@@ -1,7 +1,6 @@
 package data.implementation;
 
-import helper.MemberType;
-import org.junit.After;
+import other.MemberType;
 import org.junit.Before;
 import org.junit.Test;
 import po.MemberPO;

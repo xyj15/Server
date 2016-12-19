@@ -1,7 +1,7 @@
 package driver;
 
 import data.implementation.MemberData;
-import helper.MemberType;
+import other.MemberType;
 import po.MemberPO;
 
 import java.text.ParseException;

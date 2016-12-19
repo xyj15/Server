@@ -1,4 +1,4 @@
-package helper;
+package other;
 
 /**
  * 存储客户的类型，分为普通客户和企业客户

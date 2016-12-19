@@ -1,16 +1,13 @@
 package driver;
 
 import data.implementation.PromotionData;
-import helper.PromotionType;
-import helper.SaleType;
-import jxl.write.DateTime;
-import jxl.write.WriteException;
+import other.PromotionType;
+import other.SaleType;
 import po.PromotionPO;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.logging.SimpleFormatter;
 
 /**
  * Created by apple on 2016/12/10.

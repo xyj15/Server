@@ -1,7 +1,7 @@
 package po;
 
-import helper.User;
-import helper.UserType;
+import other.User;
+import other.UserType;
 
 import java.io.Serializable;
 
@@ -15,6 +15,7 @@ public class SalerPO extends User implements Serializable {
 	
 	private String name;	//姓名或名称
 	private String tel;	//联系方式
+	private static final long serialVersionUID = -6833877079313718314L;   //序列号
 	
 	/**
 	 * 空构造方法

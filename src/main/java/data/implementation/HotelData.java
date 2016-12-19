@@ -1,7 +1,7 @@
 package data.implementation;
 
 import data.service.HotelDataService;
-import helper.Encryption;
+import other.Encryption;
 import jxl.Cell;
 import jxl.NumberCell;
 import jxl.Sheet;

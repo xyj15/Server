@@ -1,8 +1,8 @@
 package data.implementation;
 
 import data.service.PromotionDataService;
-import helper.PromotionType;
-import helper.SaleType;
+import other.PromotionType;
+import other.SaleType;
 import jxl.NumberCell;
 import jxl.Sheet;
 import jxl.Workbook;

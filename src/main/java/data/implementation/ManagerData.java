@@ -1,7 +1,7 @@
 package data.implementation;
 
 import data.service.ManagerDataService;
-import helper.Encryption;
+import other.Encryption;
 import jxl.Sheet;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;

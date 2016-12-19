@@ -1,6 +1,6 @@
 package po;
 
-import helper.OrderAction;
+import other.OrderAction;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -18,6 +18,7 @@ public class CreditChangePO implements Serializable {
     private OrderAction orderAction; //导致信用变化的行为
     private double change;  //信用度变化数值
     private double result;  //信用度变化后的结果数值
+	private static final long serialVersionUID = -6833877079313718314L;   //序列号
 	
 	/**
 	 * CreditChange构造方法

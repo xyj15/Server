@@ -1,7 +1,7 @@
 package po;
 
-import helper.PromotionType;
-import helper.SaleType;
+import other.PromotionType;
+import other.SaleType;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -31,7 +31,8 @@ public class PromotionPO implements Serializable {
 	private double discount;	//享受的折扣
 	private double neededPrice;	//减价需要满足的价格
 	private double reducePrice;	//减少的价格
-	
+
+	private static final long serialVersionUID = -6833877079313718314L;   //序列号
 	/**
 	 * 网站营销策略的构造方法
 	 * @param promotionID 营销策略编号

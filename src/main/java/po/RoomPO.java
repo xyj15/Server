@@ -1,6 +1,6 @@
 package po;
 
-import helper.RoomType;
+import other.RoomType;
 
 import java.io.Serializable;
 
@@ -18,6 +18,7 @@ public class RoomPO implements Serializable {
 	private RoomType roomType;	//客房类型
 	private double price;	//客房单价
 	private String hotelID;	//所属酒店ID
+	private static final long serialVersionUID = -6833877079313718314L;
 	
 	/**
 	 * 空构造方法

@@ -1,8 +1,8 @@
 package po;
 
-import helper.MemberType;
-import helper.User;
-import helper.UserType;
+import other.MemberType;
+import other.User;
+import other.UserType;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -22,6 +22,7 @@ public class MemberPO extends User implements Serializable {
 	private MemberType memberType;
 	private Date birthday;
 	private String enterprise;
+	private static final long serialVersionUID = -6833877079313718314L;   //序列号
 	
 	/**
 	 * 空构造方法

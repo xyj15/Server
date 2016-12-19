@@ -1,4 +1,4 @@
-package helper;
+package other;
 
 /**
  * Created by CROFF on 2016/11/29.

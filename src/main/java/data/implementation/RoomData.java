@@ -7,7 +7,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import data.service.RoomDataService;
-import helper.RoomType;
+import other.RoomType;
 import jxl.NumberCell;
 import jxl.Sheet;
 import jxl.Workbook;
@@ -28,6 +28,7 @@ public class RoomData implements RoomDataService {
 	private Sheet sheet;
 	private WritableWorkbook wBook;
 	private WritableSheet wSheet;
+	private static final long serialVersionUID = -6833877079313718314L;
 	
 	public RoomData() {
 		// TODO Auto-generated constructor stub
@@ -360,7 +361,7 @@ public class RoomData implements RoomDataService {
 		for (int i = 0; i < sheet.getRow(row).length; i+=dataSize) {
 			if(!sheet.getCell(col+i, row).getContents().equals("-1"))result.add(getRoomByCol(col, row));
 		}
-		close();
+		book.close();
 		if(result.size()==0) return null;  //there is no room of the hotel on the day
 		for (RoomPO thisRoom: result
 		     ) {

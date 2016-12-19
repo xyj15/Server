@@ -1,7 +1,7 @@
 package driver;
 
 import data.implementation.RoomData;
-import helper.RoomType;
+import other.RoomType;
 import po.RoomPO;
 
 import java.text.SimpleDateFormat;

@@ -1,6 +1,6 @@
 package data.service;
 
-import helper.RoomType;
+import other.RoomType;
 import po.RoomPO;
 
 import java.rmi.Remote;

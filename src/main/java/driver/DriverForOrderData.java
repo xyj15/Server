@@ -3,7 +3,7 @@ package driver;
 import data.service.OrderDataService;
 import data.service.OrderDataAbstractFactory;
 import data.factoryImpl.OrderDataConFactory;
-import helper.OrderStatus;
+import other.OrderStatus;
 import po.OrderPO;
 
 import java.rmi.RemoteException;

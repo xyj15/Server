@@ -1,4 +1,4 @@
-package helper;
+package other;
 
 /**
  * 存储用户的类型，分为客户、酒店管理人员、网站营销人员、网站管理人员
