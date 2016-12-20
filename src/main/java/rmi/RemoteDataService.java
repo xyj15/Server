@@ -31,18 +31,24 @@ public class RemoteDataService extends UnicastRemoteObject implements CreditData
 	private SalerDataService salerDataService;
 	private SearchDataService searchDataService;
 	private OrderDataAbstractFactory orderDataAbstractFactory;
+	private OrderDataForS orderDataForS;
+	private OrderDataForH orderDataForH;
+	private OrderDataForM orderDataForM;
 	protected RemoteDataService() throws RemoteException {
 		creditDataService = new CreditData();
 		hotelDataService = new HotelData();
 		managerDataService = new ManagerData();
 		memberDataService = new MemberData();
-//		orderDataService = ;
+//		orderDataService = new OrderDataForM();
 		promotionDataService = new PromotionData();
 		rankDataService = new RankData();
 		roomDataService = new RoomData();
 		salerDataService = new SalerData();
 		searchDataService = new SearchData();
 		orderDataAbstractFactory = new OrderDataConFactory();
+		orderDataForH = new OrderDataForH();
+		orderDataForM = new OrderDataForM();
+		orderDataForS = new OrderDataForS();
 	}
 	
 	@Override
@@ -97,17 +103,17 @@ public class RemoteDataService extends UnicastRemoteObject implements CreditData
 	
 	@Override
 	public boolean addOrder(OrderPO order) throws RemoteException {
-		return false;
+		return orderDataService.addOrder(order);
 	}
 	
 	@Override
 	public boolean updateOrder(OrderPO order) throws RemoteException {
-		return false;
+		return orderDataService.updateOrder(order);
 	}
 	
 	@Override
 	public boolean cancelOrder(String orderID) throws RemoteException {
-		return false;
+		return orderDataService.cancelOrder(orderID);
 	}
 	
 	@Override
@@ -122,12 +128,12 @@ public class RemoteDataService extends UnicastRemoteObject implements CreditData
 	
 	@Override
 	public OrderPO getOrder(String orderID) throws RemoteException {
-		return null;
+		return orderDataService.getOrder(orderID);
 	}
 	
 	@Override
 	public ArrayList<OrderPO> getOrderList(String userID) throws RemoteException {
-		return null;
+		return orderDataService.getOrderList(userID);
 	}
 	
 	@Override
@@ -326,7 +332,15 @@ public class RemoteDataService extends UnicastRemoteObject implements CreditData
 	}
 
 	@Override
-	public OrderDataService getOrdaerData(String userID) throws RemoteException {
-		return orderDataAbstractFactory.getOrdaerData(userID);
+	public OrderDataService getOrderData(String userID) throws RemoteException {
+		return orderDataAbstractFactory.getOrderData(userID);
+	}
+
+	public void setOrderData(String userID) throws RemoteException{
+		switch(userID.length()) {
+			case 8: orderDataService = orderDataForM; break;
+			case 6: orderDataService = orderDataForH; break;
+			case 4: orderDataService = orderDataForS; break;
+		}
 	}
 }

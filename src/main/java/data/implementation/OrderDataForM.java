@@ -6,6 +6,7 @@ import jxl.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -16,14 +17,15 @@ import other.OrderStatus;
 /**
  * Created by apple on 2016/11/30.
  */
-public class OrderDataForM implements OrderDataService {
+public class OrderDataForM implements OrderDataService ,Serializable{
 
-    private int dataSize = 21;
+    private int dataSize = 20;
     private String sourceFile = "OrderDataForMember.xls";
     private OrderChanger changerForM = new OrderChanger("OrderDataForMember.xls");
     private OrderChanger changerForH = new OrderChanger("OrderDataForHotel.xls");
     private Workbook book;
     private Sheet sheet;
+    private static final long serialVersionUID = -6833877079313718314L;   //序列号
 
     /**
      *

@@ -8,6 +8,7 @@ import other.OrderStatus;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -15,13 +16,14 @@ import java.util.Date;
 /**
  * Created by apple on 2016/12/1.
  */
-public class OrderDataForS implements OrderDataService {
+public class OrderDataForS implements OrderDataService ,Serializable{
 
-	private int dataSize = 21;
+	private int dataSize = 20;
 	private String sourceFile = "OrderDataForMember.xls";
 	private Workbook book;
 	private Sheet sheet;
 	private OrderDataForM memberOrder = new OrderDataForM();
+	private static final long serialVersionUID = -6833877079313718314L;   //序列号
 
 	public boolean addOrder(OrderPO order) {
 		return false;
@@ -113,7 +115,7 @@ public class OrderDataForS implements OrderDataService {
 		for (int i = 0; i < sheet.getRow(row).length; i+=dataSize) {
 			result.add(getOrder(col+i, row));
 		}
-		if(result.size()==0) return null;   //This hotel does not have any order.
+		if(result.size()==0) return null;   //does not have any order.
 		return result;
 	}
 

@@ -9,19 +9,21 @@ import other.OrderStatus;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
 /**
  * Created by apple on 2016/12/1.
  */
-public class OrderDataForH implements OrderDataService {
-	private int dataSize = 21;
+public class OrderDataForH implements OrderDataService, Serializable{
+	private int dataSize = 20;
 	private String sourceFile = "OrderDataForHotel.xls";
 	private OrderChanger changerForH = new OrderChanger("OrderDataForHotel.xls");
 	private OrderChanger changerForM = new OrderChanger("OrderDataForMember.xls");
 	private Workbook book;
 	private Sheet sheet;
+	private static final long serialVersionUID = -6833877079313718314L;   //序列号
 	/**
 	 *
 	 * @param order

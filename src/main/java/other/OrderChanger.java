@@ -9,18 +9,20 @@ import po.OrderPO;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 
 /**
  * Created by apple on 2016/12/10.
  */
-public class OrderChanger {
+public class OrderChanger implements Serializable{
 	private Workbook book;
 	private WritableWorkbook wBook;
 	private WritableSheet wSheet;
 	private String sourceFile;
-	private int dataSize = 21;
+	private int dataSize = 20;
+	private static final long serialVersionUID = -6833877079313718314L;   //序列号
 
 	public OrderChanger(String sourceFile){
 		this.sourceFile = sourceFile;
