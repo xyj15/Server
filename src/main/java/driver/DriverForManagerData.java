@@ -12,7 +12,7 @@ public class DriverForManagerData {
 
 	public static void main(String[] args) {
 		DriverForManagerData driver = new DriverForManagerData();
-		System.out.println(driver.testUpdateManager(new ManagerPO("00", "zhuangzhuang", "zhuangzhuang","13151522158")));
+		System.out.println(driver.testUpdateManager(new ManagerPO("00", "zhuangzhuang", "zhuangzhuang","13151522158", false)));
 		System.out.println(driver.testGetManager());
 	}
 

@@ -20,7 +20,7 @@ public class ManagerDataTest {
 
 	@Test
 	public void updateManager() throws Exception {
-		ManagerPO model = new ManagerPO("00", "zhuangzhuang", "zhuangzhuang","13151522158");
+		ManagerPO model = new ManagerPO("00", "zhuangzhuang", "zhuangzhuang","13151522158", false);
 		assertEquals(true, managerData.updateManager(model));
 	}
 

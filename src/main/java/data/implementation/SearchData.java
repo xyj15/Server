@@ -166,13 +166,16 @@ public class SearchData implements SearchDataService {
 		col++;
 		double score = ((NumberCell)sheet.getCell(col, row)).getValue();
 		col++;
+		boolean isLogged = false;
+		if(((NumberCell)sheet.getCell(col, row)).getValue()==1) isLogged = true;
+		col++;
 		String totalEnterprise = sheet.getCell(col, row).getContents();
 		String[] temp = totalEnterprise.split(";");
 		ArrayList<String> enterprise = new ArrayList<String>();
 		for (String anEnterprise: temp) {
 			enterprise.add(anEnterprise);
 		}
-		return new HotelPO(ID,password,name,address,district,city,level,score,service,introduction,managerName,managerTel,enterprise);
+		return new HotelPO(ID,password,name,address,district,city,level,score,service,introduction,managerName,managerTel,enterprise, isLogged);
 	}
 
 	/**

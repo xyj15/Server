@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 
 import data.service.SalerDataService;
+import jxl.NumberCell;
+import jxl.write.Number;
 import other.Encryption;
 import jxl.Sheet;
 import jxl.Workbook;
@@ -22,7 +24,7 @@ public class SalerData implements SalerDataService {
 	Sheet sheet;
 	WritableWorkbook wBook;
 	WritableSheet wSheet;
-	int dataSize = 4;
+	int dataSize = 5;
 	int lengthOfID = 4;
 	
 	//@Override
@@ -45,11 +47,16 @@ public class SalerData implements SalerDataService {
 		Label name = new Label(col, row, Encryption.convertMD5(saler.getName()));
 		col++;
 		Label tel = new Label(col, row, Encryption.convertMD5(saler.getTel()));
+		col++;
+		int log = 0;
+		if(saler.isLoged()) log = 1;
+		jxl.write.Number isLogged = new Number(col, row, log);
 		try {
 			wSheet.addCell(account);
 			wSheet.addCell(password);
 			wSheet.addCell(name);
 			wSheet.addCell(tel);
+			wSheet.addCell(isLogged);
 		} catch (WriteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -105,10 +112,15 @@ public class SalerData implements SalerDataService {
 		Label name = new Label(col, row, Encryption.convertMD5(saler.getName()));
 		col++;
 		Label tel = new Label(col, row, Encryption.convertMD5(saler.getTel()));
+		col++;
+		int log = 0;
+		if(saler.isLoged()) log = 1;
+		jxl.write.Number isLogged = new Number(col, row, log);
 		try {
 			wSheet.addCell(password);
 			wSheet.addCell(name);
 			wSheet.addCell(tel);
+			wSheet.addCell(isLogged);
 		} catch (WriteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -136,8 +148,12 @@ public class SalerData implements SalerDataService {
 				String name = Encryption.convertMD5(sheet.getCell(col, row).getContents());
 				col++;
 				String tel = Encryption.convertMD5(sheet.getCell(col, row).getContents());
+				col++;
+				boolean isLogged = false;
+				int log = (int)((NumberCell) sheet.getCell(col, row)).getValue();
+				if(log==1) isLogged =true;
 				book.close();
-				return new SalerPO(ID, password, name, tel);
+				return new SalerPO(ID, password, name, tel, isLogged);
 			}
 		}
 		book.close();

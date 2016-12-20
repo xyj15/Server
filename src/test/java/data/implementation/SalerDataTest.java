@@ -20,8 +20,8 @@ public class SalerDataTest {
 
 	@Test
 	public void addSaler() throws Exception {
-		assertEquals(true, salerData.addSaler(new SalerPO("0010", "qianqian", "薛之谦", "123456789")));
-		assertEquals(false, salerData.addSaler(new SalerPO("0000", "jingjing", "徐亚婧", "123456789")));
+		assertEquals(true, salerData.addSaler(new SalerPO("0010", "qianqian", "薛之谦", "123456789", false)));
+		assertEquals(false, salerData.addSaler(new SalerPO("0000", "jingjing", "徐亚婧", "123456789", false)));
 	}
 
 	@Test
@@ -32,8 +32,8 @@ public class SalerDataTest {
 
 	@Test
 	public void updateSaler() throws Exception {
-		assertEquals(true, salerData.updateSaler(new SalerPO("0000", "jingjing", "徐亚婧", "13151530838")));
-		assertEquals(false, salerData.updateSaler(new SalerPO("0008", "jingjing", "徐亚婧", "13151530838")));
+		assertEquals(true, salerData.updateSaler(new SalerPO("0000", "jingjing", "徐亚婧", "13151530838", false)));
+		assertEquals(false, salerData.updateSaler(new SalerPO("0008", "jingjing", "徐亚婧", "13151530838", false)));
 	}
 
 	@Test

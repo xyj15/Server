@@ -21,10 +21,10 @@ public class MemberDataTest {
 
 	@Test
 	public void addMember() throws Exception {
-		MemberPO member1 = new MemberPO("00000004", "xinxin", "张新悦", "15205153967", 3, 5.0, MemberType.Orinary, getDate("02-11-1997"),"");
-		MemberPO member2 = new MemberPO("00000001", "jingjing", "徐亚婧", "13151530838", 2, 6.0, MemberType.Orinary, getDate("03-03-1997"),"");
-		MemberPO member3 = new MemberPO("00000002", "kunkun", "CroffCompany", "8888888", 4, 7.0, MemberType.Bussiness, null,"仙林大道163号");
-		MemberPO member4 = new MemberPO("00000003", "zhuangzhuang", "刚轻厂", "6666666", 1, 8.0, MemberType.Bussiness, null,"新街口");
+		MemberPO member1 = new MemberPO("00000004", "xinxin", "张新悦", "15205153967", 3, 5.0, MemberType.Orinary, getDate("02-11-1997"),"", false);
+		MemberPO member2 = new MemberPO("00000001", "jingjing", "徐亚婧", "13151530838", 2, 6.0, MemberType.Orinary, getDate("03-03-1997"),"", false);
+		MemberPO member3 = new MemberPO("00000002", "kunkun", "CroffCompany", "8888888", 4, 7.0, MemberType.Bussiness, null,"仙林大道163号", false);
+		MemberPO member4 = new MemberPO("00000003", "zhuangzhuang", "刚轻厂", "6666666", 1, 8.0, MemberType.Bussiness, null,"新街口", false);
 		assertEquals(true,memberData.addMember(member1));
 		assertEquals(true,memberData.addMember(member2));
 		assertEquals(true,memberData.addMember(member3));
@@ -40,7 +40,7 @@ public class MemberDataTest {
 
 	@Test
 	public void updateMember() throws Exception {
-		MemberPO member3 = new MemberPO("00000002", "kunkun", "CroffCompany", "13909466189", 4, 7.0, MemberType.Bussiness, null,"仙林大道163号");
+		MemberPO member3 = new MemberPO("00000002", "kunkun", "CroffCompany", "13909466189", 4, 7.0, MemberType.Bussiness, null,"仙林大道163号", false);
 		assertEquals(true, memberData.updateMember(member3));
 	}
 

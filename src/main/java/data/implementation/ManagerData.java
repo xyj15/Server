@@ -1,14 +1,13 @@
 package data.implementation;
 
 import data.service.ManagerDataService;
+import jxl.NumberCell;
+import jxl.write.*;
+import jxl.write.Number;
 import other.Encryption;
 import jxl.Sheet;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
-import jxl.write.Label;
-import jxl.write.WritableSheet;
-import jxl.write.WritableWorkbook;
-import jxl.write.WriteException;
 import po.ManagerPO;
 
 import java.io.File;
@@ -26,7 +25,7 @@ public class ManagerData implements ManagerDataService {
 	private Sheet sheet;
 	private WritableWorkbook wBook;
 	private WritableSheet wSheet;
-	private int dataSize = 4;
+	private int dataSize = 5;
 
 	public boolean updateManager(ManagerPO manager) {
 		createWritableSheet();
@@ -39,12 +38,17 @@ public class ManagerData implements ManagerDataService {
 		Label name = new Label(col, row, Encryption.convertMD5(manager.getName()));
 		col++;
 		Label tel = new Label(col, row, Encryption.convertMD5(manager.getTel()));
+		col++;
+		int log = 0;
+		if(manager.isLoged()) log = 1;
+		jxl.write.Number isLogged = new Number(col, row, log);
 
 		try {
 			wSheet.addCell(ID);
 			wSheet.addCell(password);
 			wSheet.addCell(name);
 			wSheet.addCell(tel);
+			wSheet.addCell(isLogged);
 		} catch (WriteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -65,8 +69,12 @@ public class ManagerData implements ManagerDataService {
 		String name = Encryption.convertMD5(sheet.getCell(col, row).getContents());
 		col++;
 		String tel = Encryption.convertMD5(sheet.getCell(col, row).getContents());
+		col++;
+		boolean isLogged = false;
+		int log = (int)((NumberCell) sheet.getCell(col, row)).getValue();
+		if(log==1) isLogged =true;
 		book.close();
-		return new ManagerPO(managerID, password, name, tel);
+		return new ManagerPO(managerID, password, name, tel, isLogged);
 	}
 
 	/**

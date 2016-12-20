@@ -22,7 +22,7 @@ import other.MemberType;
  */
 public class MemberData implements MemberDataService {
 
-	int dataSize = 8;
+	int dataSize = 9;
 	int lengthOfID = 8;
 	String sourceFile = "MemberData.xls";
 	Workbook book;
@@ -107,6 +107,16 @@ public class MemberData implements MemberDataService {
 		number = new Number(col, row, member.getLevel());
 		try {
 			wSheet.addCell(number);
+		} catch (WriteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		col++;
+		int log = 0;
+		if(member.isLoged()) log = 1;
+		Number isLogged = new Number(col, row, log);
+		try {
+			wSheet.addCell(isLogged);
 		} catch (WriteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -237,6 +247,16 @@ public class MemberData implements MemberDataService {
 			e.printStackTrace();
 		}
 		col++;
+		int log = 0;
+		if(member.isLoged()) log = 1;
+		Number isLogged = new Number(col, row, log);
+		try {
+			wSheet.addCell(isLogged);
+		} catch (WriteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		col++;
 		col++;
 		switch(member.getMemberType().getValue()){
 			case 0: {
@@ -295,6 +315,10 @@ public class MemberData implements MemberDataService {
 				col++;
 				int level = (int)((NumberCell)sheet.getCell(col, row)).getValue();
 				col++;
+				boolean isLogged = false;
+				int log = (int)((NumberCell) sheet.getCell(col, row)).getValue();
+				if(log==1) isLogged =true;
+				col++;
 				int type = (int)((NumberCell)sheet.getCell(col, row)).getValue();
 				col++;
 				switch (type){
@@ -302,12 +326,12 @@ public class MemberData implements MemberDataService {
 						long dateHelper = (long)((NumberCell)sheet.getCell(col,row)).getValue();
 						Date birthday = new Date(dateHelper);
 						book.close();
-						return new MemberPO(ID,name,password,phone,level,discount,MemberType.Orinary,birthday,"");
+						return new MemberPO(ID,name,password,phone,level,discount,MemberType.Orinary,birthday,"",isLogged);
 					}
 					case 1:{
 						String enterprise = sheet.getCell(col, row).getContents();
 						book.close();
-						return new MemberPO(ID,name,password,phone,level,discount,MemberType.Bussiness,null,enterprise);
+						return new MemberPO(ID,name,password,phone,level,discount,MemberType.Bussiness,null,enterprise, isLogged);
 					}
 				}
 			}

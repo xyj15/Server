@@ -32,7 +32,7 @@ public class OrderPO implements Serializable {
 	private String promotionID;	//使用的促销策略
 	private double price;	//订单价值
 	private Date cancelTime;	//订单撤销时间
-	private static final long serialVersionUID = -6833877079313718314L;   //序列号
+	private static final long serialVersionUID = -7032305008313936602L;   //序列号
 	
 	/**
 	 * 空构造方法

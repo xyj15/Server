@@ -22,7 +22,7 @@ import java.util.ArrayList;
  */
 public class HotelData implements HotelDataService {
 
-	private int dataSize = 13;
+	private int dataSize = 14;
 	private int lengthOfID = 6;
 	private String sourceFile = "HotelData.xls";
 	private Workbook book;
@@ -84,6 +84,10 @@ public class HotelData implements HotelDataService {
 		col++;
 		Number score = new Number(col, row, hotel.getScore());
 		col++;
+		int log = 0;
+		if(hotel.isLoged()) log = 1;
+		Number isLogged = new Number(col, row, log);
+		col++;
 		String enterPrise = "";
 		for (String temp:hotel.getEnterpriseList()) {
 			enterPrise = enterPrise+";"+temp;
@@ -102,6 +106,7 @@ public class HotelData implements HotelDataService {
 			wSheet.addCell(managerTel);
 			wSheet.addCell(level);
 			wSheet.addCell(score);
+			wSheet.addCell(isLogged);
 			wSheet.addCell(enterPriseLabel);
 		} catch (WriteException e) {
 			e.printStackTrace();
@@ -230,6 +235,10 @@ public class HotelData implements HotelDataService {
 		col++;
 		Number score = new Number(col, row, hotel.getScore());
 		col++;
+		int log = 0;
+		if(hotel.isLoged()) log = 1;
+		Number isLogged = new Number(col, row, log);
+		col++;
 		String enterPrise = "";
 		for (String temp:hotel.getEnterpriseList()) {
 			enterPrise = enterPrise+";"+temp;
@@ -248,6 +257,7 @@ public class HotelData implements HotelDataService {
 			wSheet.addCell(managerTel);
 			wSheet.addCell(level);
 			wSheet.addCell(score);
+			wSheet.addCell(isLogged);
 			wSheet.addCell(enterPriseLabel);
 		} catch (WriteException e) {
 			e.printStackTrace();
@@ -376,13 +386,16 @@ public class HotelData implements HotelDataService {
 		col++;
 		double score = ((NumberCell)sheet.getCell(col, row)).getValue();
 		col++;
+		boolean isLogged = false;
+		if(((NumberCell)sheet.getCell(col, row)).getValue()==1) isLogged = true;
+		col++;
 		String totalEnterprise = sheet.getCell(col, row).getContents();
 		String[] temp = totalEnterprise.split(";");
 		ArrayList<String> enterprise = new ArrayList<String>();
 		for (String anEnterprise: temp) {
 			enterprise.add(anEnterprise);
 		}
-		return new HotelPO(ID,password,name,address,district,city,level,score,service,introduction,managerName,managerTel,enterprise);
+		return new HotelPO(ID,password,name,address,district,city,level,score,service,introduction,managerName,managerTel,enterprise, isLogged);
 	}
 
 	/**
