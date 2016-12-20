@@ -7,33 +7,55 @@ package other;
  */
 public class User {
 
-	private String userID;
-	private String password;
-	private UserType userType;
-
+	private String userID;	//用户ID
+	private String password;	//密码
+	private UserType userType;	//用户类型
+	private boolean isLoged;   //登录状态
+	
+	/**
+	 * 空构造方法
+	 */
 	public User() {
 
 	}
-
+	
+	/**
+	 * 不带用户类型的构造方法
+	 * @param userID 用户ID
+	 * @param password 密码
+	 */
 	public User(String userID, String password) {
 		this.userID = userID;
 		this.password = password;
 	}
-
-	public User(String userID, String password, UserType userType) {
+	
+	/**
+	 * 带用户类型的构造方法
+	 * @param userID 用户ID
+	 * @param password 密码
+	 * @param userType 用户类型
+	 * @param isLoged
+	 */
+	public User(String userID, String password, UserType userType, boolean isLoged) {
 		this.userID = userID;
 		this.password = password;
-		this.userID = userID;
+		this.userType = userType;
+		this.isLoged = isLoged;
 	}
-
-	public boolean checkIdentity(String username, String password) {
-		if (this.userID.equals(username) && this.password.equals(password)) {
+	
+	/**
+	 * 检查用户名和密码
+	 * @param userID 用户ID
+	 * @param password 密码
+	 * @return 正确则true，否则false
+	 */
+	public boolean checkIdentity(String userID, String password) {
+		if(this.userID.equals(userID) && this.password.equals(password)) {
 			return true;
 		} else {
 			return false;
 		}
 	}
-
 
 	public String getUserID() {
 		return userID;
@@ -59,4 +81,11 @@ public class User {
 		this.userType = userType;
 	}
 
+	public boolean isLoged() {
+		return isLoged;
+	}
+
+	public void setLoged(boolean loged) {
+		isLoged = loged;
+	}
 }

@@ -42,8 +42,8 @@ public class SalerPO extends User implements Serializable {
 	 * @param name 姓名或名称
 	 * @param tel 联系方式
 	 */
-    public SalerPO(String userID, String password, String name, String tel) {
-		super(userID, password, UserType.Saler);
+    public SalerPO(String userID, String password, String name, String tel, boolean isLogged) {
+		super(userID, password, UserType.Saler, isLogged);
 		this.name = name;
 		this.tel = tel;
 	}

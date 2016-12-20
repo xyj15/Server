@@ -66,8 +66,8 @@ public class MemberPO extends User implements Serializable {
 	 * @param enterprise 合作企业名称
 	 */
 	public MemberPO(String userID, String password, String name, String phone,
-	                int level, double discount, MemberType memberType, Date birthday, String enterprise) {
-		super(userID, password, UserType.Member);
+	                int level, double discount, MemberType memberType, Date birthday, String enterprise, boolean isLogged) {
+		super(userID, password, UserType.Member, isLogged);
 		this.name = name;
 		this.phone = phone;
 		this.level = level;

@@ -82,8 +82,8 @@ public class HotelPO extends User implements Serializable {
 	 */
 	public HotelPO(String userID, String password, String name, String city, String district, String address,
 	               int level, double score, String service, String introduction, String managerName,
-	               String managerTel, ArrayList<String> enterpriseList) {
-		super(userID, password, UserType.Hotel);
+	               String managerTel, ArrayList<String> enterpriseList, boolean isLogged) {
+		super(userID, password, UserType.Hotel, isLogged);
 		this.name = name;
 		this.city = city;
 		this.district = district;
