@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 /**
+ * 控制creditChange数据
  * Created by apple on 2016/12/3.
  */
 public class CreditData implements CreditDataService {
@@ -31,7 +32,7 @@ public class CreditData implements CreditDataService {
 	}
 
 	/**
-	 *
+	 *为ID为memberID的客户增加信用值改变记录
 	 * @param memberID
 	 * @param creditChange
 	 * @return

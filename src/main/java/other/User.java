@@ -1,16 +1,19 @@
 package other;
 
+import java.io.Serializable;
+
 /**
  * 所有用户的父类，存储用户名和密码，提供验证用户名和密码的功能
  * @author CROFF
  * @version 2016-11-28
  */
-public class User {
+public class User implements Serializable{
 
 	private String userID;	//用户ID
 	private String password;	//密码
 	private UserType userType;	//用户类型
 	private boolean isLoged;   //登录状态
+	private static final long serialVersionUID = -6833877079313718314L;   //序列号
 	
 	/**
 	 * 空构造方法
