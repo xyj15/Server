@@ -42,10 +42,10 @@ public class DriverForPromotionData {
 		model5.setDiscount(0.75);
 		model5.setEnterprise("Intellij IDEA");
 		System.out.println(driver.testAddPromotion(model5));
-//		System.out.println(driver.testGetID());
-//		System.out.println(driver.testUpdatePromotion(model1));
-//		System.out.println(driver.testGetPromotion("00001"));
-//		System.out.println(driver.testGetPromotionList());
+		System.out.println(driver.testGetID());
+		System.out.println(driver.testUpdatePromotion(model1));
+		System.out.println(driver.testGetPromotion("00001"));
+		System.out.println(driver.testGetPromotionList());
 	}
 
 	/**

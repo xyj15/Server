@@ -35,7 +35,7 @@ public class DriverForCreditData {
 		day.setMonth(10);
 		driver.testAdd("00000001", new CreditChangePO(day,"2016081100000000", OrderAction.AbnormalOrder, -200, 100));
 		driver.testGetChanges("00000000");
-//		driver.testGetCredit("00000001");
+		driver.testGetCredit("00000001");
 	}
 
 	public boolean testAdd(String memberID, CreditChangePO credit){
