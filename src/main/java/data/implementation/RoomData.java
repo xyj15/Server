@@ -283,6 +283,7 @@ public class RoomData implements RoomDataService {
 		int row = cal.get(Calendar.DAY_OF_MONTH);
 		RoomPO result = getRoomByNumber(row, roomNUM);
 		book.close();
+		if(result==null) return null;   //this room does not exist
 		result.setHotelID(hotelID);
 		return result;
 	}
@@ -476,10 +477,10 @@ public class RoomData implements RoomDataService {
 		int col = 0;
 		int row = 1;
 		ArrayList<RoomPO> result = new ArrayList<RoomPO>();
-		for (int i = 0; i < sheet.getRow(row).length; i++) {
+		for (int i = 0; i < sheet.getRow(row).length; i+=dataSize) {
 			result.add(getRoomByCol(col+i, row));
 		}
-		close();
+		book.close();
 		for (RoomPO temp: result) {
 			if(temp.getPrice()>=low&&temp.getPrice()<=high) return true;
 		}

@@ -17,7 +17,7 @@ import java.util.ArrayList;
  */
 public class SearchData implements SearchDataService {
 
-	private int dataSize = 13;
+	private int dataSize = 14;
 	private String sourceFile = "HotelData.xls";
 	private Workbook book;
 	private Sheet sheet;
@@ -39,7 +39,7 @@ public class SearchData implements SearchDataService {
 			return null;
 		}
 		for (int i = 0; i < sheet.getRow(row).length; i+=dataSize) {
-			if(!sheet.getCell(col+i, row).getContents().equals("-1")){
+			if(!sheet.getCell(col+i, row).getContents().equals("-1")&&sheet.getCell(col+i, row).getContents()!=""){
 				result.add(getHotelByPosition(col+i, row));
 			}
 		}
@@ -131,7 +131,7 @@ public class SearchData implements SearchDataService {
 	private int hash(String hotelScope){
 		int result = hotelScope.hashCode();
 		if(result<0)result = 0-result;
-		result%=10;
+		result %= 10;
 		return result;
 	}
 

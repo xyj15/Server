@@ -351,7 +351,7 @@ public class HotelData implements HotelDataService {
 	private int hash(String hotelScope){
 		int result = hotelScope.hashCode();
 		if(result<0)result = 0-result;
-		result%=10;
+		result %= 10;
 		return result;
 	}
 
