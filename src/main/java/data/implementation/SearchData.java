@@ -1,6 +1,7 @@
 package data.implementation;
 
 import data.service.SearchDataService;
+import jxl.Cell;
 import other.Encryption;
 import jxl.NumberCell;
 import jxl.Sheet;
@@ -10,6 +11,7 @@ import po.HotelPO;
 
 import java.io.File;
 import java.io.IOException;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 /**
@@ -21,6 +23,47 @@ public class SearchData implements SearchDataService {
 	private String sourceFile = "HotelData.xls";
 	private Workbook book;
 	private Sheet sheet;
+
+	@Override
+	public ArrayList<String> getCityList() throws RemoteException {
+		Workbook addressBook = null;
+		try {
+			addressBook = Workbook.getWorkbook(new File("AddressData.xls"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (BiffException e) {
+			e.printStackTrace();
+		}
+		Sheet addressSheet = addressBook.getSheet(0);
+		ArrayList<String> cities = new ArrayList<>();
+		int col = 0;
+		int row = 0;
+		for (int i = 0; i < addressSheet.getRows(); i++) {
+			cities.add(addressSheet.getCell(col, row+i).getContents());
+		}
+		return cities;
+	}
+
+	@Override
+	public ArrayList<String> getDistrictList(String city) throws RemoteException {
+		Workbook addressBook = null;
+		try {
+			addressBook = Workbook.getWorkbook(new File("AddressData.xls"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (BiffException e) {
+			e.printStackTrace();
+		}
+		Sheet addressSheet = addressBook.getSheet(0);
+		ArrayList<String> districts = new ArrayList<>();
+		Cell cityCell = addressSheet.findCell(city);
+		int col = 1;
+		int row = cityCell.getRow();
+		for (int i = 0; i < addressSheet.getRow(row).length-1; i++) {
+			districts.add(addressSheet.getCell(col+i, row).getContents());
+		}
+		return districts;
+	}
 
 	/**
 	 *

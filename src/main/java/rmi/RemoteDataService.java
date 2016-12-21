@@ -230,7 +230,17 @@ public class RemoteDataService extends UnicastRemoteObject implements CreditData
 	public String getAvailableHotelID() throws RemoteException {
 		return hotelDataService.getAvailableHotelID();
 	}
-	
+
+	@Override
+	public ArrayList<String> getCityList() throws RemoteException {
+		return searchDataService.getCityList();
+	}
+
+	@Override
+	public ArrayList<String> getDistrictList(String city) throws RemoteException {
+		return searchDataService.getDistrictList(city);
+	}
+
 	@Override
 	public ArrayList<HotelPO> getHotelListByCityDistrict(String city, String district) throws RemoteException {
 		return searchDataService.getHotelListByCityDistrict(city, district);

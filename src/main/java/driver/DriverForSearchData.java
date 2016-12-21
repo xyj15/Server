@@ -3,6 +3,7 @@ package driver;
 import data.implementation.SearchData;
 import po.HotelPO;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 /**
@@ -14,15 +15,17 @@ public class DriverForSearchData {
 
 	public static void main(String[] args){
 		DriverForSearchData driver = new DriverForSearchData();
-		driver.testGetHotelByCityDistrict("南京市", "新街口");
-		System.out.println(driver.testGetHotelByCityDistrict("上海市", "徐家汇"));
-		driver.testGetHotelByLevel(5,"南京市", "新街口");
-		System.out.println(driver.testGetHotelByLevel(2, "南京市", "新街口"));
-		driver.testGetHotelByScore(4.5, 5.0, "南京市", "新街口");
-		System.out.println(driver.testGetHotelByScore(2.0, 3.5, "南京市", "新街口"));
-		driver.testGetHotelFilteredByPrice(450, 600, "南京市", "新街口");
-		System.out.println(driver.testGetHotelFilteredByPrice(500, 2000, "南京市", "新街口"));
-		System.out.println(driver.testGetHotelFilteredByPrice(1000, 2000, "南京市", "大行宫"));
+//		driver.testGetHotelByCityDistrict("南京市", "新街口");
+//		System.out.println(driver.testGetHotelByCityDistrict("上海市", "徐家汇"));
+//		driver.testGetHotelByLevel(5,"南京市", "新街口");
+//		System.out.println(driver.testGetHotelByLevel(2, "南京市", "新街口"));
+//		driver.testGetHotelByScore(4.5, 5.0, "南京市", "新街口");
+//		System.out.println(driver.testGetHotelByScore(2.0, 3.5, "南京市", "新街口"));
+//		driver.testGetHotelFilteredByPrice(450, 600, "南京市", "新街口");
+//		System.out.println(driver.testGetHotelFilteredByPrice(500, 2000, "南京市", "新街口"));
+//		System.out.println(driver.testGetHotelFilteredByPrice(1000, 2000, "南京市", "大行宫"));
+		driver.testGetCities();
+		driver.testGetDistricts("南京市");
 	}
 
 	/**
@@ -88,6 +91,35 @@ public class DriverForSearchData {
 			outputHotel(temp);
 		}
 		return true;
+	}
+
+	/**
+	 *
+	 */
+	public void testGetCities(){
+		ArrayList<String> result = new ArrayList<>();
+		try {
+			result = test.getCityList();
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+		for (String city: result
+		     ) {
+			System.out.println(city);
+		}
+	}
+
+	public void testGetDistricts(String city){
+		ArrayList<String> result = new ArrayList<>();
+		try {
+			result = test.getDistrictList(city);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+		for (String district: result
+				) {
+			System.out.println(district);
+		}
 	}
 
 	/**
