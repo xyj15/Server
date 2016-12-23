@@ -12,13 +12,13 @@ public class DriverForSalerData {
 
 	public static void main(String[] args) {
 		DriverForSalerData driver = new DriverForSalerData();
-		System.out.println(driver.testAddSaler(new SalerPO("0000", "jingjing", "徐亚婧", "123456789", false)));
-		System.out.println(driver.testAddSaler(new SalerPO("0003", "qianqian", "薛之谦", "123456789", false)));
+//		System.out.println(driver.testAddSaler(new SalerPO("0000", "jingjing", "徐亚婧", "123456789", false)));
+//		System.out.println(driver.testAddSaler(new SalerPO("0003", "qianqian", "薛之谦", "123456789", false)));
 //		System.out.println(driver.testAddSaler(new SalerPO(driver.testGetAvailableID(), "qianqian", "薛之谦", "123456789", false)));
 //		System.out.println(driver.testDeleteSaler("0010"));
-		System.out.println(driver.testUpdateSaler(new SalerPO("0000", "jingjing", "徐亚婧", "13151530838", false)));
+		System.out.println(driver.testUpdateSaler(new SalerPO("0000", "jingjinghh", "徐亚婧", "13151530838", false)));
 //		System.out.println(driver.testGetSaler("0010"));
-		System.out.println(driver.testGetSaler("0003"));
+		System.out.println(driver.testGetSaler("0000"));
 
 	}
 

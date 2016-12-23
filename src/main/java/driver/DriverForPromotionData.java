@@ -18,34 +18,39 @@ public class DriverForPromotionData {
 
 	public static void main(String[] args) {
 		DriverForPromotionData driver = new DriverForPromotionData();
-		PromotionPO model1 = new PromotionPO(driver.testGetID(),"关爱程序员营销活动", PromotionType.Discount);
-		model1.setSaleType(SaleType.RoomNumber);
-		model1.setDiscount(0.85);
-		model1.setNumberOfRoom(3);
-		System.out.println(driver.testAddPromotion(model1));
-		PromotionPO model2 = new PromotionPO(driver.testGetID(),"代码节促销活动", PromotionType.Discount);
-		model2.setSaleType(SaleType.Date);
-		model2.setDiscount(0.7);
-		model2.setStartDate(new Date(2016-1900,9,24));
-		model2.setEndDate(new Date(2016-1900,9,26));
-		System.out.println(driver.testAddPromotion(model2));
-		PromotionPO model3 = new PromotionPO(driver.testGetID(),"会员等级折扣", PromotionType.Discount);
-		model3.setSaleType(SaleType.Rank);
-		model3.setDiscount(0.85);
-		System.out.println(driver.testAddPromotion(model3));
-		PromotionPO model4 = new PromotionPO(driver.testGetID(),"来自java的生日问候", PromotionType.Discount);
-		model4.setSaleType(SaleType.Birthday);
-		model4.setDiscount(0.75);
-		System.out.println(driver.testAddPromotion(model4));
-		PromotionPO model5 = new PromotionPO(driver.testGetID(),"与Intellij IDEA的合作折扣", PromotionType.Discount);
-		model5.setSaleType(SaleType.Enterprise);
-		model5.setDiscount(0.75);
-		model5.setEnterprise("Intellij IDEA");
-		System.out.println(driver.testAddPromotion(model5));
-		System.out.println(driver.testGetID());
-		System.out.println(driver.testUpdatePromotion(model1));
-		System.out.println(driver.testGetPromotion("00001"));
-		System.out.println(driver.testGetPromotionList());
+//		PromotionPO model1 = new PromotionPO(driver.testGetID(),"关爱程序员营销活动", PromotionType.Discount);
+//		model1.setSaleType(SaleType.RoomNumber);
+//		model1.setDiscount(0.85);
+//		model1.setNumberOfRoom(3);
+//		System.out.println(driver.testAddPromotion(model1));
+//		PromotionPO model2 = new PromotionPO(driver.testGetID(),"代码节促销活动", PromotionType.Discount);
+//		model2.setSaleType(SaleType.Date);
+//		model2.setDiscount(0.7);
+//		model2.setStartDate(new Date(2016-1900,9,24));
+//		model2.setEndDate(new Date(2016-1900,9,26));
+//		System.out.println(driver.testAddPromotion(model2));
+//		PromotionPO model3 = new PromotionPO(driver.testGetID(),"会员等级折扣", PromotionType.Discount);
+//		model3.setSaleType(SaleType.Rank);
+//		model3.setDiscount(0.85);
+//		System.out.println(driver.testAddPromotion(model3));
+//		PromotionPO model4 = new PromotionPO(driver.testGetID(),"来自java的生日问候", PromotionType.Discount);
+//		model4.setSaleType(SaleType.Birthday);
+//		model4.setDiscount(0.75);
+//		System.out.println(driver.testAddPromotion(model4));
+//		PromotionPO model5 = new PromotionPO(driver.testGetID(),"与Intellij IDEA的合作折扣", PromotionType.Discount);
+//		model5.setSaleType(SaleType.Enterprise);
+//		model5.setDiscount(0.75);
+//		model5.setEnterprise("Intellij IDEA");
+//		System.out.println(driver.testAddPromotion(model5));
+		PromotionPO model6 = new PromotionPO(driver.testGetID(),"张新悦祝全国人民身体健康", PromotionType.Discount,"000000");
+		model6.setSaleType(SaleType.RoomNumber);
+		model6.setDiscount(0.85);
+		model6.setNumberOfRoom(3);
+		System.out.println(driver.testAddPromotion(model6));
+//		System.out.println(driver.testGetID());
+//		System.out.println(driver.testUpdatePromotion(model1));
+//		System.out.println(driver.testGetPromotion("00001"));
+//		System.out.println(driver.testGetPromotionList());
 	}
 
 	/**
