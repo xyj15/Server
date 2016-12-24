@@ -271,7 +271,6 @@ public class PromotionData implements PromotionDataService {
 	public ArrayList<PromotionPO> getPromotionList() {
 		createSheet();
 		int rows = sheet.getRows();
-		System.err.println(rows);
 		ArrayList<PromotionPO> result = new ArrayList<PromotionPO>();
 		for (int i = 0; i < rows; i++) {
 			PromotionPO temp = getPromotionByRow(i);

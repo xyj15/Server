@@ -17,18 +17,20 @@ public class DriverForHotelData {
 		ArrayList<String> enterprise = new ArrayList<String>();
 		enterprise.add("刚轻厂");
 		enterprise.add("新悦集团");
-		System.out.println(driver.testAdd(new HotelPO(driver.testGetID(),"kunkun","CroffHotel", "南京市", "新街口", "珠江路",5, 4.8,"健身房、游泳池、spa","是一家专门针对高端人群的酒店。"
-				,"张新悦", "15205153967",enterprise, false)));
-		System.out.println(driver.testAdd(new HotelPO(driver.testGetID(),"jingjing","亚婧大酒店", "南京市", "新街口", "石鼓路",5, 4.8,"健身房、自助餐厅、温泉","是亲子度假首选。"
-				,"徐亚婧", "15205153967",enterprise, false)));
-		System.out.println(driver.testAdd(new HotelPO(driver.testGetID(),"helloworld","JavaHotel", "南京市", "仙林中心", "仙林大道",5, 4.8,"健身房、游泳池、spa","是一家专门针对高端人群的酒店"
-				,"eclipse", "15205153967",enterprise, false)));
-		System.out.println(driver.testDelete("000007"));
-		System.out.println(driver.testUpdate(new HotelPO("000001","jingjing","亚婧大酒店", "南京市", "新街口", "石鼓路", 3, 4.0,"健身房、自助餐厅、温泉","是亲子度假首选。"
-				,"徐亚婧", "15205153967",enterprise, false)));
-		driver.testGetHotelByID("000001");
-		driver.testGetHotelByName("JavaHotel");
-		System.out.println(driver.testGetHotelByID("000101"));
+//		System.out.println(driver.testAdd(new HotelPO(driver.testGetID(),"kunkun","CroffHotel", "南京市", "新街口", "珠江路",5, 4.8,"健身房、游泳池、spa","是一家专门针对高端人群的酒店。"
+//				,"张新悦", "15205153967",enterprise, false)));
+//		System.out.println(driver.testAdd(new HotelPO(driver.testGetID(),"jingjing","亚婧大酒店", "南京市", "新街口", "石鼓路",5, 4.8,"健身房、自助餐厅、温泉","是亲子度假首选。"
+//				,"徐亚婧", "15205153967",enterprise, false)));
+//		System.out.println(driver.testAdd(new HotelPO(driver.testGetID(),"helloworld","JavaHotel", "南京市", "仙林中心", "仙林大道",5, 4.8,"健身房、游泳池、spa","是一家专门针对高端人群的酒店"
+//				,"eclipse", "15205153967",enterprise, false)));
+//		System.out.println(driver.testDelete("000007"));
+//		System.out.println(driver.testUpdate(new HotelPO("000001","jingjing","亚婧大酒店", "南京市", "新街口", "石鼓路", 3, 4.0,"健身房、自助餐厅、温泉","是亲子度假首选。"
+//				,"徐亚婧", "15205153967",enterprise, false)));
+//		driver.testGetHotelByID("000001");
+//		driver.testGetHotelByName("JavaHotel");
+//		System.out.println(driver.testGetHotelByID("000101"));
+		System.out.println(driver.testAdd(new HotelPO(driver.testGetID(),"inlinefunction","CppHotel", "上海市", "徐家汇", "helloworld大道",5, 4.8,"健身房、游泳池、spa","是一家专门针对有梦想的程序员的酒店"
+				,"vs", "13151522158",enterprise, false)));
 		System.out.println(driver.testGetHotelByName("CppHotel"));
 	}
 

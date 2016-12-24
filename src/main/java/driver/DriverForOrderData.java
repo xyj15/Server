@@ -89,6 +89,71 @@ public class DriverForOrderData {
 //		} catch (RemoteException e) {
 //			e.printStackTrace();
 //		}
+		Date createTime = new Date(2016-1900, 12-1, 9);
+		Date checkInTime = new Date(2016-1900, 12-1, 11);
+		Date checkOutTime = new Date(2016-1900, 12-1, 14);
+		Date latestCheckInTime = new Date(2016-1900, 12-1, 9);
+		Date actualCheckInTime = null;
+		Date actualCheckOutTime = null;
+		Date cancelTime = null;
+		try {
+			driverForMember.testAddOrder(new OrderPO("00000000", "000002", "161209213558", OrderStatus.Unexecuted,
+					createTime,checkInTime,actualCheckInTime, latestCheckInTime,checkOutTime, actualCheckOutTime,1,
+					"豪华代码房", 2, false, 0, null, 0, "00000", 650, cancelTime));
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+		createTime = new Date(2016-1900, 5, 18);
+		checkInTime = new Date(2016-1900, 5, 20);
+		checkOutTime = new Date(2016-1900, 5, 21);
+		latestCheckInTime = new Date(2016-1900, 5, 20);
+		try {
+			driverForMember.testAddOrder(new OrderPO("00000001", "000002", "160618163756", OrderStatus.Abnormal,
+					createTime,checkInTime,actualCheckInTime, latestCheckInTime,checkOutTime, actualCheckOutTime,1,
+					"标准结对编程房", 2, false, 0, null, 0, "00000", 760, cancelTime));
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+		createTime = new Date(2016-1900, 9, 25);
+		checkInTime = new Date(2016-1900, 9, 4);
+		checkOutTime = new Date(2016-1900, 9, 5);
+		latestCheckInTime = new Date(2016-1900, 9, 4);
+		actualCheckInTime = new Date(2016-1900, 9, 4);
+		actualCheckOutTime = new Date(2016-1900, 9 ,6);
+		try {
+			driverForMember.testAddOrder(new OrderPO("00000001", "000002", "161025191853", OrderStatus.Executed,
+					createTime,checkInTime,actualCheckInTime, latestCheckInTime,checkOutTime, actualCheckOutTime,2,
+					"简约debug房", 2, false, 4.7, "愉快的住宿体验", 0, "00000",960, cancelTime));
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+		createTime = new Date(2016-1900, 10, 16);
+		checkInTime = new Date(2016-1900, 10, 20);
+		checkOutTime = new Date(2016-1900, 10, 25);
+		latestCheckInTime = new Date(2016-1900, 10, 21);
+		actualCheckInTime = new Date(2016-1900, 10, 22);
+		actualCheckOutTime = new Date(2016-1900, 10 ,26);
+		try {
+			driverForMember.testAddOrder(new OrderPO("00000002", "000002", "161116151908", OrderStatus.Executed,
+					createTime,checkInTime,actualCheckInTime, latestCheckInTime,checkOutTime, actualCheckOutTime,1,
+					"奢华海景测试房", 3, true, 4.8, "虽然除了一些差错，但酒店服务态度很好", 1, "00000", 1024, cancelTime));
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+		createTime = new Date(2016, 11, 22);
+		checkInTime = new Date(2016, 11, 23);
+		checkOutTime = new Date(2016, 11, 25);
+		latestCheckInTime = new Date(2016, 10, 24);
+		actualCheckInTime = null;
+		actualCheckOutTime = null;
+		cancelTime = new Date(2016, 11, 23);
+		try {
+			driverForMember.testAddOrder(new OrderPO("00000001", "000001", "1611220152436", OrderStatus.Unexecuted,
+					createTime,checkInTime,actualCheckInTime, latestCheckInTime,checkOutTime, actualCheckOutTime,3,
+					"浪漫沙滩海景大床房", 6, false, 0, null, 0, "00000",2100, cancelTime));
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
 		try {
 			driverForMember.testGetOrder("2016120900000000");
 			driverForHotel.testGetOrderList("000001");
