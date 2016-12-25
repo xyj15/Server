@@ -42,15 +42,15 @@ public class DriverForPromotionData {
 //		model5.setDiscount(0.75);
 //		model5.setEnterprise("Intellij IDEA");
 //		System.out.println(driver.testAddPromotion(model5));
-		PromotionPO model6 = new PromotionPO(driver.testGetID(),"张新悦祝全国人民身体健康", PromotionType.Discount,"000000");
+		PromotionPO model6 = new PromotionPO("00005","张新悦祝全国人民身体健康", PromotionType.Discount);
 		model6.setSaleType(SaleType.RoomNumber);
 		model6.setDiscount(0.85);
 		model6.setNumberOfRoom(3);
-		System.out.println(driver.testAddPromotion(model6));
+		System.out.println(driver.testUpdatePromotion(model6));
 //		System.out.println(driver.testGetID());
 //		System.out.println(driver.testUpdatePromotion(model1));
-//		System.out.println(driver.testGetPromotion("00001"));
-//		System.out.println(driver.testGetPromotionList());
+		System.out.println(driver.testGetPromotion("00005"));
+		System.out.println(driver.testGetPromotionList());
 	}
 
 	/**

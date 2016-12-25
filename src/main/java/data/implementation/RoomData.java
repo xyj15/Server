@@ -360,7 +360,7 @@ public class RoomData implements RoomDataService {
 		int row = cal.get(Calendar.DAY_OF_MONTH);
 		ArrayList<RoomPO> result = new ArrayList<RoomPO>();
 		for (int i = 0; i < sheet.getRow(row).length; i+=dataSize) {
-			if(!sheet.getCell(col+i, row).getContents().equals("-1"))result.add(getRoomByCol(col, row));
+			if(!sheet.getCell(col+i, row).getContents().equals("-1"))result.add(getRoomByCol(col+i, row));
 		}
 		book.close();
 		if(result.size()==0) return null;  //there is no room of the hotel on the day
