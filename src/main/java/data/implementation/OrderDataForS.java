@@ -174,7 +174,7 @@ public class OrderDataForS implements OrderDataService ,Serializable{
 			actualCheckIn = new Date(dateHelper);
 			col++;
 			dateHelper = (long)((NumberCell) sheet.getCell(col, row)).getValue();
-			actualCheckOut = new Date(dateHelper);
+			if(dateHelper!=-1) actualCheckOut = new Date(dateHelper);
 			col++;
 		}
 		else{
