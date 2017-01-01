@@ -187,7 +187,13 @@ public class OrderChanger implements Serializable{
 			col++;
 		}
 		if(order.getOrderStatus()==OrderStatus.Canceled){
-			cancelTime = new Number(col, row, order.getCancelTime().getTime());
+			if(order.getCancelTime()!=null){
+				cancelTime = new Number(col, row, order.getCancelTime().getTime());
+			}
+			else{
+				System.err.println("*");
+				cancelTime = new Number(col, row, -1);
+			}
 		}
 		else{
 			cancelTime = new Number(col, row, new Date().getTime());
