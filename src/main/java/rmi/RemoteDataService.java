@@ -34,12 +34,12 @@ public class RemoteDataService extends UnicastRemoteObject implements CreditData
 	private OrderDataForS orderDataForS;
 	private OrderDataForH orderDataForH;
 	private OrderDataForM orderDataForM;
+	
 	protected RemoteDataService() throws RemoteException {
 		creditDataService = new CreditData();
 		hotelDataService = new HotelData();
 		managerDataService = new ManagerData();
 		memberDataService = new MemberData();
-//		orderDataService = new OrderDataForM();
 		promotionDataService = new PromotionData();
 		rankDataService = new RankData();
 		roomDataService = new RoomData();
@@ -118,12 +118,12 @@ public class RemoteDataService extends UnicastRemoteObject implements CreditData
 	
 	@Override
 	public boolean makeOrderAbnormal(String orderID) throws RemoteException {
-		return false;
+		return orderDataService.makeOrderAbnormal(orderID);
 	}
 	
 	@Override
 	public boolean recoverOrder(String orderID, double recover) throws RemoteException {
-		return false;
+		return orderDataService.recoverOrder(orderID, recover);
 	}
 	
 	@Override
@@ -138,22 +138,22 @@ public class RemoteDataService extends UnicastRemoteObject implements CreditData
 	
 	@Override
 	public ArrayList<OrderPO> getFinishedOrders(String userID) throws RemoteException {
-		return null;
+		return orderDataService.getFinishedOrders(userID);
 	}
 	
 	@Override
 	public ArrayList<OrderPO> getUnfinishedOrders(String userID) throws RemoteException {
-		return null;
+		return orderDataService.getUnfinishedOrders(userID);
 	}
 	
 	@Override
 	public ArrayList<OrderPO> getAbnormalOrders(String userID) throws RemoteException {
-		return null;
+		return orderDataService.getAbnormalOrders(userID);
 	}
 	
 	@Override
 	public ArrayList<OrderPO> getCancledOrders(String userID) throws RemoteException {
-		return null;
+		return getAbnormalOrders(userID);
 	}
 	
 	@Override
