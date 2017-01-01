@@ -428,6 +428,18 @@ public class RoomData implements RoomDataService {
 		} catch (WriteException e) {
 			e.printStackTrace();
 		}
+		col++;
+		int reserved = (int)((NumberCell) wSheet.getCell(col, row)).getValue();
+		if(reserved==1){
+			close();
+			return false;                 //This room on the day has already been check in.
+		}
+		Number isReserved = new Number(col, row, 1.0);
+		try {
+			wSheet.addCell(isReserved);
+		} catch (WriteException e) {
+			e.printStackTrace();
+		}
 
 		close();
 		return true;
@@ -456,6 +468,18 @@ public class RoomData implements RoomDataService {
 		Number isAvailable = new Number(col, row, 1.0);
 		try {
 			wSheet.addCell(isAvailable);
+		} catch (WriteException e) {
+			e.printStackTrace();
+		}
+		col++;
+		int reserved = (int)((NumberCell) wSheet.getCell(col, row)).getValue();
+		if(reserved==0){
+			close();
+			return false;                 //This room on the day has already been check in.
+		}
+		Number isReserved = new Number(col, row, 0.0);
+		try {
+			wSheet.addCell(isReserved);
 		} catch (WriteException e) {
 			e.printStackTrace();
 		}
