@@ -48,7 +48,7 @@ public class DriverForRoomData {
 //		System.out.println(driver.testReserve(day, "3406", "000000"));
 //		System.out.println(driver.testCheckIn(day, "3406", "000000"));
 //		System.out.println(driver.testCheckIn(day, "3406", "000000"));
-		System.out.println(driver.testCheckOut(day, "3406", "000000"));
+//		System.out.println(driver.testCheckOut(day, "3406", "000000"));
 //		System.out.println(driver.testCheckOut(day, "3406", "000000"));
 //		System.out.println(driver.testGetRoomByDate(day, "000002"));
 //		System.out.println(driver.testGetRoomByNameDate(day, "豪华代码房", "000002"));
@@ -69,6 +69,38 @@ public class DriverForRoomData {
 //		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "1516", "只有你与Cpp房房", RoomType.Single, 660), "000003"));
 //		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "2001", "带助教套房", RoomType.Suite, 2050), "000003"));
 //		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "906", "编译器双床房", RoomType.TwinBed, 1000), "000003"));
+//		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "3407", "豪华湖景房", RoomType.BigBed, 1500), "000000"));
+//		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "904", "商务单人间", RoomType.Single, 830), "000000"));
+//		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "818", "高档温馨家庭套房", RoomType.Suite, 2050), "000000"));
+//		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "2106", "景观园林双床房", RoomType.TwinBed, 998), "000000"));
+//		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "1310", "浪漫沙滩海景大床房", RoomType.BigBed, 350), "000001"));
+//		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "1517", "舒适阳光单人房", RoomType.Single, 210), "000001"));
+//		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "2003", "豪华泰式温泉套房", RoomType.Suite, 520), "000001"));
+//		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "909", "标准双床房", RoomType.TwinBed, 370), "000001"));
+//		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "3407", "浪漫无bug观海房", RoomType.BigBed, 850), "000003"));
+//		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "901", "只有你与Cpp房", RoomType.Single, 660), "000003"));
+//		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "818", "带助教套房", RoomType.Suite, 2050), "000003"));
+//		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "2108", "编译器双床房", RoomType.TwinBed, 1000), "000003"));
+//		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "1309", "浪漫无bug观海房", RoomType.BigBed, 850), "000003"));
+//		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "1517", "只有你与Cpp房房", RoomType.Single, 660), "000003"));
+//		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "2002", "带助教套房", RoomType.Suite, 2050), "000003"));
+//		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "907", "编译器双床房", RoomType.TwinBed, 1000), "000003"));
+		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "3408", "豪华湖景房", RoomType.BigBed, 1500), "000000"));
+		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "905", "商务单人间", RoomType.Single, 830), "000000"));
+		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "819", "高档温馨家庭套房", RoomType.Suite, 2050), "000000"));
+		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "2107", "景观园林双床房", RoomType.TwinBed, 998), "000000"));
+		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "1311", "浪漫沙滩海景大床房", RoomType.BigBed, 350), "000001"));
+		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "1518", "舒适阳光单人房", RoomType.Single, 210), "000001"));
+		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "2004", "豪华泰式温泉套房", RoomType.Suite, 520), "000001"));
+		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "910", "标准双床房", RoomType.TwinBed, 370), "000001"));
+		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "3408", "浪漫无bug观海房", RoomType.BigBed, 850), "000003"));
+		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "902", "只有你与Cpp房", RoomType.Single, 660), "000003"));
+		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "819", "带助教套房", RoomType.Suite, 2050), "000003"));
+		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "2109", "编译器双床房", RoomType.TwinBed, 1000), "000003"));
+		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "1310", "浪漫无bug观海房", RoomType.BigBed, 850), "000003"));
+		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "1518", "只有你与Cpp房房", RoomType.Single, 660), "000003"));
+		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "2003", "带助教套房", RoomType.Suite, 2050), "000003"));
+		System.out.println(driver.testAddSingleRoom(new RoomPO(false, true, "908", "编译器双床房", RoomType.TwinBed, 1000), "000003"));
 	}
 
 	/**
