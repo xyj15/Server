@@ -74,7 +74,12 @@ public class OrderChanger implements Serializable{
 		else{
 			actualCheckIn = new Number(col, row, new Date().getTime());
 			col++;
-			actualCheckOut = new Number(col, row, new Date().getTime());
+			if(order.getActualCheckoutTime()!=null){
+				actualCheckOut = new Number(col, row, order.getActualCheckoutTime().getTime());
+			}
+			else{
+				actualCheckOut = new Number(col, row, -1);
+			}
 			col++;
 		}
 		if(order.getOrderStatus()==OrderStatus.Canceled){
@@ -167,7 +172,12 @@ public class OrderChanger implements Serializable{
 		if(order.getOrderStatus()==OrderStatus.Executed){
 			actualCheckIn = new Number(col, row, order.getActualCheckinTime().getTime());
 			col++;
-			actualCheckOut = new Number(col, row, order.getActualCheckoutTime().getTime());
+			if(order.getActualCheckoutTime()!=null){
+				actualCheckOut = new Number(col, row, order.getActualCheckoutTime().getTime());
+			}
+			else{
+				actualCheckOut = new Number(col, row, -1);
+			}
 			col++;
 		}
 		else{
