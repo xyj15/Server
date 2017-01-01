@@ -18,7 +18,7 @@ public class DriverForMemberData {
 	public static void main(String[] args){
 		DriverForMemberData driver = new DriverForMemberData();
 //		System.out.println(driver.testGetID());
-//		MemberPO member1 = new MemberPO(driver.testGetID(), "xinxinpassword", "张新悦", "15205153967", 3, 0.5, MemberType.Orinary, getDate("02-11-1997"),"", false);
+//		MemberPO member1 = new MemberPO("00000000", "xinxinpassword", "张新悦", "15205153967", 3, 0.5, MemberType.Orinary, getDate("02-11-1997"),"", false);
 //		System.out.println(driver.testAdd(member1));
 //		System.out.println(driver.testGetID());
 //		MemberPO member2 = new MemberPO("00000001", "jingjinghh", "徐亚婧", "13151530838", 2, 0.6, MemberType.Orinary, getDate("03-03-1997"),"", false);
@@ -31,7 +31,8 @@ public class DriverForMemberData {
 //		System.out.println(driver.testAdd(member4));
 //		System.out.println(driver.testDelete("00000002"));
 //		System.out.println(driver.testUpdate(new MemberPO("00000000","xinxinpassword", "张新悦",  "15205153967", 7, 0.5, MemberType.Orinary, getDate("02-11-1997"),"", false)));
-		driver.testGet("00000001");
+//		driver.testUpdate(member1);
+		driver.testGet("00000003");
 	}
 
 	public boolean testAdd(MemberPO member){
