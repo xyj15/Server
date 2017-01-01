@@ -176,8 +176,8 @@ public class DriverForOrderData {
 			e.printStackTrace();
 		}
 		try {
-//			driverForMember.testGetOrder("160618163756");
-			driverForHotel.testGetOrderList("000000");
+			driverForMember.testGetOrder("160618168654");
+//			driverForHotel.testGetOrderList("000000");
 //			driverForSaler.testGetOrderList("0000");
 		} catch (RemoteException e) {
 			e.printStackTrace();
@@ -362,7 +362,7 @@ public class DriverForOrderData {
 		System.out.println("price: "+order.getPrice());
 		if(order.getOrderStatus()==OrderStatus.Executed){
 			System.out.println("actualCheckInTime: "+bartDateFormate.format(order.getActualCheckinTime()));
-			System.out.println("actualCheckOutTime: "+bartDateFormate.format(order.getActualCheckoutTime()));
+			if(order.getActualCheckoutTime()!=null)System.out.println("actualCheckOutTime: "+bartDateFormate.format(order.getActualCheckoutTime()));
 			System.out.println("score: "+order.getScore());
 			System.out.println("evaluation: "+order.getEvaluation());
 			System.out.println("recover: "+order.getRecover());
