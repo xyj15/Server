@@ -56,7 +56,13 @@ public class PromotionData implements PromotionDataService {
 		col++;
 		Label name = new Label(col, row, promotion.getPromotionName());
 		col++;
-		Label relatedHotelID = new Label(col, row, promotion.getRelatedHotelID());
+		Label relatedHotelID;
+		if(promotion.getRelatedHotelID()==null){
+			relatedHotelID = new Label(col, row, "1");
+		}
+		else{
+			relatedHotelID = new Label(col, row, promotion.getRelatedHotelID());
+		}
 		col++;
 		Number saleType = new Number(col, row, promotion.getSaleType().getValue());
 		col++;
@@ -178,7 +184,13 @@ public class PromotionData implements PromotionDataService {
 		col++;
 		Label name = new Label(col, row, promotion.getPromotionName());
 		col++;
-		Label relatedHotelID = new Label(col, row, promotion.getRelatedHotelID());
+		Label relatedHotelID;
+		if(promotion.getRelatedHotelID()==null){
+			relatedHotelID = new Label(col, row, "1");
+		}
+		else{
+			relatedHotelID = new Label(col, row, promotion.getRelatedHotelID());
+		}
 		col++;
 		Number saleType = new Number(col, row, promotion.getSaleType().getValue());
 		col++;
@@ -378,7 +390,10 @@ public class PromotionData implements PromotionDataService {
 		String promotionName = sheet.getCell(col, row).getContents();
 		col++;
 		String relatedHotelID = sheet.getCell(col, row).getContents();
-		if(relatedHotelID=="") relatedHotelID=null;
+		if(relatedHotelID.equals("1")) {
+			relatedHotelID=null;
+		}
+
 		col++;
 		int sType = (int)((NumberCell) sheet.getCell(col, row)).getValue();
 		col++;
