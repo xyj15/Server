@@ -2,6 +2,7 @@ package data.implementation;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import data.service.MemberDataService;
@@ -326,12 +327,12 @@ public class MemberData implements MemberDataService {
 						long dateHelper = (long)((NumberCell)sheet.getCell(col,row)).getValue();
 						Date birthday = new Date(dateHelper);
 						book.close();
-						return new MemberPO(ID,name,password,phone,level,discount,MemberType.Orinary,birthday,"",isLogged);
+						return new MemberPO(ID,password,name,phone,level,discount,MemberType.Orinary,birthday,"",isLogged);
 					}
 					case 1:{
 						String enterprise = sheet.getCell(col, row).getContents();
 						book.close();
-						return new MemberPO(ID,name,password,phone,level,discount,MemberType.Bussiness,null,enterprise, isLogged);
+						return new MemberPO(ID,password, name,phone,level,discount,MemberType.Bussiness,null,enterprise, isLogged);
 					}
 				}
 			}
