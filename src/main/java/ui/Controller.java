@@ -18,6 +18,7 @@ public class Controller {
         Controller.root = root;
     }
 
+
     public static void setPrimaryStage(Stage primaryStage) {
         Controller.primaryStage = primaryStage;
     }

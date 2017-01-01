@@ -18,7 +18,7 @@
          <font>
             <Font name="Microsoft YaHei Bold" size="18.0" />
          </font>
-      </Label>
+      </Label> 
       <Button layoutX="128.0" layoutY="41.0" mnemonicParsing="false" onAction="#onX" prefHeight="49.0" prefWidth="158.0" text="启动" />
    </children>
 </AnchorPane>

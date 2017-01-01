@@ -20,6 +20,7 @@ public class promptUI extends Application {
     public void start (Stage primaryStage) throws Exception {
         primaryStage.setTitle("请皇上过目");
         Parent root = FXMLLoader.load(getClass().getResource("prompt.fxml"));
+        
         Controller.setRoot(root);
         Controller.setPrimaryStage(primaryStage);
         Scene myScene = new Scene(root,410,193);
