@@ -31,7 +31,8 @@ public class promptUI extends Application {
 
 
     public static void main(String[] args) {
-        launch(args);
         new  RemoteHelper();
+        launch(args);
+
     }
 }
