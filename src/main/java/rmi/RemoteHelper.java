@@ -5,6 +5,9 @@ import java.rmi.AlreadyBoundException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
+import ui.promptUI;
+
+import static javafx.application.Application.launch;
 
 /**
  * Created by CROFF on 2016/12/18.
@@ -23,6 +26,7 @@ public class RemoteHelper {
 			LocateRegistry.createRegistry(3304);
 			Naming.bind("rmi://localhost:3304/RemoteDataService", remoteDataService);
 			System.out.println("创建服务器成功");
+
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		} catch (MalformedURLException e) {
@@ -32,7 +36,8 @@ public class RemoteHelper {
 		}
 	}
 	
-	public static void main(String[] args) {
-		new RemoteHelper();
-	}
+//	public static void main(String[] args) {
+//		new RemoteHelper();
+//
+//	}
 }
