@@ -90,8 +90,6 @@ public class ManagerData implements ManagerDataService {
 			wBook.close();
 		} catch (IOException e) {
 			e.printStackTrace();
-		} catch (WriteException e) {
-			e.printStackTrace();
 		}
 		book.close();
 	}
