@@ -127,11 +127,9 @@ public class HotelData implements HotelDataService {
 			WritableWorkbook wRoomBook = Workbook.createWorkbook(new File("RoomData.xls"),roomBook);
 			wRoomBook.createSheet(hotel.getName(), Integer.parseInt(hotel.getUserID()));
 			wRoomBook.write();
-			try {
+
 				wRoomBook.close();
-			} catch (WriteException e) {
-				e.printStackTrace();
-			}
+
 			roomBook.close();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -179,11 +177,7 @@ public class HotelData implements HotelDataService {
 			WritableWorkbook wRoomBook = Workbook.createWorkbook(new File("RoomData.xls"),roomBook);
 			wRoomBook.removeSheet(Integer.parseInt(hotelID));
 			wRoomBook.write();
-			try {
-				wRoomBook.close();
-			} catch (WriteException e) {
-				e.printStackTrace();
-			}
+			wRoomBook.close();
 			roomBook.close();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -325,8 +319,6 @@ public class HotelData implements HotelDataService {
 			wBook.close();
 		} catch (IOException e) {
 			e.printStackTrace();
-		} catch (WriteException e) {
-			e.printStackTrace();
 		}
 		book.close();
 	}
@@ -439,8 +431,6 @@ public class HotelData implements HotelDataService {
 		try {
 			wBook.close();
 		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (WriteException e) {
 			e.printStackTrace();
 		}
 		book.close();

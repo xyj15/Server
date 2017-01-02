@@ -269,8 +269,6 @@ public class RoomData implements RoomDataService {
 			wBook.close();
 		} catch (IOException e) {
 			e.printStackTrace();
-		} catch (WriteException e) {
-			e.printStackTrace();
 		}
 		book.close();
 	}
